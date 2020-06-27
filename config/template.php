@@ -35,10 +35,18 @@ return [
     // 模板参数
     'tpl_replace_string' => [ // 视图输出字符串内容替换
         '__PUBLIC__' => '/sweet/public',
-        '__IMAGES__' => '/sweet/public/images',
-        '__UPLOADS__' => '/sweet/public/uploads',
-        '__CSS__' => '/sweet/public/css',
-        '__JS__' => '/sweet/public/js',
-        '__FONTS__' => '/sweet/public/fonts',
+        //前端
+        '__FIMAGES__' => '/sweet/public/front/images',
+        '__FUPLOADS__' => '/sweet/public/front/uploads',
+        '__FCSS__' => '/sweet/public/front/css',
+        '__FJS__' => '/sweet/public/front/js',
+        '__FFONTS__' => '/sweet/public/front/fonts',
+
+        //后端
+        '__BIMAGES__' => '/sweet/public/back/images',
+        '__BUPLOADS__' => '/sweet/public/back/uploads',
+        '__BCSS__' => '/sweet/public/back/css',
+        '__BJS__' => '/sweet/public/back/js',
+        '__BFONTS__' => '/sweet/public/back/fonts',
     ],
 ];
