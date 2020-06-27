@@ -24,7 +24,7 @@ return [
     // 应用Trace
     'app_trace'              => false,
     // 是否支持多模块
-    'app_multi_module'       => true,
+    'app_multi_module'       => false,
     // 入口自动绑定模块
     'auto_bind_module'       => false,
     // 注册的根命名空间
@@ -65,7 +65,7 @@ return [
     // 默认验证器
     'default_validate'       => '',
     // 默认的空模块名
-    'empty_module'           => '',
+    'empty_module'           => 'home',
     // 默认的空控制器名
     'empty_controller'       => 'Error',
     // 操作方法前缀
@@ -147,9 +147,11 @@ return [
     // +----------------------------------------------------------------------
     // | 自定义快捷目录
     // +----------------------------------------------------------------------
-    '__PUBLIC__'  => Env::get('ROOT_PATH') . 'public/',
+  /*  '__PUBLIC__'  => Env::get('ROOT_PATH') . 'public/',
     '__CSS__'  => Env::get('ROOT_PATH') . 'public/css/',
     '__JS__'  => Env::get('ROOT_PATH') . 'public/js/',
     '__UPLOADS__'  => Env::get('ROOT_PATH') . 'public/uploads/',
-    '__IMAGES__'  => Env::get('ROOT_PATH') . 'public/images/',
+    '__IMAGES__'  => Env::get('ROOT_PATH') . 'public/images/',*/
+
+
 ];

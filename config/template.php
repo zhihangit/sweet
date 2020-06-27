@@ -32,4 +32,13 @@ return [
     'taglib_begin' => '{',
     // 标签库标签结束标记
     'taglib_end'   => '}',
+    // 模板参数
+    'tpl_replace_string' => [ // 视图输出字符串内容替换
+        '__PUBLIC__' => '/sweet/public',
+        '__IMAGES__' => '/sweet/public/images',
+        '__UPLOADS__' => '/sweet/public/uploads',
+        '__CSS__' => '/sweet/public/css',
+        '__JS__' => '/sweet/public/js',
+        '__FONTS__' => '/sweet/public/fonts',
+    ],
 ];
