@@ -8,8 +8,8 @@ class Home extends Controller
     public function index()
     {
         //echo  "juse test";
-        $this->assign('name', 'thinkphp');
-        echo  "juse  home test";
+        $this->assign('todaytime', time());
+       // echo  "juse  home test";
         return $this->fetch('index');
     }
     public function loginout()
