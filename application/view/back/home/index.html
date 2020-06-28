@@ -8,7 +8,7 @@
         <link rel="stylesheet" type="text/css" href="__BCSS__/material-design.css">
         <link rel="stylesheet" type="text/css" href="__BCSS__/small-n-flat.css">
         <link rel="stylesheet" type="text/css" href="__BCSS__/font-awesome.min.css">
-        <title>Clearmin template</title>
+        <title>sweet管理平台</title>
     </head>
     <body class="cm-no-transition cm-1-navbar">
         <div id="cm-menu">
@@ -40,7 +40,7 @@
                                 </ul>
                             </li>
                             <li><a href="notepad.html" class="sf-notepad">Text Editor</a></li>
-                            <li><a href="login.html" class="sf-lock-open">登录</a></li>
+                            <li><a href="{:url('back.home/loginout')}" class="sf-lock-open">退出登录</a></li>
                         </ul>
                     </div>
                 </div>
@@ -50,7 +50,7 @@
             <nav class="cm-navbar cm-navbar-primary">
                 <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
                 <div class="cm-flex">
-                    <h1>Home</h1> 
+                    <h1>SWEET管理平台</h1>
                     <form id="cm-search" action="index.html" method="get">
                         <input type="search" name="q" autocomplete="off" placeholder="Search...">
                     </form>
@@ -199,12 +199,12 @@
                         </a>
                     </div>
                     <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
-                        <a href="login.html" class="panel panel-default thumbnail cm-thumbnail">
+                        <a href="{:url('back.home/loginout')}" class="panel panel-default thumbnail cm-thumbnail">
                             <div class="panel-body text-center">
                                 <span class="svg-48">
                                     <img src="__BIMAGES__/sf/lock-open.svg" alt="lock-open">
                                 </span>
-                                <h4>登录</h4> <small>Have a look to the login page.</small>
+                                <h4>退出登录</h4> <small>Have a look to the login page.</small>
 
                             </div>
                         </a>
