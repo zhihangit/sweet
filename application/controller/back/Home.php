@@ -19,6 +19,11 @@ class Home extends Controller
         $this->redirect(url('back.login/index'));
     }
 
+    public function demo()
+    {
+        return $this->fetch('demo');
+    }
+
 
 
 
