@@ -32,6 +32,7 @@ class Login extends Controller
 // 记录用户登录信息
         cookie('user_id', $has['id'], 3600); // 一个小时有效期
         cookie('user_name', $has['username'], 3600);
+        cookie('user_limite', $has['limite'], 3600);
         $this->redirect(url('back.home/index'));
     }
 }
