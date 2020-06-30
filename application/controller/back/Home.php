@@ -8,7 +8,7 @@ class Home extends Controller
     protected $beforeActionList = [
         'judge'=>  ['except'=>'loginout'],
     ];
-
+    //安全考虑
     protected  function judge(){
        // if (!isset(cookie('user_name')) or !isset(cookie('user_id')) )
        if (!isset($_COOKIE['user_name']) or !isset($_COOKIE['user_id']) )
@@ -24,6 +24,7 @@ class Home extends Controller
 
         return $this->fetch('index');
     }
+    //退出系统
     public function loginout()
     {
         cookie('user_id', null);
@@ -31,12 +32,18 @@ class Home extends Controller
         cookie('limite', null);
         $this->redirect(url('back.login/index'));
     }
+    //商家管理
+    public function comadmin()
+    {
+        return $this->fetch('comadmin');
+    }
 
     public function demo()
     {
         //return $this->fetch('demo');
         echo "demo";
     }
+
 
 
 

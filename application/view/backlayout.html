@@ -20,11 +20,11 @@
                 <div id="cm-menu-items-wrapper">
                     <div id="cm-menu-scroller">
                         <ul class="cm-menu-items">
-                            <li class="active"><a href="index.html" class="sf-house">Home</a></li>
+                            <li class="active"><a href="{:url('back.home/comadmin')}" class="sf-house">系统应用</a></li>
                             <li><a href="dashboard-sales.html" class="sf-dashboard">Dashboard</a></li>
                             <li><a href="components-text.html" class="sf-brick">Components</a></li>
                             <li class="cm-submenu">
-                                <a class="sf-window-layout">Navbar layouts <span class="caret"></span></a>
+                                <a class="sf-window-layout">商家应用<span class="caret"></span></a>
                                 <ul>
                                     <li><a href="layouts-breadcrumb1.html">1st nav breadcrumb</a></li>
                                     <li><a href="layouts-breadcrumb2.html">2nd nav breadcrumb</a></li>
@@ -109,7 +109,7 @@
         </header>
         <div id="global" style="padding-top: 10px;height: 100%">
             {__CONTENT__}
-            <footer class="cm-footer"><span class="pull-left">登录账户：</span></footer>
+            <footer class="cm-footer"><span class="pull-left">登录账户：{$Think.cookie.user_name}</span></footer>
         </div>
         <script src="__BJS__/lib/jquery.min.js"></script>
         <script src="__BJS__/jquery.mousewheel.min.js"></script>
