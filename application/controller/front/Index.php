@@ -8,6 +8,7 @@ class Index extends Controller
     public function index()
     {
         //echo  "juse test";
+
         $this->assign('name', 'thinkphp');
         return $this->fetch('index');
     }
@@ -19,7 +20,7 @@ class Index extends Controller
 
     public function demo()
     {
-
+        echo md5('987001');
         echo Env::get('app_path')."------------------APP_PATH</BR>";
         echo Env::get('ROOT_PATH')."------------------ROOT_PATH</BR>";
         echo Env::get('MODULE_PATH')."------------------MODULE_PATH</BR>";

@@ -26,7 +26,7 @@ class Login extends Controller
             $this->error('用户名密码错误');
         }
 // 验证密码
-        if($has['userpwd'] != $param['userpwd']){
+        if($has['userpwd'] != md5($param['userpwd'])){
             $this->error('用户名密码错误');
         }
 // 记录用户登录信息
