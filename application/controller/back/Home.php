@@ -37,6 +37,13 @@ class Home extends Controller
     {
         return $this->fetch('comadmin');
     }
+    public function vendermanage(){
+        return $this->fetch('vendermanage');
+    }
+
+    public function codemanage(){
+        return $this->fetch('codemanage');
+    }
 
     public function demo()
     {
