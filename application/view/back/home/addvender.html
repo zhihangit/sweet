@@ -1,4 +1,6 @@
 {layout name="backlayout" /}
+
+
 <div class="container-fluid cm-container-white" style="margin-top:20px;padding-top: 30px;height: 100%">
     <div class="row">
         <div class="col-md-12">
@@ -53,9 +55,60 @@
                         <div class="form-group">
                             <label for="areaid" class="col-sm-2 control-label">地域归属（必填）</label>
                             <div class="col-sm-10">
-                                <input type="areaid"  name="areaid" class="form-control" id="areaid" placeholder="地域归属">
+                                <select name="pro" id="pro">
+                                    <option>--请选择--</option>
+                                   {foreach $region as $vo}
+                                    <option value="{$vo.id}">{$vo.name}</option>
+                                    {/foreach}
+                                </select>
+
+
+                                <!-- 城市 -->
+                                <select name="city" id="city">
+                                    <option>--请选择省--</option>
+                                </select>
+
+
+
+
+                                <!-- 区县 -->
+                                <select name="area" id="area">
+                                    <option>--请选择市--</option>
+                                </select>
+
                             </div>
                         </div>
+
+                        <script src="https://cdn.bootcss.com/jquery/3.3.0/jquery.min.js"></script>
+                        <script>
+
+                            $('#pro').change(function(){
+                                    $.ajax({
+                                        type:"post",
+                                        url:"{:url('back.home/addvender')}",
+                                        data:'pro_id='+$('#pro').val(),
+                                        dataType:"json",
+                                        success:function(data){
+                                            console.log(data);
+                                            $('#city').html(data);
+                                            $('#area').html('<option>--请选择市--</option>');
+                                        }
+                                    });
+                            });
+
+                            $('#city').change(function(){
+                                $.ajax({
+                                    type:"post",
+                                    url:"{:url('back.home/addvender')}",
+                                    data:'pro_id='+$('#city').val(),
+                                    dataType:"json",
+                                    success:function(data){
+                                        console.log(data);
+                                        $('#area').html(data);
+                                    }
+                                });
+                            });
+                        </script>
 
                         <div class="form-group">
                             <label for="email" class="col-sm-2 control-label">email（必填）</label>
