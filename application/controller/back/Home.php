@@ -45,6 +45,9 @@ class Home extends Controller
         return $this->fetch('codemanage');
     }
 
+    public function addvender(){
+        return $this->fetch('addvender');
+}
     public function demo()
     {
         //return $this->fetch('demo');
