@@ -4,6 +4,7 @@ use think\facade\Env;
 use think\Db;
 use think\facade\Request;
 use think\Controller;
+use app\model\back\User as usertest;
 
 class Home extends Controller
 {
@@ -68,8 +69,14 @@ class Home extends Controller
 }
     public function demo()
     {
-        //return $this->fetch('demo');
-        echo "demo";
+        $result=usertest::select();
+        return json($result);
+
+        /*$user           = new User;
+        $user->name     = 'thinkphp';
+        //$user->email    = 'thinkphp@qq.com';
+        $user->save();
+        echo "demo";*/
     }
 
 
