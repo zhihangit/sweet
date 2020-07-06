@@ -6,6 +6,7 @@ use think\Db;
 use think\facade\Request;
 use think\Controller;
 use app\model\back\User;
+use app\model\back\Region;
 class Home extends Controller
 {
     protected $beforeActionList = [
@@ -46,6 +47,26 @@ class Home extends Controller
         //$list= User::with(['Userinfo'	=> function($query) { $query->field('user_id,company,email');}])->select();
        // dump($list);
         return $this->fetch('vendermanage');
+    }
+
+    public function modvender(){
+        if (Request::has('id'))
+        {
+            $modid = input('id');
+            $user = User::get($modid );
+            echo $user->userinfo->email;
+            //dump($user);
+            $pid=Region::where('id',$user->area)->value('parent_id');
+            $ppid=Region::where('id',$pid)->value('parent_id');
+
+            echo $pid."$".$ppid;
+        }
+        else{
+
+            $this->error('非法操作');
+
+        }
+
     }
 
     public function codemanage(){
