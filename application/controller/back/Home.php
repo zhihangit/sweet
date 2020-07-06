@@ -119,6 +119,23 @@ class Home extends Controller
 
 
     }
+
+    public function delevender()
+    {
+        if (Request::has('id')) {
+            $delid = input('id');
+            //User::destroy($delid);
+            //Userinfo::destroy($delid);
+
+            $data = User::get($delid,'userinfo');
+             // 删除当前及关联模型
+            $data->together('userinfo')->delete();
+            //die('stop here');
+            $this->success('删除成功', 'back.home/vendermanage');
+        } else {
+            $this->error('非法操作');
+        }
+    }
     public function demo()
     {
         //$result=User::select();
