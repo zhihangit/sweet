@@ -49,17 +49,27 @@ class Home extends Controller
         return $this->fetch('vendermanage');
     }
 
-    public function modvender(){
+    public function modivender(){
         if (Request::has('id'))
         {
             $modid = input('id');
             $user = User::get($modid );
-            echo $user->userinfo->email;
+            //echo $user->userinfo->email;
             //dump($user);
-            $pid=Region::where('id',$user->area)->value('parent_id');
-            $ppid=Region::where('id',$pid)->value('parent_id');
+            $userareaname=Region::where('id',$user->area)->value('name');
+            $p['id']=Region::where('id',$user->area)->value('parent_id');
+            $p['name']=Region::where('id',$p['id'])->value('name');
+            $pp['id']=Region::where('id',$p['id'])->value('parent_id');
+           // $pp['name']=Region::where('id',$p['id'])->value('name');
 
-            echo $pid."$".$ppid;
+            $region = Db::name('region')->where(['level_type' => 1])->select();
+            $this->assign('userareaname',$userareaname);
+            $this->assign('region', $region);
+            $this->assign('user',$user);
+            $this->assign('p',$p);
+            $this->assign('pp',$pp);
+            return $this->fetch('modivender');
+            //echo $pid."$".$ppid;
         }
         else{
 
@@ -69,10 +79,57 @@ class Home extends Controller
 
     }
 
-    public function codemanage(){
+    public function domodivender(){
+        if(Request::isPost()){
 
-        return $this->fetch('codemanage');
+        $validate = new \app\validate\back\Vuser;
+        if (!$validate->check(Request::param())) {
+            dump($validate->getError());
+        }else{
+
+            $userdata=Request::param();
+            $file = request()->file('info_photo');
+            // 移动到框架应用根目录/uploads/ 目录下
+            $info = $file->move( '../uploads');
+            if($info){
+                $userdata['image']=$info->getSaveName();
+
+            }else{ $this->error('图片上传失败！');}
+
+            $mod = new User();
+            $modinfo=new Userinfo();
+
+            $modinfo->email=$userdata['email'];
+            $modinfo->address=$userdata['address'];
+            $modinfo->company=$userdata['company'];
+            $modinfo->image=$userdata['image'];
+
+            $mod->userinfo=$modinfo;
+            $a=$mod->allowField(['username','userpwd','limite','area'])->together('userinfo')->save($userdata);
+
+            if(false === $a){
+                // 验证失败 输出错误信息
+                dump($mod->getError());
+                die;
+            }else
+            {
+                //die('stop here');
+                //echo $mod->id;
+                //sleep("6");
+                $this->success('新增成功', 'back.home/vendermanage');
+            }
+
+        }
+
+    }else
+    {
+        $this->error('非法操作');
     }
+
+
+    }
+
+
 
     public function addvender(){
       if (Request::isPost()) {
@@ -93,44 +150,48 @@ class Home extends Controller
 
         return $this->fetch('addvender');
           }
-    public function doaddvender(){
-        if(Request::isPost()){
-
-            $validate = new \app\validate\back\Vuser;
-            if (!$validate->check(Request::param())) {
-                dump($validate->getError());
-            }else{
-
-                $userdata=Request::param();
-                $file = request()->file('info_photo');
-                // 移动到框架应用根目录/uploads/ 目录下
-                $info = $file->move( '../uploads');
-                if($info){
-                    $userdata['image']=$info->getSaveName();
-                    $mod = new User();
-                    $modinfo=new Userinfo();
-                    
-                    $modinfo->email=$userdata['email'];
-                    $modinfo->address=$userdata['address'];
-                    $modinfo->company=$userdata['company'];
-                    $modinfo->image=$userdata['image'];
-
-                    $mod->userinfo=$modinfo;
-                    $a=$mod->allowField(['username','userpwd','limite','area'])->together('userinfo')->save($userdata);
-
-                    if(false === $a){
-                        // 验证失败 输出错误信息
-                        dump($mod->getError());
-                        die;
+    public function doaddvender()
+      {
+        if(Request::isPost())
+            {
+                 $validate = new \app\validate\back\Vuser;
+                 if (!$validate->check(Request::param()))
+                    {
+                           dump($validate->getError());
                     }else
                         {
-                            //die('stop here');
-                            //echo $mod->id;
-                            //sleep("6");
-                            $this->success('新增成功', 'back.home/vendermanage');
-                        }
-                        }
-                 }
+                                $userdata=Request::param();
+                                $file = request()->file('info_photo');
+                              // 移动到框架应用根目录/uploads/ 目录下
+                                 $info = $file->move( '../uploads');
+                                if($info){
+                                             $userdata['image']=$info->getSaveName();
+                                         }else
+                                             { $this->error('图片上传失败！');}
+
+                                $mod = new User();
+                                $modinfo=new Userinfo();
+
+                                $modinfo->email=$userdata['email'];
+                                $modinfo->address=$userdata['address'];
+                                $modinfo->company=$userdata['company'];
+                                $modinfo->image=$userdata['image'];
+
+                                $mod->userinfo=$modinfo;
+                                $a=$mod->allowField(['username','userpwd','limite','area'])->together('userinfo')->save($userdata);
+
+                                if(false === $a){
+                                    // 验证失败 输出错误信息
+                                    dump($mod->getError());
+                                    die;
+                                }else
+                                {
+                                    //die('stop here');
+                                    //echo $mod->id;
+                                    //sleep("6");
+                                    $this->success('新增成功', 'back.home/vendermanage');
+                                }
+                                 }
 
         }else
             {
@@ -156,6 +217,11 @@ class Home extends Controller
         } else {
             $this->error('非法操作');
         }
+    }
+
+    public function codemanage(){
+
+        return $this->fetch('codemanage');
     }
     public function demo()
     {

@@ -35,6 +35,7 @@ return [
     // 模板参数
     'tpl_replace_string' => [ // 视图输出字符串内容替换
         '__PUBLIC__' => '/sweet/public',
+        '__UPLOADS__' => '/sweet/uploads',
         //前端
         '__FIMAGES__' => '/sweet/public/front/images',
         '__FUPLOADS__' => '/sweet/public/front/uploads',

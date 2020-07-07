@@ -1,0 +1,183 @@
+{layout name="backlayout" /}
+
+
+<div class="container-fluid cm-container-white" style="margin-top:20px;padding-top: 30px;height: 100%">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">修改商家信息</div>
+                <div class="panel-body" style="min-height: 214px;">
+                    <form class="form-horizontal"  enctype="multipart/form-data" action="{:url('back.home/domodivender')}" method="post" >
+                        <div class="form-group">
+                            <label for="username" class="col-sm-2 control-label">用户名（必填）</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="username" class="form-control" id="username" placeholder="用户名" value="{$user.username}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="pass_word" class="col-sm-2 control-label">登录密码（必填）</label>
+                            <div class="col-sm-10">
+                                <input name="userpwd" type="password" class="form-control" id="user_pwd" placeholder="密码">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="limite" class="col-sm-2 control-label">类型（必选）</label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline">
+                                    <input type="radio" name="limite" id="limiteRadio1" value="1"  {if ( $user.limite == 1) } checked {/if}> 1系统管理员
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="limite" id="limiteRadio2" value="2" {if ( $user.limite == 2) } checked {/if}> 2商家管理员
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="limite" id="limiteRadio3" value="3" {if ( $user.limite == 3) } checked {/if}> 3门店管理员
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="company" class="col-sm-2 control-label">商家名称（必填）</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="company" class="form-control" id="company" placeholder="商家名称" value="{$user.userinfo.company}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="company" class="col-sm-2 control-label">商家形象图</label>
+                            <div class="col-sm-10">
+                              <!--<input type="text" name="company" class="form-control" id="company" placeholder="商家形象图">
+                         -->
+                                 <!--   <img id="plsod" style="display:none; border-color:#333; border-style:solid; border-width:1px;" width="80px" height="60px">-->
+                                <input type="file" name="info_photo" value="{$user.userinfo.image}" id="info_photo"
+                                       onchange='PreviewImage(this)' />
+
+                                <div id="photo_info" class="photo_info" ><img id='img1' width='120px' height='100px'  style='border:black solid 1px;margin-top:5px;' src='__UPLOADS__/{$user.userinfo.image}'/></div>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="areaid" class="col-sm-2 control-label">地域归属（必填）</label>
+                            <div class="col-sm-10">
+                                <select name="pro" id="pro">
+                                    <option>--请选择--</option>
+                                   {foreach $region as $vo}
+                                    {if $vo.id == $pp.id}
+                                    <option value={$vo.id} selected>{$vo.name}</option>
+                                    {else /}
+                                    <option value={$vo.id} >{$vo.name}</option>
+                                    {/if}
+
+
+
+                                    {/foreach}
+                                </select>
+
+
+                                <!-- 城市 -->
+                                <select name="city" id="city">
+                                    <option value="{$p.id}">{$p.name}</option>
+                                </select>
+
+
+
+
+                                <!-- 区县 -->
+                                <select name="area" id="area">
+                                    <option value="{$user.id}">{$userareaname}</option>
+                                </select>
+
+                            </div>
+                        </div>
+
+                        <!--<script src="https://cdn.bootcss.com/jquery/3.3.0/jquery.min.js"></script>-->
+                        <script src="__BJS__/jquery.min.js"></script>
+                        <script>
+
+                            $('#pro').change(function(){
+                                    $.ajax({
+                                        type:"post",
+                                        url:"{:url('back.home/addvender')}",
+                                        data:'pro_id='+$('#pro').val(),
+                                        dataType:"json",
+                                        success:function(data){
+                                            console.log(data);
+                                            $('#city').html(data);
+                                            $('#area').html('<option>--请选择市--</option>');
+                                        }
+                                    });
+                            });
+
+                            $('#city').change(function(){
+                                $.ajax({
+                                    type:"post",
+                                    url:"{:url('back.home/addvender')}",
+                                    data:'pro_id='+$('#city').val(),
+                                    dataType:"json",
+                                    success:function(data){
+                                        console.log(data);
+                                        $('#area').html(data);
+                                    }
+                                });
+                            });
+
+
+                            function PreviewImage(imgFile) {
+                                var filextension = imgFile.value.substring(imgFile.value
+                                    .lastIndexOf("."), imgFile.value.length);
+                                filextension = filextension.toLowerCase();
+                                if ((filextension != '.jpg') && (filextension != '.gif')
+                                    && (filextension != '.jpeg') && (filextension != '.png')
+                                    && (filextension != '.bmp')) {
+                                    alert("对不起，系统仅支持标准格式的照片，请您调整格式后重新上传，谢谢 !");
+                                    imgFile.focus();
+                                } else {
+                                    var path;
+                                    if (document.all)//IE
+                                    {
+                                        imgFile.select();
+                                        path = document.selection.createRange().text;
+                                        document.getElementById("photo_info").innerHTML = "";
+                                        document.getElementById("photo_info").style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='scale',src=\""
+                                            + path + "\")";//使用滤镜效果
+                                    } else//FF
+                                    {
+                                        path = window.URL.createObjectURL(imgFile.files[0]);// FF 7.0以上
+                                        //path = imgFile.files[0].getAsDataURL();// FF 3.0
+                                        document.getElementById("photo_info").innerHTML = "<img id='img1' width='120px' height='100px'  style='border:black solid 1px;margin-top:5px;' src='"+path+"'/>";
+                                        //document.getElementById("img1").src = path;
+                                    }
+                                }
+                            }
+
+                        </script>
+
+                        <div class="form-group">
+                            <label for="email" class="col-sm-2 control-label">email（必填）</label>
+                            <div class="col-sm-10">
+                                <input type="email"  name="email" class="form-control" id="areaid" placeholder="email" value="{$user.userinfo.email}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="address" class="col-sm-2 control-label">地址（必填）</label>
+                            <div class="col-sm-10">
+                                <input type="text"  name="address" class="form-control" id="address" placeholder="地址" value="{$user.userinfo.address}">
+                            </div>
+                        </div>
+
+
+                        <div class="form-group" style="margin-bottom:0">
+                            <div class="col-sm-offset-2 col-sm-10 text-right">
+                                <!--<button type="reset" class="btn btn-default">Cancel</button>-->
+                                <button type="submit" class="btn btn-primary">修改</button>
+                            </div>
+                        </div>
+                        {:token()}
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
