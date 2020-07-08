@@ -87,37 +87,17 @@ class Home extends Controller
             dump($validate->getError());
         }else{
 
-            $userdata=Request::param();
-            $file = request()->file('info_photo');
-            // 移动到框架应用根目录/uploads/ 目录下
-            $info = $file->move( '../uploads');
-            if($info){
-                $userdata['image']=$info->getSaveName();
 
-            }else{ $this->error('图片上传失败！');}
-
-            $mod = new User();
-            $modinfo=new Userinfo();
-
-            $modinfo->email=$userdata['email'];
-            $modinfo->address=$userdata['address'];
-            $modinfo->company=$userdata['company'];
-            $modinfo->image=$userdata['image'];
-
-            $mod->userinfo=$modinfo;
-            $a=$mod->allowField(['username','userpwd','limite','area'])->together('userinfo')->save($userdata);
-
-            if(false === $a){
-                // 验证失败 输出错误信息
-                dump($mod->getError());
-                die;
-            }else
-            {
-                //die('stop here');
-                //echo $mod->id;
-                //sleep("6");
-                $this->success('新增成功', 'back.home/vendermanage');
-            }
+            $user = User::get(input('userid'));
+            $user->username=input('username');
+            $user->limite= input('limte');
+            $user->userpwd=input('userpwd');
+            $user->userinfo->email=input('email');
+            $user->userinfo->company=input('company');
+            $user->userinfo->address=input('address');
+            $user->userinfo->image=input('image');
+// 更新当前模型及关联模型
+            $user->together('userinfo')->save();
 
         }
 
