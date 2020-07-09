@@ -80,25 +80,49 @@ class Home extends Controller
     }
 
     public function domodivender(){
+        $flag=false;
+        $modidata=Request::param();
+        //如果没有设置新密码则保留旧密码
+        if ($modidata['userpwd']==''){
+            $flag=true;//设置密码保留标志
+            $modidata['userpwd']=Db::table('sw_user')->getFieldById(input('userid'), 'userpwd');
+        }
+       // die('stop here');
+        $isfile=$_FILES;
+        if($isfile['info_photo']['name']==''){
+            $vimage = Db::table('sw_userinfo')->getFieldByUser_id(input('userid'), 'image');
+        }
+        else{
+            $file = request()->file('info_photo');
+            // 移动到框架应用根目录/uploads/ 目录下
+            $info = $file->move( '../uploads');
+            if($info){
+                $vimage=$info->getSaveName();
+            }else
+                { $this->error('图片上传失败！');}
+        }
         if(Request::isPost()){
-
         $validate = new \app\validate\back\Vuser;
-        if (!$validate->check(Request::param())) {
+        if (!$validate->check($modidata)) {
             dump($validate->getError());
         }else{
-
-
-            $user = User::get(input('userid'));
-            $user->username=input('username');
-            $user->limite= input('limte');
-            $user->userpwd=input('userpwd');
+            $user = User::get($modidata['userid']);
+            $user->username=$modidata['username'];
+            $user->limite= $modidata['limite'];
+            if($flag==false){
+                $user->userpwd=md5($modidata['userpwd']);
+            }
             $user->userinfo->email=input('email');
             $user->userinfo->company=input('company');
             $user->userinfo->address=input('address');
-            $user->userinfo->image=input('image');
+            $user->userinfo->image=$vimage;
 // 更新当前模型及关联模型
-            $user->together('userinfo')->save();
-
+            $res=$user->together('userinfo')->save();
+            if($res){
+                $this->success('修改成功', 'back.home/vendermanage');
+            }else{
+                $this->error('修改失败');
+            }
         }
 
     }else
