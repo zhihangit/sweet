@@ -1,0 +1,68 @@
+{layout name="backlayout" /}
+<div class="container-fluid cm-container-white" style="margin-top:20px;padding-top: 30px;height: 100%">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">生成消费码</div>
+                <div class="panel-body" style="min-height: 214px;">
+                    <form class="form-horizontal"  enctype="multipart/form-data" action="{:url('back.home/doaddcode')}" method="post" >
+                        <div class="form-group">
+                            <label for="price" class="col-sm-2 control-label">面值</label>
+                            <div class="col-sm-10">
+                                <input name="price" type="number" class="form-control" id="price"   placeholder="面值">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="amount" class="col-sm-2 control-label">数量</label>
+                            <div class="col-sm-10">
+                                <input name="amount" type="number" class="form-control" id="amount"   placeholder="数量">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="company" class="col-sm-2 control-label">有效期（必填）</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="indate" class="demo-input" placeholder="请选择日期" id="test1">
+                            </div>
+                        </div>
+                        <script src="__PUBLIC__/plug/layDate/laydate/laydate.js"></script>
+                        <script>
+                            //执行一个laydate实例
+                            laydate.render({
+                                elem: '#test1' //指定元素
+                            });
+                        </script>
+                        <div class="form-group">
+                            <label for="areaid" class="col-sm-2 control-label">客户名称</label>
+                            <div class="col-sm-10">
+                                <select name="companyid" id="companyid">
+
+
+
+                                    {foreach $clientlist as $vo}
+                                    <option value="{$vo.id}">{$vo.companyname}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="company" class="col-sm-2 control-label">上传合同</label>
+                            <div class="col-sm-10">
+                                <input type="file" name="contract" value="" id="contract"/>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-bottom:0">
+                            <div class="col-sm-offset-2 col-sm-10 text-right">
+                                <!--<button type="reset" class="btn btn-default">Cancel</button>-->
+                                <button type="submit" class="btn btn-primary">生成消费码</button>
+                            </div>
+                        </div>
+                        {:token()}
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+

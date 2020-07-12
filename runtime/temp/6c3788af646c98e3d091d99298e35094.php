@@ -1,13 +1,14 @@
+<?php /*a:2:{s:60:"D:\wamp64\www\sweet\application\view\back\home\modicode.html";i:1594570786;s:52:"D:\wamp64\www\sweet\application\view\backlayout.html";i:1594519586;}*/ ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-        <link rel="stylesheet" type="text/css" href="__BCSS__/bootstrap-clearmin.min.css">
-        <link rel="stylesheet" type="text/css" href="__BCSS__/roboto.css">
-        <link rel="stylesheet" type="text/css" href="__BCSS__/material-design.css">
-        <link rel="stylesheet" type="text/css" href="__BCSS__/small-n-flat.css">
-        <link rel="stylesheet" type="text/css" href="__BCSS__/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="/sweet/public/back/css/bootstrap-clearmin.min.css">
+        <link rel="stylesheet" type="text/css" href="/sweet/public/back/css/roboto.css">
+        <link rel="stylesheet" type="text/css" href="/sweet/public/back/css/material-design.css">
+        <link rel="stylesheet" type="text/css" href="/sweet/public/back/css/small-n-flat.css">
+        <link rel="stylesheet" type="text/css" href="/sweet/public/back/css/font-awesome.min.css">
 
         <title>sweet管理平台</title>
     </head>
@@ -21,7 +22,7 @@
                 <div id="cm-menu-items-wrapper">
                     <div id="cm-menu-scroller">
                         <ul class="cm-menu-items">
-                            <li class="active"><a href="{:url('back.home/comadmin')}" class="sf-house">系统应用</a></li>
+                            <li class="active"><a href="<?php echo url('back.home/comadmin'); ?>" class="sf-house">系统应用</a></li>
                             <li><a href="dashboard-sales.html" class="sf-dashboard">Dashboard</a></li>
                             <li><a href="components-text.html" class="sf-brick">Components</a></li>
                             <li class="cm-submenu">
@@ -41,7 +42,7 @@
                                 </ul>
                             </li>
                             <li><a href="notepad.html" class="sf-notepad">Text Editor</a></li>
-                            <li><a href="{:url('back.home/loginout')}" class="sf-lock-open">退出登录</a></li>
+                            <li><a href="<?php echo url('back.home/loginout'); ?>" class="sf-lock-open">退出登录</a></li>
                         </ul>
                     </div>
                 </div>
@@ -109,16 +110,87 @@
             </nav>
         </header>
         <div id="global" style="padding-top: 10px;height: 100%">
-            {__CONTENT__}
-            <footer class="cm-footer"><span class="pull-left">登录账户：{$Think.cookie.user_name}</span></footer>
+            
+<div class="container-fluid cm-container-white" style="margin-top:20px;padding-top: 30px;height: 100%">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">生成消费码</div>
+                <div class="panel-body" style="min-height: 214px;">
+                    <form class="form-horizontal"  enctype="multipart/form-data" action="<?php echo url('back.home/domodicode'); ?>" method="post" >
+                        <div class="form-group">
+                            <label for="price" class="col-sm-2 control-label">面值</label>
+                            <div class="col-sm-10">
+                                <input name="price" type="number" class="form-control" id="price"  value="<?php echo htmlentities($data['price']); ?>"  placeholder="面值">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="amount" class="col-sm-2 control-label">数量</label>
+                            <div class="col-sm-10">
+                                <input name="amount" type="number" class="form-control" id="amount"  value="<?php echo htmlentities($data['amount']); ?>" placeholder="数量">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="company" class="col-sm-2 control-label">有效期（必填）</label>
+                            <div class="col-sm-10">
+                                <input type="text" value="<?php echo htmlentities($data['indate']); ?>" name="indate" class="demo-input" placeholder="请选择日期" id="test1">
+                            </div>
+                        </div>
+                        <script src="/sweet/public/plug/layDate/laydate/laydate.js"></script>
+                        <script>
+                            //执行一个laydate实例
+                            laydate.render({
+                                elem: '#test1' //指定元素
+                            });
+                        </script>
+                        <div class="form-group">
+                            <label for="areaid" class="col-sm-2 control-label">客户名称</label>
+                            <div class="col-sm-10">
+                                <select name="companyid" id="companyid" >
+
+                                    <option>--请选择--</option>
+                                    <?php foreach($clientlist as $vo): if($vo['id'] == $data['companyid']): ?>
+                                    <option value=<?php echo htmlentities($vo['id']); ?> selected><?php echo htmlentities($vo['companyname']); ?></option>
+                                    <?php else: ?>
+                                    <option value=<?php echo htmlentities($vo['id']); ?> ><?php echo htmlentities($vo['companyname']); ?></option>
+                                    <?php endif; ?>
+                                    <?php endforeach; ?>
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="company" class="col-sm-2 control-label">上传合同</label>
+                            <div class="col-sm-10">
+                                <input type="file" name="contract" value="" id="contract"/>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-bottom:0">
+                            <div class="col-sm-offset-2 col-sm-10 text-right">
+                                <!--<button type="reset" class="btn btn-default">Cancel</button>-->
+                                <button type="submit" class="btn btn-primary">生成消费码</button>
+                            </div>
+                        </div>
+                        <?php echo token(); ?>
+                    </form>
+                </div>
+            </div>
         </div>
-        <script src="__BJS__/lib/jquery.min.js"></script>
-        <script src="__BJS__/jquery.mousewheel.min.js"></script>
-        <script src="__BJS__/jquery.cookie.min.js"></script>
-        <script src="__BJS__/fastclick.min.js"></script>
-        <script src="__BJS__/bootstrap.min.js"></script>
-        <script src="__BJS__/clearmin.min.js"></script>
-        <script src="__BJS__/demo/home.js"></script>
+
+    </div>
+</div>
+
+
+            <footer class="cm-footer"><span class="pull-left">登录账户：<?php echo htmlentities(app('cookie')->get('user_name')); ?></span></footer>
+        </div>
+        <script src="/sweet/public/back/js/lib/jquery.min.js"></script>
+        <script src="/sweet/public/back/js/jquery.mousewheel.min.js"></script>
+        <script src="/sweet/public/back/js/jquery.cookie.min.js"></script>
+        <script src="/sweet/public/back/js/fastclick.min.js"></script>
+        <script src="/sweet/public/back/js/bootstrap.min.js"></script>
+        <script src="/sweet/public/back/js/clearmin.min.js"></script>
+        <script src="/sweet/public/back/js/demo/home.js"></script>
 
     </body>
 </html>

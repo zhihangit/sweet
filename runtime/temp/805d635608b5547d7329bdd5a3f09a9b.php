@@ -1,13 +1,14 @@
+<?php /*a:2:{s:57:"D:\wamp64\www\sweet\application\view\back\home\index.html";i:1593534260;s:52:"D:\wamp64\www\sweet\application\view\backlayout.html";i:1594519586;}*/ ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-        <link rel="stylesheet" type="text/css" href="__BCSS__/bootstrap-clearmin.min.css">
-        <link rel="stylesheet" type="text/css" href="__BCSS__/roboto.css">
-        <link rel="stylesheet" type="text/css" href="__BCSS__/material-design.css">
-        <link rel="stylesheet" type="text/css" href="__BCSS__/small-n-flat.css">
-        <link rel="stylesheet" type="text/css" href="__BCSS__/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="/sweet/public/back/css/bootstrap-clearmin.min.css">
+        <link rel="stylesheet" type="text/css" href="/sweet/public/back/css/roboto.css">
+        <link rel="stylesheet" type="text/css" href="/sweet/public/back/css/material-design.css">
+        <link rel="stylesheet" type="text/css" href="/sweet/public/back/css/small-n-flat.css">
+        <link rel="stylesheet" type="text/css" href="/sweet/public/back/css/font-awesome.min.css">
 
         <title>sweet管理平台</title>
     </head>
@@ -21,7 +22,7 @@
                 <div id="cm-menu-items-wrapper">
                     <div id="cm-menu-scroller">
                         <ul class="cm-menu-items">
-                            <li class="active"><a href="{:url('back.home/comadmin')}" class="sf-house">系统应用</a></li>
+                            <li class="active"><a href="<?php echo url('back.home/comadmin'); ?>" class="sf-house">系统应用</a></li>
                             <li><a href="dashboard-sales.html" class="sf-dashboard">Dashboard</a></li>
                             <li><a href="components-text.html" class="sf-brick">Components</a></li>
                             <li class="cm-submenu">
@@ -41,7 +42,7 @@
                                 </ul>
                             </li>
                             <li><a href="notepad.html" class="sf-notepad">Text Editor</a></li>
-                            <li><a href="{:url('back.home/loginout')}" class="sf-lock-open">退出登录</a></li>
+                            <li><a href="<?php echo url('back.home/loginout'); ?>" class="sf-lock-open">退出登录</a></li>
                         </ul>
                     </div>
                 </div>
@@ -109,16 +110,22 @@
             </nav>
         </header>
         <div id="global" style="padding-top: 10px;height: 100%">
-            {__CONTENT__}
-            <footer class="cm-footer"><span class="pull-left">登录账户：{$Think.cookie.user_name}</span></footer>
+            
+<div class="container-fluid cm-container-white" style="margin-top:20px;padding-top: 200px;height: 100%">
+  <h2 style="margin-top:100px;text-align: center"><img src="/sweet/public/back/images/sf/device-computer.svg" height="60" width="60"> 欢迎登录SWEET管理平台</h2>
+  <p style="text-align: center"><?php echo htmlentities(date('Y-m-d H:i',!is_numeric($todaytime)? strtotime($todaytime) : $todaytime)); ?></p>
+</div>
+
+
+            <footer class="cm-footer"><span class="pull-left">登录账户：<?php echo htmlentities(app('cookie')->get('user_name')); ?></span></footer>
         </div>
-        <script src="__BJS__/lib/jquery.min.js"></script>
-        <script src="__BJS__/jquery.mousewheel.min.js"></script>
-        <script src="__BJS__/jquery.cookie.min.js"></script>
-        <script src="__BJS__/fastclick.min.js"></script>
-        <script src="__BJS__/bootstrap.min.js"></script>
-        <script src="__BJS__/clearmin.min.js"></script>
-        <script src="__BJS__/demo/home.js"></script>
+        <script src="/sweet/public/back/js/lib/jquery.min.js"></script>
+        <script src="/sweet/public/back/js/jquery.mousewheel.min.js"></script>
+        <script src="/sweet/public/back/js/jquery.cookie.min.js"></script>
+        <script src="/sweet/public/back/js/fastclick.min.js"></script>
+        <script src="/sweet/public/back/js/bootstrap.min.js"></script>
+        <script src="/sweet/public/back/js/clearmin.min.js"></script>
+        <script src="/sweet/public/back/js/demo/home.js"></script>
 
     </body>
 </html>

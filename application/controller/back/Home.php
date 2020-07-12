@@ -6,6 +6,8 @@ use think\Db;
 use think\facade\Request;
 use think\Controller;
 use app\model\back\User;
+use app\model\back\Code;
+use app\model\back\Client;
 use app\model\back\Region;
 class Home extends Controller
 {
@@ -224,9 +226,103 @@ class Home extends Controller
     }
 
     public function codemanage(){
+         $list = Code::withJoin([
+            'client'	=>	['id', 'companyname']
+        ],'LEFT')->order('create_time desc')->select();
+        $this->assign('list',$list);
 
         return $this->fetch('codemanage');
     }
+    public function addcode(){
+        $clientlist = Db::name('client')->select();
+        $this->assign('clientlist', $clientlist);
+
+        return $this->fetch('addcode');
+    }
+
+    public function doaddcode()
+    {
+
+        $isfile=$_FILES;
+        $userdata=Request::param();
+        if(Request::isPost())
+        {
+            $validate = new \app\validate\back\Vcode;
+            if (!$validate->check(Request::param()))
+            {
+                dump($validate->getError());
+            }else
+            {
+                if($isfile['contract']['name']==''){
+                    $userdata['contract']='';
+                }else{
+
+                    $file = request()->file('contract');
+                    // 移动到框架应用根目录/uploads/ 目录下
+                    $info = $file->move( '../uploads');
+
+                    if($info){
+                        $userdata['contract']=$info->getSaveName();
+                    }else
+                       { $this->error('合同上传失败！');}
+                    }
+
+                $userdata['status']=1;
+                $mod = new Code();
+                //dump($userdata);
+               //die('stop!');
+                $a=$mod->save($userdata);
+
+                if(false === $a){
+                    // 验证失败 输出错误信息
+                    dump($mod->getError());
+                    die;
+                }else
+                {
+                    $this->success('新增批次消费码成功', 'back.home/codemanage');
+                }
+            }
+
+        }else
+        {
+            $this->error('非法操作');
+        }
+
+
+
+    }
+
+
+    public function abolishcode(){
+
+        if (Request::has('id')) {
+            $delid = input('id');
+            $code = Code::get($delid);
+            $code->status= 3;
+            $code->save();
+            //echo $code->getLastSql();
+           // die('stop here');
+            $this->success('改批次已作废', 'back.home/codemanage');
+        } else {
+            $this->error('非法操作');
+        }
+
+    }
+
+    public function modicode(){
+        $data = Code::get(input('id'));
+        //echo $data['status'];
+        if ($data['status']==1) {
+            $clientlist = Db::name('client')->select();
+            $this->assign('clientlist', $clientlist);
+            $this->assign('data',$data);
+            return $this->fetch('modicode');
+        }else{
+            $this->error('已激活或作废批次无法进行修改！');
+        }
+
+        }
+
     public function demo()
     {
         //$result=User::select();
