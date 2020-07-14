@@ -81,7 +81,7 @@ class HasManyThrough extends Relation
      */
     public function has($operator = '>=', $count = 1, $id = '*', $joinType = 'INNER')
     {
-        $model         = Loader::parseName(basename(str_replace('\\', '/', get_class($this->parent))));
+        $model         = App::parseName(App::classBaseName($this->parent));
         $throughTable  = $this->through->getTable();
         $pk            = $this->throughPk;
         $throughKey    = $this->throughKey;
@@ -114,7 +114,7 @@ class HasManyThrough extends Relation
      */
     public function hasWhere($where = [], $fields = null)
     {
-        $model        = Loader::parseName(basename(str_replace('\\', '/', get_class($this->parent))));
+        $model        = App::parseName(App::classBaseName($this->parent));
         $throughTable = $this->through->getTable();
         $pk           = $this->throughPk;
         $throughKey   = $this->throughKey;
@@ -169,7 +169,7 @@ class HasManyThrough extends Relation
             ], $foreignKey, $relation, $subRelation, $closure);
 
             // 关联属性名
-            $attr = Loader::parseName($relation);
+            $attr = App::parseName($relation);
 
             // 关联数据封装
             foreach ($resultSet as $result) {
@@ -218,7 +218,7 @@ class HasManyThrough extends Relation
             $relationModel->setParent(clone $result);
         }
 
-        $result->setRelation(Loader::parseName($relation), $this->resultSetBuild($data[$pk]));
+        $result->setRelation(App::parseName($relation), $this->resultSetBuild($data[$pk]));
     }
 
     /**
@@ -279,7 +279,7 @@ class HasManyThrough extends Relation
             }
         }
 
-        $alias        = Loader::parseName(basename(str_replace('\\', '/', $this->model)));
+        $alias        = App::parseName(App::classBaseName($this->model));
         $throughTable = $this->through->getTable();
         $pk           = $this->throughPk;
         $throughKey   = $this->throughKey;
@@ -315,7 +315,7 @@ class HasManyThrough extends Relation
             }
         }
 
-        $alias        = Loader::parseName(basename(str_replace('\\', '/', $this->model)));
+        $alias        = App::parseName(App::classBaseName($this->model));
         $throughTable = $this->through->getTable();
         $pk           = $this->throughPk;
         $throughKey   = $this->throughKey;

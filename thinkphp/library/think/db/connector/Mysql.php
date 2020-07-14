@@ -97,10 +97,10 @@ class Mysql extends Connection
                 $info[$val['field']] = [
                     'name'    => $val['field'],
                     'type'    => $val['type'],
-                    'notnull' => 'NO' == $val['null'],
+                    'notnull' => (bool) ('' === $val['null']), // not null is empty, null is yes
                     'default' => $val['default'],
-                    'primary' => strtolower($val['key']) == 'pri',
-                    'autoinc' => strtolower($val['extra']) == 'auto_increment',
+                    'primary' => (strtolower($val['key']) == 'pri'),
+                    'autoinc' => (strtolower($val['extra']) == 'auto_increment'),
                 ];
             }
         }
@@ -187,7 +187,7 @@ class Mysql extends Connection
             return false;
         }
 
-        $this->linkID->exec("XA START '$xid'");
+        $this->execute("XA START '$xid'");
     }
 
     /**
@@ -199,8 +199,8 @@ class Mysql extends Connection
     public function prepareXa($xid)
     {
         $this->initConnect(true);
-        $this->linkID->exec("XA END '$xid'");
-        $this->linkID->exec("XA PREPARE '$xid'");
+        $this->execute("XA END '$xid'");
+        $this->execute("XA PREPARE '$xid'");
     }
 
     /**
@@ -212,7 +212,7 @@ class Mysql extends Connection
     public function commitXa($xid)
     {
         $this->initConnect(true);
-        $this->linkID->exec("XA COMMIT '$xid'");
+        $this->execute("XA COMMIT '$xid'");
     }
 
     /**
@@ -224,6 +224,6 @@ class Mysql extends Connection
     public function rollbackXa($xid)
     {
         $this->initConnect(true);
-        $this->linkID->exec("XA ROLLBACK '$xid'");
+        $this->execute("XA ROLLBACK '$xid'");
     }
 }

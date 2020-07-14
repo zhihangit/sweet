@@ -63,7 +63,7 @@
                             <td><a href="javascript:void(0)" onclick="showDeleteModal(this)">作废</a>
                                 <a href="{:url('back.home/modicode','','')}/id/{$vo.id}.html">/修改</a>
                                 <a href="../../uploads/{$vo.contract}" download="{$vo.client.companyname}{$vo.create_time}合同">/查看合同</a>
-                                <a href="/#" download="w3logo">/码文件</a>
+                                <a href="{:url('back.home/out','','')}/id/{$vo.id}" >/码文件</a>
                             </td>
                         </tr>
                         <!--{/volist}

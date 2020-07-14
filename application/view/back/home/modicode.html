@@ -9,6 +9,7 @@
                         <div class="form-group">
                             <label for="price" class="col-sm-2 control-label">面值</label>
                             <div class="col-sm-10">
+                                <input name="id"type="hidden"  value="{$data.id}">
                                 <input name="price" type="number" class="form-control" id="price"  value="{$data.price}"  placeholder="面值">
                             </div>
                         </div>
@@ -58,7 +59,7 @@
                         <div class="form-group" style="margin-bottom:0">
                             <div class="col-sm-offset-2 col-sm-10 text-right">
                                 <!--<button type="reset" class="btn btn-default">Cancel</button>-->
-                                <button type="submit" class="btn btn-primary">生成消费码</button>
+                                <button type="submit" class="btn btn-primary">修改</button>
                             </div>
                         </div>
                         {:token()}
