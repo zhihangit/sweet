@@ -468,42 +468,41 @@ class Home extends Controller
 
     }
 
-    public function demo()
-    {
-        Db::table('sw_codedetail')->where('code_id',input('id'))->delete();
-        //die('stop!!');
-        echo getrandstr1(4);
-        //$result=User::select();
-        //return json($result);
+    public function clientmanage(){
+        $clientdata=Db::table('sw_client')->order('create_time')->select();
+        $this->assign('clientdata',$clientdata);
+        return $this->fetch('clientmanage');
+    }
 
-        /*$user           = new User;
-        $user->name     = 'thinkphp';
-        //$user->email    = 'thinkphp@qq.com';
-        $user->save();
-        echo "demo";*/
-        //自动时间
-        /*$user = new User();
-        $user->username = 'thinkphp';
-        $user->userpwd = md5('987001');
-        $user->limite =1;
-        $user->areaid=1;
-        $user->aid=2;
-        $user->bid=3;
-        $user->save();
-        echo $user->create_time; // 输出类似 2016-10-12 14:20:10
-        echo $user->update_time;*/
+    public function addclient(){
+        return $this->fetch('addclient');
+    }
 
-        $user = User::get(1);
-// 输出Profile关联模型的email属性
-        //echo $user->profile->email."1</br>";
+    public function doaddclient(){
+        $userdata=Request::param();
+        if(Request::isPost())
+        {
+                $userdata['create_time']=date('Y-m-d H:i:s',time());
+                dump($userdata);
+                //die('stop!');
+                $a=Db::name('client')->Field(['companyname','email','companyaddress','contact','tel'])->insert($userdata);
 
-        die('stop here');
-        //sleep(5);
-        echo '5sss';
+                if(false === $a){
+                    dump($mod->getError());
+                    die;
+                }else
+                {
+                    $this->success('新增客户成功', 'back.home/clientmanage');
+                }
+
+
+        }else
+        {
+            $this->error('非法操作');
+        }
 
 
     }
-
 
 
 

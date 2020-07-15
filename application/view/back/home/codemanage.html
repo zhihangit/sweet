@@ -34,7 +34,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
-                <div class="panel-heading"><h3>消费码批次管理</h3></div>
+                <div class="panel-heading"  style="font-size: 20px;" ><h3>消费码批次管理</h3></div>
                 <h4 style="padding-left: 25px;margin: 5px 0px;">
                     <a href="{:url('back.home/addcode')}" class="btn btn-primary" role="button">新增批次消费码</a>
                 </h4>
@@ -52,7 +52,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                       <!--{volist name="list" id="vo" key="k"}-->
+                      {volist name="list" id="vo" key="k"}
                         <tr>
                             <td scope="row"><input type="hidden" value="{$vo.id}"> {$k}</td>
                             <td>{$vo.client.companyname}</td>
@@ -66,8 +66,8 @@
                                 <a href="{:url('back.home/out','','')}/id/{$vo.id}" >/码文件</a>
                             </td>
                         </tr>
-                        <!--{/volist}
--->
+                       {/volist}
+
                         </tbody>
                     </table>
 

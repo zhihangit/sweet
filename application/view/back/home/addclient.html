@@ -1,0 +1,55 @@
+{layout name="backlayout" /}
+<div class="container-fluid cm-container-white" style="margin-top:20px;padding-top: 30px;height: 100%">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading" style="font-size: 20px;" >新增客户</div>
+                <h5 style="text-align: center;color:red;">提示：添加后为保证系统信息完整，系统将不提供删除功能</h5>
+                <div class="panel-body" style="min-height: 214px;">
+                    <form class="form-horizontal"  enctype="multipart/form-data" action="{:url('back.home/doaddclient')}" method="post" >
+                        <div class="form-group">
+                            <label for="companyname" class="col-sm-2 control-label">客户名称</label>
+                            <div class="col-sm-10">
+                                <input name="companyname"  class="form-control" id="companyname"   placeholder="客户名称">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="companyaddress" class="col-sm-2 control-label">地址</label>
+                            <div class="col-sm-10">
+                                <input name="companyaddress"   class="form-control" id="companyaddress"   placeholder="地址">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                        <label for="contact" class="col-sm-2 control-label">联系人</label>
+                        <div class="col-sm-10">
+                            <input name="contact"   class="form-control" id="contact"   placeholder="联系人">
+                        </div>
+                    </div>
+                        <div class="form-group">
+                            <label for="tel" class="col-sm-2 control-label">联系电话</label>
+                            <div class="col-sm-10">
+                                <input name="tel"  type="tel" class="form-control" id="tel"   placeholder="联系电话">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="col-sm-2 control-label">电子邮件</label>
+                            <div class="col-sm-10">
+                                <input name="email"  type="email"  class="form-control" id=email"   placeholder="电子邮件">
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:0">
+                            <div class="col-sm-offset-2 col-sm-10 text-right">
+                                <!--<button type="reset" class="btn btn-default">Cancel</button>-->
+                                <button type="submit" class="btn btn-primary">新增</button>
+                            </div>
+                        </div>
+                        {:token()}
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
