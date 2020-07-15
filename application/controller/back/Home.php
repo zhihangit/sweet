@@ -236,7 +236,7 @@ class Home extends Controller
         return $this->fetch('codemanage');
     }
     public function addcode(){
-        $clientlist = Db::name('client')->select();
+        $clientlist = Db::name('client')->order('companyname')->select();
         $this->assign('clientlist', $clientlist);
 
         return $this->fetch('addcode');
@@ -341,20 +341,6 @@ class Home extends Controller
         public function domodicode(){
             $isfile=$_FILES;
             $userdata=Request::param();
-/*            $modidata=Request::param();
-
-            if($isfile['contract']['name']==''){
-                $vfile = Db::table('sw_code')->getFieldById(input('id'), 'contract');
-            }
-            else{
-                $file = request()->file('contract');
-                // 移动到框架应用根目录/uploads/ 目录下
-                $info = $file->move( '../uploads');
-                if($info){
-                    $vfile=$info->getSaveName();
-                }else
-                { $this->error('合同上传失败！');}
-            }*/
             if(Request::isPost())
             {
                 $validate = new \app\validate\back\Vcode;
@@ -480,12 +466,12 @@ class Home extends Controller
 
     public function doaddclient(){
         $userdata=Request::param();
+        dump($userdata);
         if(Request::isPost())
         {
-                $userdata['create_time']=date('Y-m-d H:i:s',time());
-                dump($userdata);
-                //die('stop!');
-                $a=Db::name('client')->Field(['companyname','email','companyaddress','contact','tel'])->insert($userdata);
+                $client=new Client();
+
+                $a=$client->allowField(true)->save($userdata);
 
                 if(false === $a){
                     dump($mod->getError());
@@ -499,6 +485,28 @@ class Home extends Controller
         }else
         {
             $this->error('非法操作');
+        }
+
+
+    }
+    public function modiclient(){
+        $clientdata= Client::get(input('id'));
+        $this->assign('clientdata',$clientdata);
+        return $this->fetch('modiclient');
+    }
+
+    public function domodiclient(){
+        $newdata=Request::param();
+        $companyname=Db::table('sw_client')->getFieldById(input('id'),'companyname');
+        $newdata['companyname']=$companyname;
+        //dump($newdata);
+        //die(1);
+        $client=Client::get(input('id'));
+        $res=$client->save($newdata);
+        if($res){
+            $this->success('修改成功','back.home/clientmanage');
+        }else{
+            $this->error('修改失败');
         }
 
 
