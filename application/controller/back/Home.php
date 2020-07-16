@@ -466,7 +466,7 @@ class Home extends Controller
 
     public function doaddclient(){
         $userdata=Request::param();
-        dump($userdata);
+       // dump($userdata);
         if(Request::isPost())
         {
                 $client=new Client();
