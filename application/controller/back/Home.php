@@ -1,5 +1,6 @@
 <?php
 namespace app\controller\back;
+use app\model\back\Product;
 use app\model\back\Userinfo;
 use think\facade\Env;
 use think\Db;
@@ -52,7 +53,6 @@ class Home extends Controller
        // dump($list);
         return $this->fetch('vendermanage');
     }
-
     public function modivender(){
         if (Request::has('id'))
         {
@@ -82,7 +82,6 @@ class Home extends Controller
         }
 
     }
-
     public function domodivender(){
         $flag=false;
         $modidata=Request::param();
@@ -136,9 +135,6 @@ class Home extends Controller
 
 
     }
-
-
-
     public function addvender(){
       if (Request::isPost()) {
             $data = Request::param();
@@ -209,7 +205,6 @@ class Home extends Controller
 
 
     }
-
     public function delevender()
     {
         if (Request::has('id')) {
@@ -226,7 +221,6 @@ class Home extends Controller
             $this->error('非法操作');
         }
     }
-
     public function codemanage(){
          $list = Code::withJoin([
             'client'    =>  ['id', 'companyname']
@@ -241,7 +235,6 @@ class Home extends Controller
 
         return $this->fetch('addcode');
     }
-
     public function doaddcode()
     {
 
@@ -306,8 +299,6 @@ class Home extends Controller
 
 
     }
-
-
     public function abolishcode(){
 
         if (Request::has('id')) {
@@ -323,7 +314,6 @@ class Home extends Controller
         }
 
     }
-
     public function modicode(){
         $data = Code::get(input('id'));
         //echo $data['status'];
@@ -337,8 +327,7 @@ class Home extends Controller
         }
 
         }
-
-        public function domodicode(){
+    public function domodicode(){
             $isfile=$_FILES;
             $userdata=Request::param();
             if(Request::isPost())
@@ -453,17 +442,14 @@ class Home extends Controller
         $PHPWriter->save("php://output"); //表示在$path路径下面生成demo.xlsx文件*/
 
     }
-
     public function clientmanage(){
         $clientdata=Db::table('sw_client')->order('create_time')->select();
         $this->assign('clientdata',$clientdata);
         return $this->fetch('clientmanage');
     }
-
     public function addclient(){
         return $this->fetch('addclient');
     }
-
     public function doaddclient(){
         $userdata=Request::param();
        // dump($userdata);
@@ -494,7 +480,6 @@ class Home extends Controller
         $this->assign('clientdata',$clientdata);
         return $this->fetch('modiclient');
     }
-
     public function domodiclient(){
         $newdata=Request::param();
         $companyname=Db::table('sw_client')->getFieldById(input('id'),'companyname');
@@ -511,6 +496,142 @@ class Home extends Controller
 
 
     }
+    public function productmanage(){
+        $product=new Product();
+        $list=$product->where('del_flag','0')->order('main_flag desc,create_time')->select();
+        //dump($list);
+        $this->assign('list',$list);
+
+       return $this->fetch('productmanage');
+    }
+    public function addproduct(){
+        return $this->fetch('addproduct');
+    }
+    public function doaddproduct(){
+        //dump(Request::param());
+        //die('s');
+        $isfile=$_FILES;
+        if($isfile['info_photo']['name']==''){
+                $this->error('添加商品必须上传商品主图');
+
+            }else{
+                if(Request::isPost())
+            {
+                $validate = new \app\validate\back\Vproduct;
+                if (!$validate->check(Request::param()))
+                {
+                    dump($validate->getError());
+                }else
+                {
+                    $userdata=Request::param();
+
+                    $userdata['user_id']=cookie('user_id');
+                    if(isset($userdata['main_flag'])){
+                        $userdata['main_flag']=1;
+                    }else{$userdata['main_flag']=0;}
+                    //dump($userdata);
+                    //die('2 step');
+                    $file = request()->file('info_photo');
+                    // 移动到框架应用根目录/uploads/ 目录下
+                    $info = $file->move( '../uploads');
+                    if($info){
+                        $userdata['mainimage']=$info->getSaveName();
+                    }else
+                    { $this->error('图片上传失败！');}
+
+                    $mod = new Product();
+                    $a=$mod->save($userdata);
+
+                    if(false === $a){
+                        // 验证失败 输出错误信息
+                        dump($mod->getError());
+                        die;
+                    }else
+                    {
+                        ;
+                        $this->success('新增成功', 'back.home/productmanage');
+                    }
+                }
+
+            }else
+            {
+                $this->error('非法操作');
+            }
+            }
+
+
+    }
+    public function deleproduct(){
+        $id=input('id');
+        //预留订单查看，如果该产品尚存未处理订单，则不能做删除标志删除
+        $p = Product::get($id);
+        $p->del_flag = '1';
+        $r=$p->save();
+        echo $p->getlastsql();
+        //die('stop');
+        if($r){
+            $this->success('删除成功','back.home/productmanage');
+        }else{
+            $this->error('删除失败');
+        }
+
+    }
+    public function modiproduct(){
+        $productdata=Product::get(input('id'));
+        $this->assign('productdata',$productdata);
+        return $this->fetch('modiproduct');
+    }
+    public function domodiproduct(){
+        $userdata=Request::param();
+        $isfile=$_FILES;
+        if($isfile['info_photo']['name']==''){
+            $userdata['mainimage']=Db::table('sw_product')->getFieldById(input('id'),'mainimage');
+        }else{
+            $file = request()->file('info_photo');
+            // 移动到框架应用根目录/uploads/ 目录下
+            $info = $file->move( '../uploads');
+            if($info){
+                $userdata['mainimage']=$info->getSaveName();
+            }else
+            { $this->error('图片上传失败！');}}
+
+           if(Request::isPost())
+            {
+                $validate = new \app\validate\back\Vproduct;
+                if (!$validate->check(Request::param()))
+                {
+                    dump($validate->getError());
+                }else
+                {
+                    $userdata['user_id']=cookie('user_id');
+                    if(isset($userdata['main_flag']))
+                    {
+                        $userdata['main_flag']=1;
+                    }else
+                        {$userdata['main_flag']=0;}
+
+                    $mod = Product::get(input('id'));
+                    $a=$mod->save($userdata);
+
+                    if(false === $a){
+                        // 验证失败 输出错误信息
+                        dump($mod->getError());
+                        die;
+                    }else
+                    {
+                        $this->success('修改成功', 'back.home/productmanage');
+                    }
+                }
+
+            }else
+            {
+                $this->error('非法操作');
+            }
+        }
+    public function uploadimage(){
+        return $this->fetch('uploadimage');
+        }
+
 
 
 
