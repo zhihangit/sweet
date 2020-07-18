@@ -397,7 +397,7 @@
 						para.onSuccess(file, response);  // 回调方法
 						$("#uploadProgress_" + file.index).hide();
 						$("#uploadSuccess_" + file.index).show();
-						$("#uploadInf").html("<p style='color:red;font-size:18px;'><b>图片上传成功.</b>" + response + "</p>");
+						$("#uploadInf").html("<p style='color:red;font-size:18px;'><b>图片上传成功，上传完毕请返回.</b>" + response + "</p>");
 						// 根据配置参数确定隐不隐藏上传成功的文件
 						if(para.finishDel){
 							// 移除效果

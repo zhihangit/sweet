@@ -16,14 +16,11 @@
 <!--    <script type="text/javascript" src="__PUBLIC__/plug/manyupload/demo.js"></script>-->
 </head>
 <body>
-<h1 style="text-align:center;">zyFile示例</h1>
+<h1 style="text-align:center;color:red">商品:{$Request.param.name} 图片上传</h1>
+<input    type="hidden" value="{:url('back.home/douploadimage','','')}/id/{$prodcutid}" id="actionurl">
 <div id="demo" class="demo"></div>
 <script type="text/javascript">
-    //上传的路径
-    var url = "{:url('home.back/douploadimage',['id'=>{$Think.get.id}])}";
-
-</script>
-<script type="text/javascript">
+    //alert($("#actionurl").val());
     $(function(){
         // 初始化插件
         $("#demo").zyUpload({
@@ -32,7 +29,7 @@
             itemWidth        :   "120px",                 // 文件项的宽度
             itemHeight       :   "100px",                 // 文件项的高度
             //url              :   "/upload/UploadAction",  // 上传文件的路径
-            url              :   url,
+            url              :   $("#actionurl").val(),
             multiple         :   true,                    // 是否可以多个文件上传
             dragDrop         :   true,                    // 是否可以拖动上传文件
             del              :   true,                    // 是否可以删除文件

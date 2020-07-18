@@ -56,7 +56,7 @@
                             <td>{$vo.price}</td>
                             <td>@mdo</td>
                             <td>{$vo.main_flag}</td>
-                            <td><a href="javascript:void(0)" onclick="showDeleteModal(this)">删除</a><a href="{:url('back.home/modiproduct','','')}/id/{$vo.id}.html">/修改</a><a target="_blank" href="{:url('back.home/uploadimage','','')}/id/{$vo.id}.html">/上传图集【新窗口】</a></td>
+                            <td><a href="javascript:void(0)" onclick="showDeleteModal(this)">删除</a><a href="{:url('back.home/modiproduct','','')}/id/{$vo.id}.html">/修改</a><a  href="{:url('back.home/uploadimage','','')}/id/{$vo.id}/name/{$vo.name}">/上传图集【新窗口】</a></td>
                         </tr>
                         {/volist}
 

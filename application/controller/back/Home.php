@@ -532,6 +532,8 @@ class Home extends Controller
                     //dump($userdata);
                     //die('2 step');
                     $file = request()->file('info_photo');
+                    //dump($file);
+                   // die('stop');
                     // 移动到框架应用根目录/uploads/ 目录下
                     $info = $file->move( '../uploads');
                     if($info){
@@ -588,6 +590,7 @@ class Home extends Controller
             $userdata['mainimage']=Db::table('sw_product')->getFieldById(input('id'),'mainimage');
         }else{
             $file = request()->file('info_photo');
+
             // 移动到框架应用根目录/uploads/ 目录下
             $info = $file->move( '../uploads');
             if($info){
@@ -629,10 +632,35 @@ class Home extends Controller
             }
         }
     public function uploadimage(){
+        $this->assign('prodcutid',input('id'));
         return $this->fetch('uploadimage');
         }
 
-
+    //处理上传的主方法
+    public function douploadimage()
+    {
+        $uploaddir =Env::get('ROOT_PATH'). 'uploads/productimage/';
+        $name = $_FILES['file']['name'];
+        $uploadfile = $uploaddir . $name;
+        $type = strtolower(substr(strrchr($name, '.'), 1));
+//获取文件类型
+        $typeArr = array("jpg","png","gif");
+        if (!in_array($type, $typeArr)) {
+            echo "请上传jpg,png或gif类型的图片！";
+            exit;
+        }
+        $targetfile=$uploaddir .getrandstr1(5). $_FILES['file']['name'];
+        print "<pre>";
+        if (move_uploaded_file($_FILES['file']['tmp_name'], $targetfile)) {
+            $data = ['product_id' => input('id'), 'image' => $targetfile];
+            Db::name('productimage')->strict(false)->insert($data);
+            //print "File is valid, and was successfully uploaded.  Here's some more debugging info:\n";
+           // print_r($_FILES);
+        } else {
+            print "上传失败，错误信息如下:\n";
+            print_r($_FILES);
+        }
+    }
 
 
 
