@@ -47,7 +47,9 @@ class Home extends Controller
         return $this->fetch('comadmin');
     }
     public function vendermanage(){
-        $list=User::with('Userinfo')->select();
+        $con['limite']=2;
+        $con['parent_id']=1;
+        $list=User::with('Userinfo')->where($con)->select();
         $this->assign('list',$list);
         //$list= User::with(['Userinfo' => function($query) { $query->field('user_id,company,email');}])->select();
        // dump($list);
@@ -85,6 +87,8 @@ class Home extends Controller
     public function domodivender(){
         $flag=false;
         $modidata=Request::param();
+        $modidata['parent_id']=cookie('user_id');
+
         //如果没有设置新密码则保留旧密码
         if ($modidata['userpwd']==''){
             $flag=true;//设置密码保留标志
@@ -111,7 +115,10 @@ class Home extends Controller
         }else{
             $user = User::get($modidata['userid']);
             $user->username=$modidata['username'];
-            $user->limite= $modidata['limite'];
+            if(cookie('limite')==2){
+                $modidata['limite']=3;
+            }
+            $user->limite= $modidata['limite'];//品牌店仅可以添加门店
             if($flag==false){
                 $user->userpwd=md5($modidata['userpwd']);
             }
@@ -165,6 +172,13 @@ class Home extends Controller
                     }else
                         {
                                 $userdata=Request::param();
+                                $userdata['parent_id']=cookie('user_id');
+                                $userdata['userpwd']=md5(input('userpwd'));
+                                if(cookie('user_limite')==2){
+                                $userdata['limite']=3;
+                                }
+                                //dump($userdata);
+                                //die('stop');
                                 $file = request()->file('info_photo');
                               // 移动到框架应用根目录/uploads/ 目录下
                                  $info = $file->move( '../uploads');
@@ -174,15 +188,21 @@ class Home extends Controller
                                              { $this->error('图片上传失败！');}
 
                                 $mod = new User();
+                                //品牌店仅可以添加门店
+
                                 $modinfo=new Userinfo();
 
                                 $modinfo->email=$userdata['email'];
                                 $modinfo->address=$userdata['address'];
                                 $modinfo->company=$userdata['company'];
                                 $modinfo->image=$userdata['image'];
+                                $modinfo->contact=$userdata['contact'];
+                                $modinfo->tel=$userdata['tel'];
+                                $modinfo->latitude=$userdata['latitude'];
+                                $modinfo->longitude=$userdata['longitude'];
 
                                 $mod->userinfo=$modinfo;
-                                $a=$mod->allowField(['username','userpwd','limite','area'])->together('userinfo')->save($userdata);
+                                $a=$mod->allowField(['username','userpwd','limite','area','parent_id'])->together('userinfo')->save($userdata);
 
                                 if(false === $a){
                                     // 验证失败 输出错误信息
@@ -635,8 +655,6 @@ class Home extends Controller
         $this->assign('prodcutid',input('id'));
         return $this->fetch('uploadimage');
         }
-
-    //处理上传的主方法
     public function douploadimage()
     {
         $uploaddir =Env::get('ROOT_PATH'). 'uploads/productimage/';
@@ -660,6 +678,16 @@ class Home extends Controller
             print "上传失败，错误信息如下:\n";
             print_r($_FILES);
         }
+    }
+    public function storemanage(){
+
+        $con['limite']=3;
+        $con['parent_id']=cookie('user_id');
+        $list=User::with('Userinfo','LEFT')->where($con)->select();
+        $this->assign('list',$list);
+        //$list= User::with(['Userinfo' => function($query) { $query->field('user_id,company,email');}])->select();
+        // dump($list);
+        return $this->fetch('vendermanage');
     }
 
 
