@@ -33,6 +33,39 @@ class Home extends Controller
 
         return $this->fetch('index');
     }
+    public function modipwd(){
+        return $this->fetch('modipwd');
+    }
+    public function domodipwd(){
+        $passwd=Db::table('sw_user')->getFieldById(cookie('user_id'),'userpwd');
+        if($passwd<>md5(input('oldpwd'))){
+            $this->error("原密码不对，请重新输入");
+        }
+
+        if (input('newpwd')<>input('confirmnewpwd')){
+            $this->error("两次输入新密码不一致，请重新输入");
+        }else{
+            $modidata['userpwd']=input('newpwd');
+        }
+        if(Request::isPost()){
+            $validate = new \app\validate\back\Vuserpwd;
+            if (!$validate->check($modidata)) {
+                dump($validate->getError());
+            }else{
+                $modidata['userpwd']=md5($modidata['userpwd']);
+                $user = User::get(cookie('user_id'));
+                $r=$user->save($modidata);
+                if($r){
+                    $this->success('修改成功');
+                }
+                else{
+                    $this->success('修改失败');
+                }
+
+            }
+        }
+
+    }
     //退出系统
     public function loginout()
     {
