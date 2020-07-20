@@ -27,5 +27,15 @@ class Demo extends Controller
         $a=new \my\Test();
         echo $a->sayHello();
     }
+
+    public function delecook(){
+        setcookie('remember',1,time()-3600);
+        setcookie('olduser_pwd','',time()-3600);
+        setcookie('user_pwd','',time()-3600);
+        setcookie('user_limite',1,time()-3600);
+        setcookie('user_id','',time()-3600);
+        setcookie('user_name',1,time()-3600);
+        echo "已删除所有cookie";
+    }
 }
 

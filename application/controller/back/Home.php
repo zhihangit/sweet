@@ -37,8 +37,11 @@ class Home extends Controller
     public function loginout()
     {
         cookie('user_id', null);
-        cookie('user_name', null);
-        cookie('limite', null);
+        cookie('user_limite', null);
+        if(!isset($_COOKIE['remember'])){
+            cookie('user_name', null);
+        }
+        //dump($_COOKIE);
         $this->redirect(url('back.login/index'));
     }
     //商家管理
@@ -129,6 +132,7 @@ class Home extends Controller
 // 更新当前模型及关联模型
             $res=$user->together('userinfo')->save();
             if($res){
+
                 $this->success('修改成功', 'back.home/vendermanage');
             }else{
                 $this->error('修改失败');
@@ -687,9 +691,195 @@ class Home extends Controller
         $this->assign('list',$list);
         //$list= User::with(['Userinfo' => function($query) { $query->field('user_id,company,email');}])->select();
         // dump($list);
-        return $this->fetch('vendermanage');
+        return $this->fetch('storemanage');
     }
+    public function addstore(){
+        if (Request::isPost()) {
+            $data = Request::param();
+            $id = $data['pro_id'];
+            $region = Db::name('region')->where(['parent_id' => $id])->select();
 
+            $opt = '<option>--请选择--</option>';
+            foreach($region as $key=>$val){
+                $opt .= "<option value='{$val['id']}'>{$val['name']}</option>";
+            }
+            echo json_encode($opt);
+            die;
+        }
+
+        $region = Db::name('region')->where(['level_type' => 1])->select();
+        $this->assign('region', $region);
+
+        return $this->fetch('addstore');
+    }
+    public function doaddstore()
+    {
+        if(Request::isPost())
+        {
+            $validate = new \app\validate\back\Vuser;
+            if (!$validate->check(Request::param()))
+            {
+                dump($validate->getError());
+            }else
+            {
+                $userdata=Request::param();
+                $userdata['parent_id']=cookie('user_id');
+                $userdata['userpwd']=md5(input('userpwd'));
+                if(cookie('user_limite')==2){
+                    $userdata['limite']=3;
+                }
+                //dump($userdata);
+                //die('stop');
+                $file = request()->file('info_photo');
+                // 移动到框架应用根目录/uploads/ 目录下
+                $info = $file->move( '../uploads');
+                if($info){
+                    $userdata['image']=$info->getSaveName();
+                }else
+                { $this->error('图片上传失败！');}
+
+                $mod = new User();
+                //品牌店仅可以添加门店
+
+                $modinfo=new Userinfo();
+
+                $modinfo->email=$userdata['email'];
+                $modinfo->address=$userdata['address'];
+                $modinfo->company=$userdata['company'];
+                $modinfo->image=$userdata['image'];
+                $modinfo->contact=$userdata['contact'];
+                $modinfo->tel=$userdata['tel'];
+                $modinfo->latitude=$userdata['latitude'];
+                $modinfo->longitude=$userdata['longitude'];
+
+                $mod->userinfo=$modinfo;
+                $a=$mod->allowField(['username','userpwd','limite','area','parent_id'])->together('userinfo')->save($userdata);
+
+                if(false === $a){
+                    // 验证失败 输出错误信息
+                    dump($mod->getError());
+                    die;
+                }else
+                {
+                    //die('stop here');
+                    //echo $mod->id;
+                    //sleep("6");
+                    $this->success('新增成功', 'back.home/storemanage');
+                }
+            }
+
+        }else
+        {
+            $this->error('非法操作');
+        }
+
+
+
+    }
+    public function modistore(){
+        if (Request::has('id'))
+        {
+            $modid = input('id');
+            $user = User::get($modid );
+            //echo $user->userinfo->email;
+            //dump($user);
+            $userareaname=Region::where('id',$user->area)->value('name');
+            $p['id']=Region::where('id',$user->area)->value('parent_id');
+            $p['name']=Region::where('id',$p['id'])->value('name');
+            $pp['id']=Region::where('id',$p['id'])->value('parent_id');
+            // $pp['name']=Region::where('id',$p['id'])->value('name');
+
+            $region = Db::name('region')->where(['level_type' => 1])->select();
+            $this->assign('userareaname',$userareaname);
+            $this->assign('region', $region);
+            $this->assign('user',$user);
+            $this->assign('p',$p);
+            $this->assign('pp',$pp);
+            return $this->fetch('modistore');
+            //echo $pid."$".$ppid;
+        }
+        else{
+
+            $this->error('非法操作');
+
+        }
+
+    }
+    public function domodistore(){
+        $flag=false;
+        $modidata=Request::param();
+        $modidata['parent_id']=cookie('user_id');
+
+        //如果没有设置新密码则保留旧密码
+        if ($modidata['userpwd']==''){
+            $flag=true;//设置密码保留标志
+            $modidata['userpwd']=Db::table('sw_user')->getFieldById(input('userid'), 'userpwd');
+        }
+        // die('stop here');
+        $isfile=$_FILES;
+        if($isfile['info_photo']['name']==''){
+            $vimage = Db::table('sw_userinfo')->getFieldByUser_id(input('userid'), 'image');
+        }
+        else{
+            $file = request()->file('info_photo');
+            // 移动到框架应用根目录/uploads/ 目录下
+            $info = $file->move( '../uploads');
+            if($info){
+                $vimage=$info->getSaveName();
+            }else
+            { $this->error('图片上传失败！');}
+        }
+        if(Request::isPost()){
+            $validate = new \app\validate\back\Vuser;
+            if (!$validate->check($modidata)) {
+                dump($validate->getError());
+            }else{
+                $user = User::get($modidata['userid']);
+                $user->username=$modidata['username'];
+                if(cookie('limite')==2){
+                    $modidata['limite']=3;
+                }
+                $user->limite= $modidata['limite'];//品牌店仅可以添加门店
+                if($flag==false){
+                    $user->userpwd=md5($modidata['userpwd']);
+                }
+                $user->userinfo->email=input('email');
+                $user->userinfo->company=input('company');
+                $user->userinfo->address=input('address');
+                $user->userinfo->image=$vimage;
+// 更新当前模型及关联模型
+                $res=$user->together('userinfo')->save();
+                if($res){
+
+                    $this->success('修改成功', 'back.home/storemanage');
+                }else{
+                    $this->error('修改失败');
+                }
+            }
+
+        }else
+        {
+            $this->error('非法操作');
+        }
+
+
+    }
+    public function delestore()
+    {
+        if (Request::has('id')) {
+            $delid = input('id');
+            //User::destroy($delid);
+            //Userinfo::destroy($delid);
+
+            $data = User::get($delid,'userinfo');
+            // 删除当前及关联模型
+            $data->together('userinfo')->delete();
+            //die('stop here');
+            $this->success('删除成功', 'back.home/storemanage');
+        } else {
+            $this->error('非法操作');
+        }
+    }
 
 
     }

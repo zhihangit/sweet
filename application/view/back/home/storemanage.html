@@ -13,7 +13,7 @@
 
  function deleteHaulinfo() {
         //alert("你即将删除的ID" + $("#deleteHaulId").val());
-       window.location.href ="{:url('back.home/delevender','','')}"+"/id/"+ $("#deleteHaulId").val()+".html";
+       window.location.href ="{:url('back.home/delestore','','')}"+"/id/"+ $("#deleteHaulId").val()+".html";
        //window.location.href="{:url('table/index')}?id="+id;
     }
     // 打开询问是否删除的模态框并设置需要删除的的ID
@@ -34,7 +34,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading"><h3>商家列表</h3></div>
                 <h4 style="padding-left: 25px;margin: 5px 0px;">
-                    <a href="{:url('back.home/addvender')}" class="btn btn-primary" role="button">新增商家</a>
+                    <a href="{:url('back.home/addstore')}" class="btn btn-primary" role="button">新增门店</a>
                 </h4>
                 <div class="panel-body" style="padding-top: 0px;">
                     <table class="table table-bordered table-hover table-condensed" style="text-align: center">
@@ -54,7 +54,7 @@
                             <td>{$vo.userinfo.company}</td>
                             <td>{$vo.userinfo.address}</td>
                             <td>@mdo</td>
-                            <td><a href="javascript:void(0)" onclick="showDeleteModal(this)">删除</a><a href="{:url('back.home/modivender','','')}/id/{$vo.id}.html">/修改</td>
+                            <td><a href="javascript:void(0)" onclick="showDeleteModal(this)">删除</a><a href="{:url('back.home/modistore','','')}/id/{$vo.id}.html">/修改</td>
                         </tr>
                         {/volist}
 

@@ -22,19 +22,25 @@
                         </div>
 
 
-                        {if $Think.cookie.user_limite == '1'}
                         <div class="form-group">
-                        <label for="limiteRadio1" class="col-sm-2 control-label">类型（必选）</label>
-                        <div class="col-sm-10">
-                            <label class="radio-inline">
-                                <input type="radio" name="limite" id="limiteRadio1" value="1"> 1系统管理员
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="limite" id="limiteRadio2" value="2"> 2商家管理员
-                            </label>
+                            <label for="limiteRadio1" class="col-sm-2 control-label">类型（必选）</label>
+                            <div class="col-sm-10">
+                                {if $Think.cookie.user_limite == '1'}
+                                <label class="radio-inline">
+                                    <input type="radio" name="limite" id="limiteRadio1" value="1"> 1系统管理员
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="limite" id="limiteRadio2" value="2"> 2商家管理员
+                                </label>
+                                {/if}
+                                {if $Think.cookie.user_limite == '2'}
+                                <label class="radio-inline">
+                                    <input type="radio" name="limite" id="limiteRadio3" value="3" checked> 门店管理员
+                                </label>
+
+                                {/if}
+                            </div>
                         </div>
-                      </div>
-                        {/if}
 
 
 
@@ -86,7 +92,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="areaid" class="col-sm-2 control-label">地域归属（必填）</label>
+                            <label for="pro" class="col-sm-2 control-label">地域归属（必填）</label>
                             <div class="col-sm-10">
                                 <select name="pro" id="pro">
                                     <option>--请选择--</option>
@@ -177,7 +183,7 @@
                         <div class="form-group">
                             <label for="email" class="col-sm-2 control-label">email（必填）</label>
                             <div class="col-sm-10">
-                                <input type="email"  name="email" class="form-control" id="areaid" placeholder="email">
+                                <input type="email"  name="email" class="form-control" id="email" placeholder="email">
                             </div>
                         </div>
 
