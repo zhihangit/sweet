@@ -916,8 +916,15 @@ class Home extends Controller
         }
     }
     public function storeproductmanage(){
-        $par_id=Db::table('sw_user')->GetFieldByname
-        $pdata=Db::table('sw_product')->where('')
+        $cureuserid=cookie('user_id');
+        $par_id=Db::table('sw_user')->getFieldById($cureuserid,'parent_id');
+        echo $par_id;
+       // $con['user_id']=$par_id;
+        $sql="select id as product_id from sw_product where user_id= $par_id and id not in (select product_id as id from sw_storeproduct where store_id=$cureuserid)";
+        //echo '</br>'.$sql;
+        $pdata=Db::query($sql);
+       // $pdata=Db::table('sw_product')->field('')->where($con)->select();
+        dump($pdata);
 
     }
 
