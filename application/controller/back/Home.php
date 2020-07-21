@@ -555,7 +555,9 @@ class Home extends Controller
     }
     public function productmanage(){
         $product=new Product();
-        $list=$product->where('del_flag','0')->order('main_flag desc,create_time')->select();
+        $con['del_flag']=0;
+        $con['user_id']=cookie('user_id');
+        $list=$product->where($con)->order('main_flag desc,create_time')->select();
         //dump($list);
         $this->assign('list',$list);
 
@@ -912,6 +914,11 @@ class Home extends Controller
         } else {
             $this->error('非法操作');
         }
+    }
+    public function storeproductmanage(){
+        $par_id=Db::table('sw_user')->GetFieldByname
+        $pdata=Db::table('sw_product')->where('')
+
     }
 
 
