@@ -918,13 +918,36 @@ class Home extends Controller
     public function storeproductmanage(){
         $cureuserid=cookie('user_id');
         $par_id=Db::table('sw_user')->getFieldById($cureuserid,'parent_id');
-        echo $par_id;
+        //echo $par_id;
        // $con['user_id']=$par_id;
-        $sql="select id as product_id from sw_product where user_id= $par_id and id not in (select product_id as id from sw_storeproduct where store_id=$cureuserid)";
-        //echo '</br>'.$sql;
+        //同步产品种类
+        $sql="select id as product_id,del_flag,$cureuserid as store_id,price as newprice from sw_product where user_id= $par_id  and id not in (select product_id as id from sw_storeproduct where store_id=$cureuserid)";
+        //echo "</br>查询同步产品种类sql</br>".$sql;
+
         $pdata=Db::query($sql);
-       // $pdata=Db::table('sw_product')->field('')->where($con)->select();
-        dump($pdata);
+        //dump($pdata);
+
+        $sql=" insert into sw_storeproduct (product_id,del_flag,store_id,newprice) select id as product_id,del_flag,$cureuserid as store_id,price as newprice from sw_product where user_id= $par_id  and id not in (select product_id as id from sw_storeproduct where store_id=$cureuserid)";
+        //echo "</br>添加同步产品种类sql</br>".$sql;
+        Db::execute($sql);//同步完毕
+
+        //同步产品删除标志
+        $sql="update sw_storeproduct set del_flag=1 where store_id=$cureuserid and  product_id in (select id as product_id from sw_product where user_id=$par_id and del_flag=1)";
+        //echo "</br>同步已删除产品种类sql</br>".$sql;
+        Db::execute($sql);
+
+
+        $sql="select * from sw_storeproduct a  left join sw_product b  on a.product_id=b.id  where a.store_id=$cureuserid order by a.del_flag ";
+        //echo "</br>查询本店产品</br>".$sql;
+        $list=Db::query($sql);
+        //dump($list);
+        $this->assign('list',$list);
+        return $this->fetch('storeproductmanage');
+
+
+    }
+
+    public function modistoreprice(){
 
     }
 
