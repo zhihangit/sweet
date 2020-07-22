@@ -7,21 +7,33 @@
     function CheckAll(obj) {
         //获取checked属性
         if ($(obj).prop("checked")) {
-            alert($(obj).attr('id')+'1');
-            //设置checked属性
-           // $("input[name='checkboxall']").prop("checked", true);
+alert($(obj).attr('id'));
+            $.ajax({
+                type:"get",
+                url:"{:url('back.home/setofftoon')}",
+                data:'id='+$(obj).attr('id'),
+                dataType:"json",
+                success:function(data){
+                    console.log(data);
+                    alert(data);
+                }
+            });
+
         } else {
-            alert($(obj).attr('id')+'2');
-            //设置checked属性
-           // $("input[name='checkboxall']").prop("checked",false);
+            alert($(obj).attr('id'));
+            $.ajax({
+                type:"get",
+                url:"{:url('back.home/setontooff')}",
+                data:'id='+$(obj).attr('id'),
+                dataType:"json",
+                success:function(data){
+                    console.log(data);
+                    alert(data);
+                }
+            });
         }
     }
 
-
-    $(function() {
-
-
-    })
 
 
 
@@ -49,7 +61,7 @@
                         <tbody>
                         {volist name="list" id="vo" key="k"}
                         <tr>
-                            <td scope="row"><input type="hidden" value="{$vo.id}"> {$k}</td>
+                            <td scope="row">{$k}</td>
                             <td>{$vo.name}</td>
                             <td>{$vo.price}</td>
                             <td>{$vo.newprice}</td>
@@ -60,7 +72,7 @@
                                 <li class="item item-toggle" style="border: hidden">
                                     &nbsp
                                     <label class="toggle toggle-calm">
-                                        <input onclick="CheckAll(this);"  id="{$vo.id}" class="jsonoff" type="checkbox" checked >
+                                        <input onclick="CheckAll(this);"  id="{$vo.aid}" class="jsonoff" type="checkbox" checked >
                                         <div class="track">
                                             <div class="handle"></div>
                                         </div>

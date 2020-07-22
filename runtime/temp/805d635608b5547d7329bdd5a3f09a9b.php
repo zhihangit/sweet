@@ -1,4 +1,4 @@
-<?php /*a:2:{s:57:"D:\wamp64\www\sweet\application\view\back\home\index.html";i:1593534260;s:52:"D:\wamp64\www\sweet\application\view\backlayout.html";i:1594519586;}*/ ?>
+<?php /*a:2:{s:57:"D:\wamp64\www\sweet\application\view\back\home\index.html";i:1594816134;s:52:"D:\wamp64\www\sweet\application\view\backlayout.html";i:1595344944;}*/ ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
     <head>
@@ -8,8 +8,6 @@
         <link rel="stylesheet" type="text/css" href="/sweet/public/back/css/roboto.css">
         <link rel="stylesheet" type="text/css" href="/sweet/public/back/css/material-design.css">
         <link rel="stylesheet" type="text/css" href="/sweet/public/back/css/small-n-flat.css">
-        <link rel="stylesheet" type="text/css" href="/sweet/public/back/css/font-awesome.min.css">
-
         <title>sweet管理平台</title>
     </head>
     <body class="cm-no-transition cm-1-navbar">
@@ -23,25 +21,25 @@
                     <div id="cm-menu-scroller">
                         <ul class="cm-menu-items">
                             <li class="active"><a href="<?php echo url('back.home/comadmin'); ?>" class="sf-house">系统应用</a></li>
-                            <li><a href="dashboard-sales.html" class="sf-dashboard">Dashboard</a></li>
-                            <li><a href="components-text.html" class="sf-brick">Components</a></li>
+                           <!-- <li><a href="dashboard-sales.html" class="sf-dashboard">Dashboard</a></li>
+                            <li><a href="components-text.html" class="sf-brick">Components</a></li>-->
                             <li class="cm-submenu">
                                 <a class="sf-window-layout">商家应用<span class="caret"></span></a>
                                 <ul>
-                                    <li><a href="layouts-breadcrumb1.html">1st nav breadcrumb</a></li>
-                                    <li><a href="layouts-breadcrumb2.html">2nd nav breadcrumb</a></li>
-                                    <li><a href="layouts-tabs.html">2nd nav tabs</a></li>
+                                    <li><a  style="text-align: center" href="<?php echo url('back.home/productmanage'); ?>">商品管理</a></li>
+                                    <li><a style="text-align: center" href="<?php echo url('back.home/storemanage'); ?>">门店管理</a></li>
+                                    <li><a style="text-align: center" href="<?php echo url('back.home/vendercount'); ?>">查询统计</a></li>
                                 </ul>
                             </li>
                             <li class="cm-submenu">
-                                <a class="sf-cat">Icons <span class="caret"></span></a>
+                                <a class="sf-cat">门店应用<span class="caret"></span></a>
                                 <ul>
-                                    <li><a href="ico-sf.html">Small-n-flat</a></li>
-                                    <li><a href="ico-md.html">Material Design</a></li>
-                                    <li><a href="ico-fa.html">Font Awesome</a></li>
+                                    <li><a style="text-align: center" href="<?php echo url('back.home/storeproductmanage'); ?>">商品上架</a></li>
+                                    <li><a style="text-align: center" href="<?php echo url('back.home/dealorder'); ?>">订单处理</a></li>
+                                    <li><a style="text-align: center" href="<?php echo url('back.home/storecount'); ?>">查询统计</a></li>
                                 </ul>
                             </li>
-                            <li><a href="notepad.html" class="sf-notepad">Text Editor</a></li>
+                            <li><a href="<?php echo url('back.home/modipwd'); ?>" class="sf-notepad">修改密码</a></li>
                             <li><a href="<?php echo url('back.home/loginout'); ?>" class="sf-lock-open">退出登录</a></li>
                         </ul>
                     </div>
@@ -117,8 +115,9 @@
 </div>
 
 
-            <footer class="cm-footer"><span class="pull-left">登录账户：<?php echo htmlentities(app('cookie')->get('user_name')); ?></span></footer>
+
         </div>
+        <footer  class="cm-footer" style=" position: fixed;bottom: 0;width: 100%;height: 49px;line-height: 49px;z-index: 100;" ><span class="pull-left">登录账户：<?php echo htmlentities(app('cookie')->get('user_name')); ?></span></footer>
         <script src="/sweet/public/back/js/lib/jquery.min.js"></script>
         <script src="/sweet/public/back/js/jquery.mousewheel.min.js"></script>
         <script src="/sweet/public/back/js/jquery.cookie.min.js"></script>

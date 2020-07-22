@@ -937,7 +937,7 @@ class Home extends Controller
         Db::execute($sql);
 
 
-        $sql="select * from sw_storeproduct a  left join sw_product b  on a.product_id=b.id  where a.store_id=$cureuserid order by a.del_flag ";
+        $sql="select a.id as aid,a.store_id,a.product_id,a.newprice,a.del_flag,a.on_off,b.* from sw_storeproduct a  left join sw_product b  on a.product_id=b.id  where a.store_id=$cureuserid order by a.del_flag ";
         //echo "</br>查询本店产品</br>".$sql;
         $list=Db::query($sql);
         //dump($list);
@@ -947,6 +947,39 @@ class Home extends Controller
 
     }
 
+    public function setontooff(){
+        $id=input('id');
+        if(Request::isGet()){
+            $res=Db::table('sw_storeproduct')
+                ->where('id', $id)
+                ->data(['on_off' => 1])
+                ->update();
+            $s=Db::name('storeproduct')->getLastSql();
+            if ($res){
+                echo '1';
+            }else{
+                echo "3";
+                //echo Db::name('storeproduct')->getLastSql();
+            }
+
+        }
+    }
+    public function setofftoon(){
+        $id=input('id');
+        if(Request::isGet()){
+            $res=Db::table('sw_storeproduct')
+                ->where('id', $id)
+                ->data(['on_off' => 0])
+                ->update();
+            $s=Db::name('storeproduct')->getLastSql();
+            if ($res){
+                echo '0';
+            }else{
+                echo "2";
+                //echo Db::name('storeproduct')->getLastSql();
+            }
+        }
+    }
     public function modistoreprice(){
 
     }
