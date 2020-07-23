@@ -949,12 +949,12 @@ class Home extends Controller
 
     public function setontooff(){
         $id=input('id');
-        if(Request::isGet()){
+        if(Request::isPost()){
             $res=Db::table('sw_storeproduct')
                 ->where('id', $id)
                 ->data(['on_off' => 1])
                 ->update();
-            $s=Db::name('storeproduct')->getLastSql();
+            //$s=Db::name('storeproduct')->getLastSql();
             if ($res){
                 echo '1';
             }else{
@@ -966,12 +966,12 @@ class Home extends Controller
     }
     public function setofftoon(){
         $id=input('id');
-        if(Request::isGet()){
+        if(Request::isPost()){
             $res=Db::table('sw_storeproduct')
                 ->where('id', $id)
                 ->data(['on_off' => 0])
                 ->update();
-            $s=Db::name('storeproduct')->getLastSql();
+            //$s=Db::name('storeproduct')->getLastSql();
             if ($res){
                 echo '0';
             }else{
@@ -981,6 +981,30 @@ class Home extends Controller
         }
     }
     public function modistoreprice(){
+        return $this->fetch("modistoreprice");
+
+    }
+
+    public function domodistoreprice(){
+        if(!is_numeric(input('newprice'))){
+            $this->error("价格为非数字，修改失败");
+        }
+        $newprice=(float)input('newprice');
+
+        $id=input('id');
+        if(Request::isPost()){
+            $res=Db::table('sw_storeproduct')
+                ->where('id', $id)
+                ->data(['newprice' =>$newprice])
+                ->update();
+            //$s=Db::name('storeproduct')->getLastSql();
+            if ($res){
+                $this->success('修改成功','back.home/storeproductmanage');
+            }else{
+                echo Db::table('sw_storeproduct')->getLastSql();
+               $this->error("修改失败",'back.home/storeproductmanage');
+            }
+        }
 
     }
 

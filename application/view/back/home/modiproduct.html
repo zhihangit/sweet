@@ -7,10 +7,10 @@
                 <div class="panel-body" style="min-height: 214px;">
                     <form class="form-horizontal"  enctype="multipart/form-data" action="{:url('back.home/domodiproduct')}" method="post" >
                         <div class="form-group">
-                            <label for="username" class="col-sm-2 control-label">商品名称（必填）</label>
+                            <label for="name" class="col-sm-2 control-label">商品名称（必填）</label>
                             <div class="col-sm-10">
                                 <input name="id" type="hidden" value="{$productdata.id}">
-                                <input type="text" value="{$productdata.name}" name="name" readonly="readonly" class="form-control" id="name" placeholder="用户名">
+                                <input type="text" value="{$productdata.name}" name="name" readonly="readonly" class="form-control" id="name" placeholder="商品名称">
                             </div>
                         </div>
 

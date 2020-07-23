@@ -7,28 +7,26 @@
     function CheckAll(obj) {
         //获取checked属性
         if ($(obj).prop("checked")) {
-alert($(obj).attr('id'));
             $.ajax({
-                type:"get",
+                type:"post",
                 url:"{:url('back.home/setofftoon')}",
                 data:'id='+$(obj).attr('id'),
                 dataType:"json",
                 success:function(data){
                     console.log(data);
-                    alert(data);
+                    //alert(data);
                 }
             });
 
         } else {
-            alert($(obj).attr('id'));
             $.ajax({
-                type:"get",
+                type:"post",
                 url:"{:url('back.home/setontooff')}",
                 data:'id='+$(obj).attr('id'),
                 dataType:"json",
                 success:function(data){
                     console.log(data);
-                    alert(data);
+                    //alert(data);
                 }
             });
         }
@@ -61,25 +59,32 @@ alert($(obj).attr('id'));
                         <tbody>
                         {volist name="list" id="vo" key="k"}
                         <tr>
-                            <td scope="row">{$k}</td>
-                            <td>{$vo.name}</td>
-                            <td>{$vo.price}</td>
-                            <td>{$vo.newprice}</td>
-                            <td>@mdo</td>
-                            <td>{$vo.main_flag}</td>
-                            <td>{$vo.del_flag}</td>
-                            <td>
-                                <li class="item item-toggle" style="border: hidden">
+                            <td style="padding-top: 30px"  scope="row">{$k}</td>
+                            <td style="padding-top: 30px">{$vo.name}</td>
+                            <td style="padding-top: 30px">{$vo.price}</td>
+                            <td style="padding-top: 30px">{$vo.newprice}</td>
+                            <td style="padding-top: 30px">@mdo</td>
+                            <td style="padding-top: 30px">
+                                {if($vo.main_flag == 0)}否{else /}是{/if}
+                                </td>
+                            <td style="padding-top: 30px">
+                                {if($vo.del_flag == 0)}有效{else /}已过期{/if}
+                                </td>
+                            <td style="width: 100px;">
+                                <li class="item item-toggle" style="border: hidden;width: 60px;">
                                     &nbsp
                                     <label class="toggle toggle-calm">
-                                        <input onclick="CheckAll(this);"  id="{$vo.aid}" class="jsonoff" type="checkbox" checked >
-                                        <div class="track">
+                                        <input onclick="CheckAll(this);"  id="{$vo.aid}" class="jsonoff" type="checkbox"
+                                               {if($vo.on_off == 0)}checked{/if}
+
+                                        >
+                                        <div class="track" >
                                             <div class="handle"></div>
                                         </div>
                                     </label>
                                 </li>
                             </td>
-                            <td><a href="{:url('back.home/modistoreprice','','')}/id/{$vo.id}.html">修改本店价格</a></td>
+                            <td style="padding-top: 30px"><a href="{:url('back.home/modistoreprice','','')}/id/{$vo.aid}/name/{$vo.name}/price/{$vo.newprice}.html">修改本店价格</a></td>
                         </tr>
                         {/volist}
 

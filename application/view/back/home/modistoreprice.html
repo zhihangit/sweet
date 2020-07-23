@@ -1,0 +1,38 @@
+{layout name="backlayout" /}
+<div class="container-fluid cm-container-white" style="margin-top:20px;padding-top: 30px;height: 100%">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading"  style="font-size: 20px;" >修改本地商品价格</div>
+                <div class="panel-body" style="min-height: 214px;">
+                    <form class="form-horizontal"  enctype="multipart/form-data" action="{:url('back.home/domodistoreprice')}" method="post" >
+                        <div class="form-group">
+                            <label style="font-size: 20px;" for="pid" class="col-sm-2 control-label">商品名称:<span style="color:red;">{$Request.param.name}</span></label>
+                            <div class="col-sm-10">
+                                <input id="pid" name="id" type="hidden" value="{$Request.param.id}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="company" class="col-sm-2 control-label">新价格（必填）</label>
+                            <div class="col-sm-10">
+                                <input type="text"  value="{$Request.param.price}"  step="0.11" name="newprice" class="form-control" id="company" placeholder="新价格">
+                            </div>
+                        </div>
+
+
+                        <div class="form-group" style="margin-bottom:0">
+                            <div class="col-sm-offset-2 col-sm-10 text-right">
+                                <!--<button type="reset" class="btn btn-default">Cancel</button>-->
+                                <button type="submit" class="btn btn-primary">修改</button>
+                            </div>
+                        </div>
+                        {:token()}
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
