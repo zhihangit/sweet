@@ -158,6 +158,7 @@ class Home extends Controller
             if($flag==false){
                 $user->userpwd=md5($modidata['userpwd']);
             }
+            $user->userinfo->adword=input('adword');
             $user->userinfo->email=input('email');
             $user->userinfo->company=input('company');
             $user->userinfo->address=input('address');
@@ -228,7 +229,7 @@ class Home extends Controller
                                 //品牌店仅可以添加门店
 
                                 $modinfo=new Userinfo();
-
+                                $modinfo->adword=$userdata['adword'];
                                 $modinfo->email=$userdata['email'];
                                 $modinfo->address=$userdata['address'];
                                 $modinfo->company=$userdata['company'];
@@ -779,6 +780,7 @@ class Home extends Controller
                 $modinfo=new Userinfo();
 
                 $modinfo->email=$userdata['email'];
+                $modinfo->adword='';
                 $modinfo->address=$userdata['address'];
                 $modinfo->company=$userdata['company'];
                 $modinfo->image=$userdata['image'];
@@ -879,6 +881,7 @@ class Home extends Controller
                     $user->userpwd=md5($modidata['userpwd']);
                 }
                 $user->userinfo->email=input('email');
+                $modinfo->adword='';
                 $user->userinfo->company=input('company');
                 $user->userinfo->address=input('address');
                 $user->userinfo->image=$vimage;

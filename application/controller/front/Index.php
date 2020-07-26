@@ -1,5 +1,7 @@
 <?php
 namespace app\controller\front;
+use app\model\back\User;
+use think\Db;
 use think\facade\Env;
 use think\Controller;
 
@@ -7,9 +9,14 @@ class Index extends Controller
 {
     public function index()
     {
-        //echo  "juse test";
+        $con['limite']=2;
+        $vender=User::with('Userinfo')->where($con)->select();
+        //dump($vender);
+        $this->assign('vender', $vender);
+        $sql="select * from sw_product where main_flag=1 and del_flag=0 order by create_time desc ";
 
-        $this->assign('name', 'thinkphp');
+        $product=Db::query($sql);
+        $this->assign('product',$product);
         return $this->fetch('index');
     }
 
@@ -17,6 +24,22 @@ class Index extends Controller
     {
         return 'hello,' . $name;
     }
+
+    public function venderexchange(){
+
+    }
+
+    public function exchange(){
+
+    }
+    public function storeexchange(){
+
+    }
+
+    public function singleexchange(){
+
+    }
+
 
     public function demo()
     {
