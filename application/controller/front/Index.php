@@ -4,6 +4,7 @@ use app\model\back\User;
 use think\Db;
 use think\facade\Env;
 use think\Controller;
+use think\facade\Request;
 
 class Index extends Controller
 {
@@ -26,6 +27,16 @@ class Index extends Controller
     }
 
     public function venderexchange(){
+        if(Request::param('storeid')){
+            $storeid=input('storeid');
+            $sql="select * from sw_user a left join sw_userinfo b on a.id=b.user_id where a.parent_id=$storeid";
+            $res=Db::query($sql);
+            //dump($res);
+            $this->assign('list',$res);
+            return $this->fetch('venderexchange');
+        }else{
+            $this->error('没有此品牌店入驻，请选择页面进驻品牌进行兑换');
+        }
 
     }
 
