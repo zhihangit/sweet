@@ -27,9 +27,9 @@ class Index extends Controller
     }
 
     public function venderexchange(){
-        if(Request::param('storeid')){
-            $storeid=input('storeid');
-            $sql="select * from sw_user a left join sw_userinfo b on a.id=b.user_id where a.parent_id=$storeid";
+        if(Request::param('venderid')){
+            $venderid=input('venderid');
+            $sql="select *,a.id as aid  from sw_user a left join sw_userinfo b on a.id=b.user_id where a.parent_id=$venderid";
             $res=Db::query($sql);
             //dump($res);
             $this->assign('list',$res);
@@ -41,9 +41,26 @@ class Index extends Controller
     }
 
     public function exchange(){
+        $con['limite']=2;
+        $vender=User::with('Userinfo')->where($con)->select();
+        //dump($vender);
+        $this->assign('vender', $vender);
+        return $this->fetch('exchange');
 
     }
     public function storeexchange(){
+        if(Request::param('storeid')){
+            $storeid=input('storeid');
+            $sql="select *,a.id as aid  from sw_storeproduct a left join sw_product b on a.product_id=b.id";
+            echo $sql;
+            $res=Db::query($sql);
+            dump($res);
+            //$this->assign('list',$res);
+            //return $this->fetch('venderexchange');
+        }else{
+            $this->error('没有改门店，请重新选择');
+        }
+
 
     }
 

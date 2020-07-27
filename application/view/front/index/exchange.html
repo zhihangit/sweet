@@ -1,0 +1,23 @@
+﻿{layout name="frontlayout2" /}
+<div class="container">
+    <div class="row">
+        {volist name="vender" id="vo" key="k"}
+
+        <div class="col-lg-4 thumbnail">
+            <div class="product-style-wrap" style="text-align: center;">
+                <img alt="" src="__UPLOADS__/{$vo.userinfo.image}">
+                <div class="product-content text-center">
+                    <h4>
+                        {$vo.userinfo.company}
+                    </h4>
+                    <p>{$vo.userinfo.adword}</p>
+                    <p>
+                        <a class="btn btn-danger" href="{:url('front.index/venderexchange','','')}/storeid/{$vo.id}" role="button">进店兑换</a></p>
+                </div>
+            </div>
+        </div>
+        {/volist}
+
+
+    </div>
+</div>

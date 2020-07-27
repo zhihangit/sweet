@@ -1,30 +1,56 @@
-﻿{layout name="frontlayout" /}
-<div class="slider-area">
-  <div class="slider-active owl-dot-style owl-carousel">
-    <div class="single-slider bg-img height-100vh d-flex align-items-center justify-content-center" style="background-image:url(__FIMAGES__/indeximg/slider/slider-1.jpg);">
-      <div class="slider-content pt-100">
-        <div class="slider-content-wrap slider-animated-1">
-          <h2 class="animated">Welcome to <span>Sweet</span> club</h2>
-          <h1 class="animated"><span>这里为你提供品种繁多的</span> 蛋糕甜点</h1>
-          <p>你的福利，你做主，任意选、任意兑、随你心</p>
-          <div class="slider-btn mt-20">
-            <a class="animated" href="{:url('front.index/exchange','','')}">兑  换</a>
-          </div>
-        </div>
-      </div>
+﻿{layout name="frontlayout2" /}
+<div class="team-area pt-100 pb-70 gray-bg">
+  <div class="container">
+    <div class="section-title text-center mb-50">
+      <h3>请选择需要兑换的门店</h3>
     </div>
-    <div class="single-slider bg-img height-100vh d-flex align-items-center justify-content-center" style="background-image:url(__FIMAGES__/indeximg/slider/slider-2.jpg);">
-      <div class="slider-content pt-100">
-        <div class="slider-content-wrap slider-animated-1">
-          <h2 class="animated">Welcome to <span>Sweet</span> club</h2>
-          <h1 class="animated"><span>足不出门</span>  快捷订购</h1>
-          <p>全市通兑、省心、省事</p>
-          <div class="slider-btn mt-20">
-            <a class="animated" href="#">兑  换</a>
-          </div>
+    <div class="row">
+        {volist name="list" id="vo" key="k"}
+        <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+            <div class="single-team text-center mb-30">
+                <div class="team-img-icon overlay">
+                    <a href="{:url('front.index/storeexchange','','')}/storeid/{$vo.aid} "> <img class="storeimg" src="__UPLOADS__/{$vo.image}" alt=""></a>
+
+                </div>
+                <div class="team-info">
+                    <h3><a href="{:url('front.index/storeexchange','','')}/storeid/{$vo.aid} ">{$vo.company}</a></h3>
+                    <span>{$vo.address}</span>
+                </div>
+            </div>
         </div>
-      </div>
+        {/volist}
+
+
+        {volist name="list" id="vo" key="k"}
+        <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+            <div class="single-team text-center mb-30">
+                <div class="team-img-icon overlay">
+                    <a href="{:url('front.index/storeexchange','','')}/storeid/{$vo.aid} "> <img class="storeimg" src="__UPLOADS__/{$vo.image}" alt=""></a>
+
+                </div>
+                <div class="team-info">
+                    <h3><a href="{:url('front.index/storeexchange','','')}/storeid/{$vo.aid} ">{$vo.company}</a></h3>
+                    <span>{$vo.address}</span>
+                </div>
+            </div>
+        </div>
+        {/volist}
+
+        {volist name="list" id="vo" key="k"}
+        <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+            <div class="single-team text-center mb-30">
+                <div class="team-img-icon overlay">
+                    <a href="{:url('front.index/storeexchange','','')}/storeid/{$vo.aid} "> <img class="storeimg" src="__UPLOADS__/{$vo.image}" alt=""></a>
+
+                </div>
+                <div class="team-info">
+                    <h3><a href="{:url('front.index/storeexchange','','')}/storeid/{$vo.aid} ">{$vo.company}</a></h3>
+                    <span>{$vo.address}</span>
+                </div>
+            </div>
+        </div>
+        {/volist}
+
     </div>
   </div>
 </div>
-<div style="background-color: yellow;height: 4000px;"></div>
