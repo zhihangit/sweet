@@ -51,12 +51,17 @@ class Index extends Controller
     public function storeexchange(){
         if(Request::param('storeid')){
             $storeid=input('storeid');
-            $sql="select *,a.id as aid  from sw_storeproduct a left join sw_product b on a.product_id=b.id";
-            echo $sql;
+            $sql="select *,a.id as aid from sw_user a left join sw_userinfo b on a.id=b.user_id where a.id=$storeid";
+            $storeinfo=Db::query($sql);
+            $this->assign('storeinfo',$storeinfo);
+            //dump($storeinfo);
+            $sql="select *,a.id as aid  from sw_storeproduct a left join sw_product b on a.product_id=b.id where b.del_flag=0 and a.on_off=0";
+
+            //echo $sql;
             $res=Db::query($sql);
-            dump($res);
-            //$this->assign('list',$res);
-            //return $this->fetch('venderexchange');
+            //dump($res);
+            $this->assign('product',$res);
+            return $this->fetch('storeexchange');
         }else{
             $this->error('没有改门店，请重新选择');
         }
