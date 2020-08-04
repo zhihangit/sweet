@@ -70,6 +70,18 @@ class Index extends Controller
     }
 
     public function confirmorder(){
+        $p_data=(Request::param());
+        foreach ($p_data as $key=>$value){
+            $lookid=substr($key,1,1);
+            //echo $key.'|'.substr($key,1,1)."|".$value."</br>";
+            $newdata["$key"] = Db::table('sw_storeproduct')
+                ->alias('a')
+                ->join('sw_product b','a.product_id = b.id','left')
+                ->where('a.id',$lookid)
+                ->find();
+            $newdata["$key"]['num']=$value;
+        }
+        dump($newdata);
         echo "confirm";
     }
 

@@ -28,9 +28,11 @@
                                 <p>{$vo.introduce}</p>
                                 <p style="font-size: 12px;">原材料：{$vo.material}</p>
                                 <p style="font-size: 12px;">
-                                    <span class="btn btn-warning " href="#" role="button">兑换数量</span>
-                                    <select name="pro_{$vo.id}" class="form-control" style="width: 60px;">
-                                        <option  value="1" selected>1</option>
+                                    <a style=" float:left;"class="btn btn-warning " href="#" role="button">兑换数量</a>
+                                    <select name="p{$vo.aid}" class="form-control" style="width: 60px;float:left;height: 32px;margin-left: 5px;">
+
+                                        <option  value="0" selected>0</option>
+                                        <option  value="1" >1</option>
                                         <option  value="2" >2</option>
                                         <option  value="3" >3</option>
                                         <option value="4" >4</option>
