@@ -69,6 +69,10 @@ class Index extends Controller
 
     }
 
+    public function confirmorder(){
+        echo "confirm";
+    }
+
     public function singleexchange(){
 
     }

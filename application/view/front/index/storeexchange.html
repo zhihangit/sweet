@@ -5,7 +5,7 @@
             <h2 style="font-family: 微软雅黑">{$storeinfo.0.company}主打商品</h2>
             <p>客服电话:{$storeinfo.0.tel} 联系人：{$storeinfo.0.contact}</p>
         </div>
-        <div class="tab-content jump">
+        <form class="form-horizontal"  action="{:url('front.index/confirmorder')}" method="post" >
             <div id="tab1" class="tab-pane active">
                 <div class="row">
                     {volist name="product" id="vo" key="k"}
@@ -27,7 +27,16 @@
                                 </div>
                                 <p>{$vo.introduce}</p>
                                 <p style="font-size: 12px;">原材料：{$vo.material}</p>
-                                <p style="font-size: 12px;"><a class="btn btn-danger" href="{:url('front.index/singleexchange','','')}/id/{$vo.id}" role="button">兑 换</a></p>
+                                <p style="font-size: 12px;">
+                                    <span class="btn btn-warning " href="#" role="button">兑换数量</span>
+                                    <select name="pro_{$vo.id}" class="form-control" style="width: 60px;">
+                                        <option  value="1" selected>1</option>
+                                        <option  value="2" >2</option>
+                                        <option  value="3" >3</option>
+                                        <option value="4" >4</option>
+                                        <option value="5" >5</option>
+                                    </select>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -35,6 +44,14 @@
 
                 </div>
             </div>
+            <div class="form-group" style="margin-bottom:0">
+                <div class="col-sm-offset-2 col-sm-10 text-right">
+                    <!--<button type="reset" class="btn btn-default">Cancel</button>-->
+                    <button type="submit" class="btn btn-danger btn-lg" style="width: 200px;height: 50px;">确认兑换</button>
+                </div>
+            </div>
+            {:token()}
+        </form>
 
         </div>
     </div>
