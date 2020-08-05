@@ -1,0 +1,64 @@
+﻿{layout name="frontlayout2" /}
+<div class="contact-area pt-100" style="margin-bottom: 30px;">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-lg-6">
+                <div class="contact-info-area">
+                    <h4 class="contact-title mb-18">你的订单信息如下，如无问题请输入兑换码信息进行兑换</h4>
+                    <p>订单明细:商品种类：{$newdata|count}种，合计金额：<span style="color:red;"> ¥{$totalnum} 元</span>，兑换门店：{$storename}</p>
+                    <div class="contact-info-wrap">
+
+                        {volist name="newdata" id="vo" key="k"}
+                        <div class="single-contact-info mb-40">
+                            <div>
+                                <img src="__UPLOADS__/{$vo.mainimage}"  class="img-circle">
+
+                            </div>
+                            <div class="contact-info-content">
+                                <h4>商品名称 : {$vo.name}</h4>
+                                <p>价格: ¥{$vo.newprice}</p>
+                                <p>数量: {$vo.num}</p>
+                            </div>
+                        </div>
+                        {/volist}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="contact-message-wrapper">
+                    <h4 class="contact-title mb-25">兑换信息</h4>
+                    <div class="contact-message">
+                        <form id="contact-form" action="{:url('front.index/addorder')}" method="post">
+                            <div class="row">
+                                <label for="codenumber" class="col-sm-12 control-label">兑换码（必填）</label>
+                                <div class="col-lg-12">
+                                    <div class="contact-form-style mb-20">
+                                        <input name="codenumber" placeholder="兑换码" type="text" id="codenumber">
+                                        <input name="totalinfo"  placeholder="兑换明细" type="hidden" id="codenumber" value="{$totalinfo}^{$storeid}^{$totalnum}">
+
+                                    </div>
+                                </div>
+                                <label for="proof" class="col-sm-12 control-label">校验码（必填）</label>
+                                <div class="col-lg-12">
+                                    <div class="contact-form-style mb-20">
+                                        <input name="proof" placeholder="验证码" type="text" id="proof">
+                                        {:token()}
+                                    </div>
+                                </div>
+                                <label for="proof" class="col-sm-12 control-label">备注（选填）</label>
+                                <div class="col-lg-12">
+                                    <div class="contact-form-style">
+                                        <textarea name="memo" placeholder="备注"></textarea>
+                                        <button class="submit btn-style" type="submit">确认兑换</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

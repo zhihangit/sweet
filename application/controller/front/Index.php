@@ -55,7 +55,7 @@ class Index extends Controller
             $storeinfo=Db::query($sql);
             $this->assign('storeinfo',$storeinfo);
             //dump($storeinfo);
-            $sql="select *,a.id as aid  from sw_storeproduct a left join sw_product b on a.product_id=b.id where b.del_flag=0 and a.on_off=0";
+            $sql="select *,a.id as aid  from sw_storeproduct a left join sw_product b on a.product_id=b.id where b.del_flag=0 and a.on_off=0 and a.store_id=$storeid";
 
             //echo $sql;
             $res=Db::query($sql);
@@ -69,22 +69,53 @@ class Index extends Controller
 
     }
 
-    public function confirmorder(){
-        $p_data=(Request::param());
-        foreach ($p_data as $key=>$value){
-            $lookid=substr($key,1,1);
-            //echo $key.'|'.substr($key,1,1)."|".$value."</br>";
-            $newdata["$key"] = Db::table('sw_storeproduct')
-                ->alias('a')
-                ->join('sw_product b','a.product_id = b.id','left')
-                ->where('a.id',$lookid)
-                ->find();
-            $newdata["$key"]['num']=$value;
-        }
-        dump($newdata);
-        echo "confirm";
-    }
+    public function confirmorder()
+    {
+        if (Request::isPost()) {
+            $storeid = input('storeid');
+            $p_data = (Request::param());
+            $totalnum = 0;
+            $totalinfo = "";
+            foreach ($p_data as $key => $value) {
+                if (substr($key, 0, 1) == 'p') {//取订单明细数据
+                    if ($value <> 0) {
+                        $lookid = substr($key, 1, 1);
+                        //echo $key.'|'.substr($key,1,1)."|".$value."</br>";
+                        $newdata["$key"] = Db::table('sw_storeproduct')
+                            ->alias('a')
+                            ->join('sw_product b', 'a.product_id = b.id', 'left')
+                            ->where('a.id', $lookid)
+                            ->where('a.store_id', $storeid)
+                            ->find();
+                        $totalnum = $totalnum + $value * $newdata["$key"]['newprice'];
+                        $tempstr = $lookid . "|" . $newdata["$key"]['name'] . "|" . $value . "|" . $newdata["$key"]['newprice'];
+                        $totalinfo = $totalinfo . "," . $tempstr;
+                        $newdata["$key"]['num'] = $value;
 
+
+                    }
+
+                }
+            }
+            if (isset($newdata)) {
+                //dump($newdata);
+                $this->assign('newdata', $newdata);
+                $storename = Db::table("sw_userinfo")->getFieldByUser_id($storeid, 'company');
+                $this->assign('storeid', $storeid);
+                $this->assign('storename', $storename);
+                $this->assign("totalnum", $totalnum);
+                $this->assign("totalinfo", substr($totalinfo,1));
+                return $this->fetch("confirmorder");
+            } else {
+                $this->error("请选择相关商品，并确定数量不为零进行兑换");
+            }
+            // echo "订单明细:".substr($totalinfo,1);
+            // echo "</br>合计:".$totalnum;
+
+        }else{
+            $this->error("非法操作");
+        }
+    }
     public function singleexchange(){
 
     }
