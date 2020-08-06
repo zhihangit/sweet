@@ -56,7 +56,16 @@ class Index extends Controller
             $storeinfo=Db::query($sql);
             $this->assign('storeinfo',$storeinfo);
             //dump($storeinfo);
+            if(Request::param('pid')){
+                $pid=Request::param('pid');
+            }else{$pid="";}
+
+            if($pid<>""){
+                $sql="select *,a.id as aid  from sw_storeproduct a left join sw_product b on a.product_id=b.id where b.del_flag=0 and a.on_off=0 and a.store_id=$storeid and a.product_id=$pid" ;
+            }else
+            {
             $sql="select *,a.id as aid  from sw_storeproduct a left join sw_product b on a.product_id=b.id where b.del_flag=0 and a.on_off=0 and a.store_id=$storeid";
+            }
 
             //echo $sql;
             $res=Db::query($sql);
@@ -187,6 +196,15 @@ class Index extends Controller
                                        $dorderdetial=new Orderdetail;
                                        $dorderdetial->save($ddata);
                                     }
+
+                                    $ye=Db::table('sw_codedetail')->getFieldByNumber(input('codenumber'), 'balance');
+
+                                    $ye=(float)$ye-(float)$sorder[2];
+
+                                    Db::name('codedetail')
+                                        ->where('number', input('codenumber'))
+                                        ->data(['balance' => $ye])
+                                        ->update();
 //die("stop here");
                                     $this->success('兑换成功，等待商家处理', url('front.index/searchcode',['codenumber'=>input('codenumber')]));
                                 }else{
@@ -208,6 +226,21 @@ class Index extends Controller
         }
     }
     public function singleexchange(){
+
+        if(Request::param('id')){
+
+            $venderid=Db::table("sw_product")->getFieldById(Request::param('id'),'user_id');
+            $sql="select *,a.id as aid  from sw_user a left join sw_userinfo b on a.id=b.user_id where a.parent_id=$venderid";
+            $res=Db::query($sql);
+            //dump($res);
+            $this->assign('list',$res);
+            $this->assign('pid',Request::param('id'));
+            return $this->fetch('singleexchange');
+        }else{
+            $this->error('没有此品牌店入驻，请选择页面进驻品牌进行兑换');
+        }
+
+
 
     }
 
