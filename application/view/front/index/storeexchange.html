@@ -6,7 +6,7 @@
             <p>客服电话:{$storeinfo.0.tel} 联系人：{$storeinfo.0.contact}</p>
         </div>
         <form class="form-horizontal"  action="{:url('front.index/confirmorder')}" method="post" >
-            <input name="storeid" value="{$storeinfo.0.aid}">
+            <input name="storeid" value="{$storeinfo.0.aid}" type="hidden">
             <div id="tab1" class="tab-pane active">
                 <div class="row">
                     {volist name="product" id="vo" key="k"}

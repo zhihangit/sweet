@@ -1,4 +1,20 @@
 ﻿{layout name="frontlayout2" /}
+<script src="__BJS__/jquery.min.js"></script>
+<script>
+
+    $(function () {
+        $("#selftake").click(function () {
+            var $cr = $("#selftake");
+            //alert($cr);
+            if ($cr.is(":checked")) {
+                $("#orderaddress").attr("disabled", true).val("");
+            }
+            else {
+                $("#orderaddress").attr("disabled", false).val("请填入配送地址");
+            }
+        });
+    });
+</script>
 <div class="contact-area pt-100" style="margin-bottom: 30px;">
     <div class="container">
         <div class="row">
@@ -29,36 +45,71 @@
                 <div class="contact-message-wrapper">
                     <h4 class="contact-title mb-25">兑换信息</h4>
                     <div class="contact-message">
-                        <form id="contact-form" action="{:url('front.index/addorder')}" method="post">
+                            <form  action="{:url('front.index/addorder')}" method="post" >
                             <div class="row">
                                 <label for="codenumber" class="col-sm-12 control-label">兑换码（必填）</label>
                                 <div class="col-lg-12">
                                     <div class="contact-form-style mb-20">
                                         <input name="codenumber" placeholder="兑换码" type="text" id="codenumber">
-                                        <input name="totalinfo"  placeholder="兑换明细" type="hidden" id="codenumber" value="{$totalinfo}^{$storeid}^{$totalnum}">
+                                        <input name="storeid"  placeholder="兑换门店"  type="hidden" id="storeid" value="{$storeid}">
+                                        <input name="totalinfo"  placeholder="兑换明细" type="hidden" id="totalinfo" value="{$totalinfo}^{$storeid}^{$totalnum}">
 
                                     </div>
                                 </div>
                                 <label for="proof" class="col-sm-12 control-label">校验码（必填）</label>
                                 <div class="col-lg-12">
                                     <div class="contact-form-style mb-20">
-                                        <input name="proof" placeholder="验证码" type="text" id="proof">
+                                        <input name="proof" placeholder="校验码" type="text" id="proof">
                                         {:token()}
                                     </div>
                                 </div>
-                                <label for="proof" class="col-sm-12 control-label">备注（选填）</label>
+
+
                                 <div class="col-lg-12">
-                                    <div class="contact-form-style">
-                                        <textarea name="memo" placeholder="备注"></textarea>
-                                        <button class="submit btn-style" type="submit">确认兑换</button>
+                                    <div class="contact-form-style mb-20">
+                                        <input id="selftake" type="checkbox" name="takeself" value="1" style="width: 20px;height: 20px;"> 是否自提
                                     </div>
                                 </div>
+
+                                <div id="express" class="col-lg-12" style="padding: 0px; >
+
+                                <label for="666" class="col-sm-12 control-label">配送地址</label>
+                                <div class="col-lg-12">
+                                    <div class="contact-form-style mb-20">
+                                        <input id="orderaddress" name="orderaddress" placeholder="配送地址" type="text" id="orderaddress">
+                                    </div>
+                                </div>
+
                             </div>
-                        </form>
+                            <label for="ordercontact" class="col-sm-12 control-label">联系人</label>
+                            <div class="col-lg-12">
+                                <div class="contact-form-style mb-20">
+                                    <input name="ordercontact" placeholder="联系人" type="text" id="ordercontact">
+                                </div>
+                            </div>
+                            <label for="ordertel" class="col-sm-12 control-label">联系人手机</label>
+                            <div class="col-lg-12">
+                                <div class="contact-form-style mb-20">
+                                    <input name="ordertel" placeholder="联系人" type="text" id="ordertel">
+                                </div>
+                            </div>
+                            <label for="proof" class="col-sm-12 control-label">备注（选填）</label>
+                            <div class="col-lg-12">
+                                <div class="contact-form-style">
+                                    <textarea name="memo" placeholder="备注"></textarea>
+                                    <button class="submit btn-style" type="submit" style="float:right">确认兑换</button>
+                                </div>
+                            </div>
+
+
+
+
                     </div>
+                    </form>
                 </div>
             </div>
         </div>
-
     </div>
+
+</div>
 </div>
