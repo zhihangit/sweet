@@ -1,0 +1,44 @@
+﻿{layout name="frontlayout2" /}
+<script src="__BJS__/jquery.min.js"></script>
+<h3 style="text-align: center">兑换码：{$datainfo[0]['codenumber']}<span style="color:red">(余额:{$ye})使用记录</span></h3>
+<div style="min-height:400px; margin-bottom: 50px;">
+    <div class="container">
+        <div class="row">
+
+            <table class="table table-condensed  table-hover">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>兑换码</th>
+                    <th>兑换日期</th>
+                    <th>兑换明细</th>
+                    <th>兑换金额</th>
+                    <th>兑换商店</th>
+                    <th>提货方式</th>
+                    <th>配送信息</th>
+                </tr>
+                </thead>
+                <tbody>
+                {volist name="datainfo" id="vo" key="k" }
+                    <tr>
+                        <th>{$k}</th>
+                        <td>{$vo.codenumber}</td>
+                        <td>{$vo.create_time|date="Y-m-d"}</td>
+                        <td style="font-size: 10px;">{$vo.productinfo}</td>
+                        <td>{$vo.totalnum}</td>
+                        <td>{$vo.company}</td>
+                        <td>{if $vo.takeself == '1'}自提
+                            {else /}配送
+                            {/if}</td>
+                        <td>{$vo.orderaddress}{$vo.ordercontact}</td>
+                    </tr>
+                {/volist}
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+</div>

@@ -1,6 +1,7 @@
 <?php
 namespace app\controller\front;
 use app\model\back\User;
+use app\model\front\Order;
 use app\model\front\Orderdetail;
 use think\Db;
 use think\facade\Env;
@@ -21,12 +22,10 @@ class Index extends Controller
         $this->assign('product',$product);
         return $this->fetch('index');
     }
-
     public function hello($name = 'ThinkPHP5')
     {
         return 'hello,' . $name;
     }
-
     public function venderexchange(){
         if(Request::param('venderid')){
             $venderid=input('venderid');
@@ -40,7 +39,6 @@ class Index extends Controller
         }
 
     }
-
     public function exchange(){
         $con['limite']=2;
         $vender=User::with('Userinfo')->where($con)->select();
@@ -78,7 +76,6 @@ class Index extends Controller
 
 
     }
-
     public function confirmorder()
     {
         if (Request::isPost()) {
@@ -123,7 +120,6 @@ class Index extends Controller
             $this->error('非法操作',url('front.index/index'));
         }
     }
-
     public function addorder(){
        // dump(Request::param());
         if(Request::isPost()){
@@ -243,10 +239,22 @@ class Index extends Controller
 
 
     }
+    public function searchcode(){
 
-  public function searchcode(){
-        dump(Request::param()) ;
+       $code=input("codenumber");
+       $ye=Db::table("sw_codedetail")->getFieldByNumber($code,"balance");
+       $this->assign('ye',$ye);
+        //$datainfo=Order::where('codenumber',input('codenumber'))->order('create_time desc')->select();
+        $sql="select a.*,b.company from sw_order a left join sw_userinfo b on a.storeid=b.user_id where a.codenumber='$code' order by a.create_time desc ";
+        $datainfo=Db::query($sql);
+        $this->assign('datainfo',$datainfo);
+       //dump($datainfo) ;
+        return $this->fetch("searchcode");
+
   }
+    public function dealorder(){
+
+}
     public function demo()
     {
         //echo md5('987001');
