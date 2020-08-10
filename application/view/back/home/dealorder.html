@@ -13,7 +13,7 @@
 
  function deleteHaulinfo() {
         //alert("你即将删除的ID" + $("#deleteHaulId").val());
-       window.location.href ="{:url('back.home/delestore','','')}"+"/id/"+ $("#deleteHaulId").val()+".html";
+       window.location.href ="{:url('back.home/deleproduct','','')}"+"/id/"+ $("#deleteHaulId").val()+".html";
        //window.location.href="{:url('table/index')}?id="+id;
     }
     // 打开询问是否删除的模态框并设置需要删除的的ID
@@ -32,29 +32,41 @@
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
-                <div class="panel-heading"><h3>商家列表</h3></div>
-                <h4 style="padding-left: 25px;margin: 5px 0px;">
-                    <a href="{:url('back.home/addstore')}" class="btn btn-primary" role="button">新增门店</a>
-                </h4>
+                <div class="panel-heading"><h3>本店订单列表</h3></div>
                 <div class="panel-body" style="padding-top: 0px;">
                     <table class="table table-bordered table-hover table-condensed" style="text-align: center">
                         <thead  >
                         <tr>
                             <th  style="text-align: center">序号</th>
-                            <th  style="text-align: center">名称</th>
-                            <th  style="text-align: center">地址</th>
-                            <th style="text-align: center" >形象图</th>
+                            <th  style="text-align: center">下单日期</th>
+                            <th style="text-align: center" >订单明细</th>
+                            <th style="text-align: center" >兑换金额</th>
+                            <th style="text-align: center" >提货方式</th>
+                            <th style="text-align: center" >订单状态</th>
+                            <th style="text-align: center" >处理结果</th>
                             <th style="text-align: center">操作</th>
+
+
                         </tr>
                         </thead>
                         <tbody>
                         {volist name="list" id="vo" key="k"}
                         <tr>
-                            <td scope="row" style="padding-top: 20px;" ><input type="hidden" value="{$vo.id}"> {$k}</td>
-                            <td style="padding-top: 20px;">{$vo.userinfo.company}</td>
-                            <td style="padding-top: 20px;">{$vo.userinfo.address}</td>
-                            <td><img src="__UPLOADS__/{$vo.userinfo.image}" alt="..." class="img-rounded" style="width: 60px;height: 60px;"></td>
-                            <td style="padding-top: 20px;"><a href="javascript:void(0)" onclick="showDeleteModal(this)">删除</a><a href="{:url('back.home/modistore','','')}/id/{$vo.id}.html">/修改</td>
+                            <td scope="row" style="padding-top: 20px;"><input type="hidden" value="{$vo.id}"> {$k}</td>
+                            <td style="padding-top: 20px;">{$vo.create_time|date="Y-m-d"}</td>
+                            <td style="padding-top: 20px;">$vo.productinfo}</td>
+                            <td>{$vo.totalnum}</td>
+                            <td style="padding-top: 20px;">{if $vo.takeself == '1'}自提
+                                {else /}配送
+                                {/if}
+                            </td>
+                            <td> {switch vo.status }
+                                {case 0 }待处理{/case}
+                                {case 1 }已处理{/case}
+                                {default /}争议订单
+                                {/switch}</td>
+                            <td>处理结果</td>
+                            <td style="padding-top: 20px;"><a href="javascript:void(0)" onclick="showDeleteModal(this)">订单处理</a></td>
                         </tr>
                         {/volist}
 
@@ -81,9 +93,11 @@
                 <h4 class="modal-title">提示</h4>
             </div>
             <div class="modal-body">
-                <!-- 隐藏需要删除的id -->
+
                 <input type="hidden" id="deleteHaulId" />
-                <p>您确认要删除该条信息吗？</p>
+                <input type="text" id="expressid" />
+                <input type="text" id="memo" />
+                <p>订单处理</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default"

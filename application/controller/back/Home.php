@@ -372,6 +372,21 @@ class Home extends Controller
         }
 
     }
+    public function activatecode(){
+
+        if (Request::has('id')) {
+            $activateid = input('id');
+            $code = Code::get($activateid);
+            $code->status= 2;
+            $code->save();
+            //echo $code->getLastSql();
+            // die('stop here');
+            $this->success('改批次已激活', 'back.home/codemanage');
+        } else {
+            $this->error('非法操作');
+        }
+
+    }
     public function modicode(){
         $data = Code::get(input('id'));
         //echo $data['status'];
@@ -949,7 +964,6 @@ class Home extends Controller
 
 
     }
-
     public function setontooff(){
         $id=input('id');
         if(Request::isPost()){
@@ -987,7 +1001,6 @@ class Home extends Controller
         return $this->fetch("modistoreprice");
 
     }
-
     public function domodistoreprice(){
         if(!is_numeric(input('newprice'))){
             $this->error("价格为非数字，修改失败");
@@ -1008,6 +1021,14 @@ class Home extends Controller
                $this->error("修改失败",'back.home/storeproductmanage');
             }
         }
+
+    }
+    public function dealorder(){
+        $storeid=cookie('user_id');
+        $sql="select * from sw_order where storeid='$storeid'";
+        $list=Db::query($sql);
+        dump($list);
+        $this->assign('list',$list);
 
     }
 

@@ -50,11 +50,11 @@
                         <tbody>
                         {volist name="list" id="vo" key="k"}
                         <tr>
-                            <td scope="row"><input type="hidden" value="{$vo.id}"> {$k}</td>
-                            <td>{$vo.userinfo.company}</td>
-                            <td>{$vo.userinfo.address}</td>
-                            <td>@mdo</td>
-                            <td><a href="javascript:void(0)" onclick="showDeleteModal(this)">删除</a><a href="{:url('back.home/modivender','','')}/id/{$vo.id}.html">/修改</td>
+                            <td scope="row" style="padding-top: 20px;"><input type="hidden" value="{$vo.id}"> {$k}</td>
+                            <td style="padding-top: 20px;">{$vo.userinfo.company}</td>
+                            <td style="padding-top: 20px;">{$vo.userinfo.address}</td>
+                            <td><img src="__UPLOADS__/{$vo.userinfo.image}" alt="..." class="img-rounded" style="width: 60px;height: 60px;"></td>
+                            <td style="padding-top: 20px;"><a href="javascript:void(0)" onclick="showDeleteModal(this)">删除</a><a href="{:url('back.home/modivender','','')}/id/{$vo.id}.html">/修改</td>
                         </tr>
                         {/volist}
 

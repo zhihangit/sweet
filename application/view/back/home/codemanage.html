@@ -9,6 +9,11 @@
             deleteHaulinfo();
         });
 
+        $("#activateHaulBtn").click(function() {
+            // ajax异步删除
+            activateinfo();
+        });
+
     })
 
     function deleteHaulinfo() {
@@ -17,6 +22,12 @@
         window.location.href ="{:url('back.home/abolishcode','','')}"+"/id/"+ $("#deleteHaulId").val()+".html";
         //window.location.href="{:url('table/index')}?id="+id;
     }
+
+    function activateinfo() {
+        window.location.href ="{:url('back.home/activatecode','','')}"+"/id/"+ $("#activateId").val()+".html";
+    }
+
+
     // 打开询问是否删除的模态框并设置需要删除的大修的ID
     function showDeleteModal(obj) {
         var $tds = $(obj).parent().parent().children();// 获取到所有列
@@ -24,6 +35,17 @@
         //alert(1);
         $("#deleteHaulId").val(delete_id);// 将模态框中需要删除的大修的ID设为需要删除的ID
         $("#delcfmOverhaul").modal({
+            backdrop : 'static',
+            keyboard : false
+        });
+    }
+
+    function showActivateModal(obj) {
+        var $tdss = $(obj).parent().parent().children();// 获取到所有列
+        var activate_id = $($tdss[0]).children("input").val();// 获取隐藏的ID
+        //alert(1);
+        $("#activateId").val(activate_id);// 将模态框中需要激活的大修的ID设为需要删除的ID
+        $("#activatefm").modal({
             backdrop : 'static',
             keyboard : false
         });
@@ -59,8 +81,16 @@
                             <td>{$vo.amount}</td>
                             <td>{$vo.price}</td>
                             <td>{$vo.indate}</td>
-                            <td>{$vo.status}</td>
-                            <td><a href="javascript:void(0)" onclick="showDeleteModal(this)">作废</a>
+                            <td>
+                                {switch vo.status }
+                                {case 3 }已作废{/case}
+                                {case 2}已激活{/case}
+                                {default /}未激活
+                                {/switch}
+                                </td>
+                            <td>
+                                <a href="javascript:void(0)" onclick="showActivateModal(this)">激活</a>
+                                <a href="javascript:void(0)" onclick="showDeleteModal(this)">/作废</a>
                                 <a href="{:url('back.home/modicode','','')}/id/{$vo.id}.html">/修改</a>
                                 <a href="../../uploads/{$vo.contract}" download="{$vo.client.companyname}{$vo.create_time}合同">/查看合同</a>
                                 <a href="{:url('back.home/out','','')}/id/{$vo.id}" >/码文件</a>
@@ -103,5 +133,31 @@
             </div>
         </div>
     </div>
+</div>
 
+
+    <div class="modal fade" id="activatefm" style="margin-top: 150px;">
+        <div class="modal-dialog">
+            <div class="modal-content message_align">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">提示</h4>
+                </div>
+                <div class="modal-body">
+                    <!-- 隐藏需要删除的id -->
+                    <input type="hidden" id="activateId" />
+                    <p>您确认要激活该批次条码吗？</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary"
+                            id="activateHaulBtn">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
