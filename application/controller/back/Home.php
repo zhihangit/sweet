@@ -2,6 +2,7 @@
 namespace app\controller\back;
 use app\model\back\Product;
 use app\model\back\Userinfo;
+use app\model\front\Order;
 use think\facade\Env;
 use think\Db;
 use think\facade\Request;
@@ -1025,10 +1026,41 @@ class Home extends Controller
     }
     public function dealorder(){
         $storeid=cookie('user_id');
-        $sql="select * from sw_order where storeid='$storeid'";
+        $sql="select * from sw_order where storeid='$storeid' order by create_time desc";
         $list=Db::query($sql);
-        dump($list);
+        //dump($list);
         $this->assign('list',$list);
+        return $this->fetch('dealorder');
+
+    }
+
+    public function dodealorder(){
+        if(Request::isPost()){
+            $id=input('id');
+            $expressid=input('expressid');
+            $basedata = Order::get($id);
+            if($basedata['status']==1){
+                $this->error('该订单已处理，无法再处理', 'back.home/dealorder');
+            }
+            if($basedata['takeself']==1 and $expressid<>''){
+                $this->error('改订单为自提，无需配送', 'back.home/dealorder');
+            }
+            if($basedata['takeself']==0 and $expressid==''){
+                $this->error('改订单需配送,必须输入配送快递单号', 'back.home/dealorder');
+            }
+            $data['result']=input('result');
+            $data['status']=1;
+            $data['expressid']=input('expressid');
+
+            $order = Order::get($id);;
+            $res=$order->force()->save($data);
+            if($res){
+                $this->success('订单处理完毕', 'back.home/dealorder');
+            }else{
+                $this->error('处理失败', 'back.home/dealorder');
+            }
+
+        }
 
     }
 

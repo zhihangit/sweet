@@ -1,26 +1,10 @@
 {layout name="backlayout" /}
 <script src="__BJS__/jquery.min.js"></script>
 <script type="text/javascript">
-
-    $(function() {
-        // 删除大修模态框的确定按钮的点击事件
-        $("#deleteHaulBtn").click(function() {
-            // ajax异步删除
-            deleteHaulinfo();
-        });
-
-    })
-
- function deleteHaulinfo() {
-        //alert("你即将删除的ID" + $("#deleteHaulId").val());
-       window.location.href ="{:url('back.home/deleproduct','','')}"+"/id/"+ $("#deleteHaulId").val()+".html";
-       //window.location.href="{:url('table/index')}?id="+id;
-    }
-    // 打开询问是否删除的模态框并设置需要删除的的ID
- function showDeleteModal(obj) {
+ function dealModal(obj) {
         var $tds = $(obj).parent().parent().children();// 获取到所有列
-        var delete_id = $($tds[0]).children("input").val();// 获取隐藏的ID
-        $("#deleteHaulId").val(delete_id);// 将模态框中需要删除的ID设为需要删除的ID
+        var deal_id = $($tds[0]).children("input").val();// 获取隐藏的ID
+        $("#dealId").val(deal_id);// 将模态框中需要处理的ID设为需要处理的ID
         $("#delcfmOverhaul").modal({
             backdrop : 'static',
             keyboard : false
@@ -31,9 +15,9 @@
 <div class="container-fluid cm-container-white" style="margin-top:20px;padding-top: 30px;height: 100%">
     <div class="row">
         <div class="col-md-12">
-            <div class="panel panel-default">
+            <div class="panel panel-default" style="min-height: 600px;">
                 <div class="panel-heading"><h3>本店订单列表</h3></div>
-                <div class="panel-body" style="padding-top: 0px;">
+                <div class="panel-body" style="padding-top: 0px;margin-top: 10px;">
                     <table class="table table-bordered table-hover table-condensed" style="text-align: center">
                         <thead  >
                         <tr>
@@ -52,21 +36,21 @@
                         <tbody>
                         {volist name="list" id="vo" key="k"}
                         <tr>
-                            <td scope="row" style="padding-top: 20px;"><input type="hidden" value="{$vo.id}"> {$k}</td>
-                            <td style="padding-top: 20px;">{$vo.create_time|date="Y-m-d"}</td>
-                            <td style="padding-top: 20px;">$vo.productinfo}</td>
+                            <td scope="row" ><input type="hidden" value="{$vo.id}"> {$k}</td>
+                            <td >{$vo.create_time|date="Y-m-d"}</td>
+                            <td style="text-align: left;" >{$vo.productinfo}</td>
                             <td>{$vo.totalnum}</td>
-                            <td style="padding-top: 20px;">{if $vo.takeself == '1'}自提
+                            <td >{if $vo.takeself == '1'}自提
                                 {else /}配送
                                 {/if}
                             </td>
                             <td> {switch vo.status }
-                                {case 0 }待处理{/case}
+                                {case 0 }<span style="color:red">待处理</span>{/case}
                                 {case 1 }已处理{/case}
                                 {default /}争议订单
                                 {/switch}</td>
-                            <td>处理结果</td>
-                            <td style="padding-top: 20px;"><a href="javascript:void(0)" onclick="showDeleteModal(this)">订单处理</a></td>
+                            <td>{$vo.result}</td>
+                            <td><a href="javascript:void(0)" onclick="dealModal(this)">订单处理</a></td>
                         </tr>
                         {/volist}
 
@@ -81,31 +65,44 @@
 </div>
 
 
+<form   action="{:url('back.home/dodealorder')}" method="post" >
+    <div class="modal fade" id="delcfmOverhaul" style="margin-top: 150px;">
+        <div class="modal-dialog">
+            <div class="modal-content message_align">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                    <h4 class="modal-title">订单处理</h4>
+                </div>
+                <div class="modal-body">
 
-<div class="modal fade" id="delcfmOverhaul" style="margin-top: 150px;">
-    <div class="modal-dialog">
-        <div class="modal-content message_align">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"
-                        aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-                <h4 class="modal-title">提示</h4>
-            </div>
-            <div class="modal-body">
+                    <div class="form-group">
+                        <label for="dealId" class="control-label" style="display:none;">订单号：</label>
+                        <input   type="hidden" id="dealId"  name="id"/>
+                    </div>
 
-                <input type="hidden" id="deleteHaulId" />
-                <input type="text" id="expressid" />
-                <input type="text" id="memo" />
-                <p>订单处理</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default"
-                        data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary"
-                        id="deleteHaulBtn">确认</button>
+                    <div class="form-group">
+                        <label for="expressid" class="control-label">配送快递单号:</label>
+                        <input  class="form-control" type="text" id="expressid" name="expressid"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="result" class="control-label">处理信息:</label>
+                        <textarea class="form-control" name="result" id="result"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary"
+                            id="deleteHaulBtn">确认</button>
+                </div>
             </div>
         </div>
     </div>
+</form>
+
 
 
