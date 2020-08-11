@@ -78,10 +78,13 @@
             </form>
 
                 <h3 style="text-align: center">查询结果</h3>
-
+            {notempty name="list"}
+            <h4  style="font-size: 16px;color:red">{$sqlinfo}</h4>
+            {/notempty}
                     <table class="table table-bordered table-hover table-condensed" style="text-align: center">
                         <thead  >
                         <tr>
+
                             <th  style="text-align: center">序号</th>
                             <th  style="text-align: center">下单日期</th>
                             <th style="text-align: center" >订单明细</th>
@@ -89,15 +92,16 @@
                             <th style="text-align: center" >提货方式</th>
                             <th style="text-align: center" >订单状态</th>
                             <th style="text-align: center" >处理结果</th>
-                            <th style="text-align: center">操作</th>
+                            <th style="text-align: center" >兑换门店</th>
+
+
                         </tr>
                         </thead>
                         <tbody>
 
                         {empty name="list"}
-                        <td colspan="8" style="font-size: 16px;color:red">暂无记录 {$sql}</td>
+                        <td colspan="8" style="font-size: 16px;color:red">暂无记录 <!--{$sql}--></td>
                         {else /}
-                        <td colspan="8" style="font-size: 16px;color:red">{$sqlinfo}</td>
                         {volist name="list" id="vo" key="k"}
                         <tr>
                             <td scope="row" ><input type="hidden" value="{$vo.id}"> {$k}</td>
@@ -114,9 +118,10 @@
                                 {default /}争议订单
                                 {/switch}</td>
                             <td>{$vo.result}</td>
-                            <td><a href="javascript:void(0)" onclick="dealModal(this)">订单处理</a></td>
+                            <td>{$vo.company}</td>
                         </tr>
                         {/volist}
+                        <td colspan="8" style="font-size: 16px;color:red;text-align: right">合计: {$total}元</td>
                         {/empty}
                         </tbody>
                     </table>
