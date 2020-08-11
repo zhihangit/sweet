@@ -1033,7 +1033,6 @@ class Home extends Controller
         return $this->fetch('dealorder');
 
     }
-
     public function dodealorder(){
         if(Request::isPost()){
             $id=input('id');
@@ -1060,6 +1059,93 @@ class Home extends Controller
                 $this->error('处理失败', 'back.home/dealorder');
             }
 
+        }
+
+    }
+    public function poll(){
+        $userid=cookie('user_id');
+        if(cookie('user_limite')==1){
+            $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='2'";
+            $vender=Db::query($sql);
+            $this->assign('vender',$vender);
+        }
+        if(cookie('user_limite')==2){
+            $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='2' and a.id=$userid";
+            $vender=Db::query($sql);
+            $this->assign('vender',$vender);
+
+            $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='3' and a.parent_id=$userid";
+            $store=Db::query($sql);
+            $this->assign('store',$store);
+        }
+        if(cookie('user_limite')==3){
+            $pid=Db::table('sw_user')->getFieldById($userid,'parent_id');
+            $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='2' and a.id=$pid";
+            $vender=Db::query($sql);
+            $this->assign('vender',$vender);
+
+            $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='3' and a.id=$userid";
+            $store=Db::query($sql);
+            $this->assign('store',$store);
+        }
+
+        if(Request::isPost()){
+            $sqlinfo="订单查询条件：";
+            $venderid=Request::param('venderid');
+            $storeid=Request::param('storeid');
+            $startrq=Request::param('startrq');
+            $endrq=Request::param('endrq');
+             $sql="select a.*,b.company from sw_order a left join sw_userinfo b on a.storeid=b.user_id where date_format(create_time,'%Y-%m-%d') between '$startrq' and '$endrq'";
+
+             if ($venderid<>'0'){
+                      if($storeid<>'0'){
+                          $sql=$sql." and a.storeid='$storeid'  order by a.storeid,a.create_time desc";
+                          $vendername=Db::table("sw_userinfo")->getFieldByUser_id($venderid,'company');
+                          $storename=Db::table("sw_userinfo")->getFieldByUser_id($storeid,'company');
+                          $sqlinfo="订单查询条件："."商家:".$vendername."；分店:".$storename."；日期在".$startrq."---".$endrq."数据";
+
+                      }else{
+
+                          $sql=$sql."and a.storeid in (select id as storeid from sw_user where parent_id='$venderid') order by a.storeid,a.create_time desc";
+                          $vendername=Db::table("sw_userinfo")->getFieldByUser_id($venderid,'company');
+                          $sqlinfo="订单查询条件："."商家".$vendername."；所有分店；日期在".$startrq."---".$endrq."数据";
+                      }
+
+
+
+                    }else{
+                 $sql=$sql." order by a.storeid,a.create_time desc";
+                 $sqlinfo="订单查询条件："."全部商家包括商家分店；日期在".$startrq."---".$endrq."数据";
+
+             }
+
+             $this->assign('sql',$sql);
+             $list=Db::query($sql);
+             $this->assign("list",$list);
+             $this->assign('sqlinfo',$sqlinfo);
+         }else{
+
+            $this->assign('sql','sql empty');
+        }
+
+         return $this->fetch("poll");
+
+
+    }
+
+    public function choosevender(){
+        if (Request::isPost()) {
+            $data = Request::param();
+            $id = $data['vender_id'];
+            $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite=3 and a.parent_id=$id";
+            $storedate=Db::query($sql);
+
+            $opt = '<option value="0">--全部--</option>';
+            foreach($storedate as $key=>$val){
+                $opt .= "<option value='{$val['id']}'>{$val['company']}</option>";
+            }
+            echo json_encode($opt);
+            die;
         }
 
     }

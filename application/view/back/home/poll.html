@@ -1,0 +1,130 @@
+{layout name="backlayout" /}
+<script src="__BJS__/jquery.min.js"></script>
+<script type="text/javascript">
+</script>
+<div class="container-fluid cm-container-white" style="margin-top:20px;padding-top: 30px;height: 100%">
+    <div class="row">
+        <div class="col-md-12">
+            <form class="form-inline" action="{:url('back.home/poll')}" method="post">
+                <div class="form-group">
+                    <label for="venderid">主店</label>
+                    <select name="venderid" id="venderid" style="height: 30px;">
+                        {if ( $Think.cookie.user_limite == 1)}<option value="0">--全部--</option>
+                        {/if}
+                        {foreach $vender as $vo1}
+                        <option value="{$vo1.id}">{$vo1.company}</option>
+                        {/foreach}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="storeid">分店</label>
+                    <select name="storeid" id="storeid" style="height: 30px;">
+                        {if ( $Think.cookie.user_limite == 1) OR ( $Think.cookie.user_limite == 2)}<option value="0">--全部--</option>
+                        {/if}
+                        {if ( $Think.cookie.user_limite == 2) OR ( $Think.cookie.user_limite == 3)}
+                        {foreach $store as $vo2}
+                        <option value="{$vo2.id}">{$vo2.company}</option>
+                        {/foreach}
+                        {/if}
+                    </select>
+                </div>
+
+                <script>
+
+                    $('#venderid').change(function(){
+                       // alert(1);
+                        $.ajax({
+                            type:"post",
+                            url:"{:url('back.home/choosevender')}",
+                            data:'vender_id='+$('#venderid').val(),
+                            dataType:"json",
+                            success:function(data){
+                                console.log(data);
+
+                                $('#storeid').html(data);
+
+                            }
+                        });
+                    });
+                    </script>
+                <div class="form-group">
+                    <label for="startrq">起始日期</label>
+                    <input type="text" name="startrq"   class="demo-input" placeholder="请选择日期" id="startrq" style="height: 30px;">
+                </div>
+                <div class="form-group">
+                    <label for="endrq">结束日期</label>
+                    <input type="text" name="endrq" class="demo-input" placeholder="请选择日期" id="endrq" style="height: 30px;">
+                </div>
+                <script src="__PUBLIC__/plug/layDate/laydate/laydate.js"></script>
+                <script>
+                        var date = new Date(); //创建时间对象
+                        var year = date.getFullYear(); //获取年
+                        var month = date.getMonth() + 1;//获取月
+                        var day = date.getDate(); //获取当日
+                        var time = year + "-" + month + "-" + day; //组合时间
+                        //执行一个laydate实例
+                    laydate.render({
+                        elem: '#startrq' //指定元素
+                        ,value:time
+                    });
+
+                    laydate.render({
+                        elem: '#endrq'//指定元素
+                        ,value: time
+                    });
+
+                </script>
+                <button type="submit" class="btn btn-primary">统计查询</button>
+            </form>
+
+                <h3 style="text-align: center">查询结果</h3>
+
+                    <table class="table table-bordered table-hover table-condensed" style="text-align: center">
+                        <thead  >
+                        <tr>
+                            <th  style="text-align: center">序号</th>
+                            <th  style="text-align: center">下单日期</th>
+                            <th style="text-align: center" >订单明细</th>
+                            <th style="text-align: center" >兑换金额</th>
+                            <th style="text-align: center" >提货方式</th>
+                            <th style="text-align: center" >订单状态</th>
+                            <th style="text-align: center" >处理结果</th>
+                            <th style="text-align: center">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {empty name="list"}
+                        <td colspan="8" style="font-size: 16px;color:red">暂无记录 {$sql}</td>
+                        {else /}
+                        <td colspan="8" style="font-size: 16px;color:red">{$sqlinfo}</td>
+                        {volist name="list" id="vo" key="k"}
+                        <tr>
+                            <td scope="row" ><input type="hidden" value="{$vo.id}"> {$k}</td>
+                            <td >{$vo.create_time|date="Y-m-d"}</td>
+                            <td style="text-align: left;" >{$vo.productinfo}</td>
+                            <td>{$vo.totalnum}</td>
+                            <td >{if $vo.takeself == '1'}自提
+                                {else /}配送
+                                {/if}
+                            </td>
+                            <td> {switch vo.status }
+                                {case 0 }<span style="color:red">待处理</span>{/case}
+                                {case 1 }已处理{/case}
+                                {default /}争议订单
+                                {/switch}</td>
+                            <td>{$vo.result}</td>
+                            <td><a href="javascript:void(0)" onclick="dealModal(this)">订单处理</a></td>
+                        </tr>
+                        {/volist}
+                        {/empty}
+                        </tbody>
+                    </table>
+
+
+    </div>
+</div>
+</div>
+
+
+
