@@ -18,26 +18,42 @@
             <div id="cm-menu-content">
                 <div id="cm-menu-items-wrapper">
                     <div id="cm-menu-scroller">
+
                         <ul class="cm-menu-items">
+
+                            {if $Think.cookie.user_limite == '1' }
                             <li class="active"><a href="{:url('back.home/comadmin')}" class="sf-house">系统应用</a></li>
+                            {/if}
+
+
+
                            <!-- <li><a href="dashboard-sales.html" class="sf-dashboard">Dashboard</a></li>
                             <li><a href="components-text.html" class="sf-brick">Components</a></li>-->
+                            {if $Think.cookie.user_limite == '2'  }
+                            <!--OR $Think.cookie.user_limite == '1'-->
                             <li class="cm-submenu">
                                 <a class="sf-window-layout">商家应用<span class="caret"></span></a>
                                 <ul>
                                     <li><a  style="text-align: center" href="{:url('back.home/productmanage')}">商品管理</a></li>
                                     <li><a style="text-align: center" href="{:url('back.home/storemanage')}">门店管理</a></li>
-                                    <li><a style="text-align: center" href="{:url('back.home/vendercount')}">查询统计</a></li>
+                                    <li><a style="text-align: center" href="{:url('back.home/poll')}">查询统计</a></li>
                                 </ul>
                             </li>
+                            {/if}
+
+                            {if $Think.cookie.user_limite == '3'   }
+                            <!--OR $Think.cookie.user_limite == '1'-->
                             <li class="cm-submenu">
                                 <a class="sf-cat">门店应用<span class="caret"></span></a>
                                 <ul>
                                     <li><a style="text-align: center" href="{:url('back.home/storeproductmanage')}">商品上架</a></li>
                                     <li><a style="text-align: center" href="{:url('back.home/dealorder')}">订单处理</a></li>
-                                    <li><a style="text-align: center" href="{:url('back.home/storecount')}">查询统计</a></li>
+                                    <li><a style="text-align: center" href="{:url('back.home/poll')}">查询统计</a></li>
                                 </ul>
                             </li>
+                            {/if}
+
+
                             <li><a href="{:url('back.home/modipwd')}" class="sf-notepad">修改密码</a></li>
                             <li><a href="{:url('back.home/loginout')}" class="sf-lock-open">退出登录</a></li>
                         </ul>
@@ -58,7 +74,7 @@
                     <div id="cm-search-btn" class="btn btn-primary md-search-white" data-toggle="cm-search"></div>
                 </div>
                 <div class="dropdown pull-right">
-                    <button class="btn btn-primary md-notifications-white" data-toggle="dropdown"> <span class="label label-danger">23</span> </button>
+                    <button class="btn btn-primary md-notifications-white" data-toggle="dropdown"></button>
                     <div class="popover cm-popover bottom">
                         <div class="arrow"></div>
                         <div class="popover-content">

@@ -154,6 +154,7 @@ class Index extends Controller
                                 $insertdata['ordertel']=input('ordertel');
                                 $insertdata['memo']=input('memo');
                                 $insertdata['result']='';
+                                $insertdata['expressid']='';
                                 //$insertdata['create_time']=date_create()->format('Y-m-d H:i:s');
                                 $insertdata['orderinfo']=explode(",",$sorder[0]);
                                 $ss="订单商品明细：";
@@ -193,16 +194,8 @@ class Index extends Controller
                                        $dorderdetial->save($ddata);
                                     }
 
-                                    $ye=Db::table('sw_codedetail')->getFieldByNumber(input('codenumber'), 'balance');
 
-                                    $ye=(float)$ye-(float)$sorder[2];
-
-                                    Db::name('codedetail')
-                                        ->where('number', input('codenumber'))
-                                        ->data(['balance' => $ye])
-                                        ->update();
-//die("stop here");
-                                    $this->success('兑换成功，等待商家处理', url('front.index/searchcode',['codenumber'=>input('codenumber')]));
+                                    $this->success('已提交兑换订单，等待商家处理', url('front.index/searchcode',['codenumber'=>input('codenumber')]));
                                 }else{
                                     $this->error('兑换失败异常，请重新兑换',url('front.index/storeexchange',['storeid'=>input('storeid')]));
                                 }
@@ -241,16 +234,18 @@ class Index extends Controller
     }
     public function searchcode(){
 
-       $code=input("codenumber");
-       $ye=Db::table("sw_codedetail")->getFieldByNumber($code,"balance");
-       $this->assign('ye',$ye);
-        //$datainfo=Order::where('codenumber',input('codenumber'))->order('create_time desc')->select();
+        $code=trim(input("codenumber"));
         $sql="select a.*,b.company from sw_order a left join sw_userinfo b on a.storeid=b.user_id where a.codenumber='$code' order by a.create_time desc ";
         $datainfo=Db::query($sql);
-        $this->assign('datainfo',$datainfo);
-       //dump($datainfo) ;
-        return $this->fetch("searchcode");
+        if(!$datainfo){
+            $this->error("没有该兑换码信息，请重新确认");
+        }else{
+            $this->assign('datainfo',$datainfo);
+            $ye=Db::table("sw_codedetail")->getFieldByNumber($code,"balance");
+            $this->assign('ye',$ye);
 
+        }
+        return $this->fetch("searchcode");
   }
     public function dealorder(){
 
@@ -271,5 +266,8 @@ class Index extends Controller
 
         echo __DIR__ . '/../thinkphp/base.php';
 
+    }
+    public function test(){
+        return $this->fetch('test');
     }
 }

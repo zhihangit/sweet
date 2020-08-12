@@ -45,13 +45,23 @@
                             <i class="fa fa-search"></i>
                         </button>
                         <div class="search">
-                            <form action="#">
-                                <input type="search" placeholder="输入兑换码查询">
-                                <button type="submit">
+                            <form action="#" method="post" >
+                                <input id="inputcode" type="search" placeholder="输入兑换码查询" name="codenumber">
+                                <button type="submit" id="searchbutton">
                                     查询
                                 </button>
                             </form>
                         </div>
+                        <script src="__BJS__/jquery.min.js"></script>
+                        <script type="text/javascript">
+                            $(document).ready(function(){
+                                $("#searchbutton").click(function(){
+                                    var code;
+                                    code=$("#inputcode").val()
+                                    window.location.href ="{:url('front.index/searchcode','','')}"+"/codenumber/"+ code+".html";
+                                });
+                            });
+                        </script>
                     </div>
                 </div>
             </div>

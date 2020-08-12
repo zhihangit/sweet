@@ -19,13 +19,14 @@
     </style>
 </head>
 <body>
-<header class="header-area transparent-bar header-black">
+<header class="header-area transparent-bar header-black stick">
     <div class="container">
         <div class="row">
             <div class="col-lg-3 col-md-4 col-5 col-sm-4">
                 <div class="logo">
-                    <a href=":url('front.index/index')}">
-                        <img alt="" src="assets/img/logo/logo-black.png">
+                    <a href="{:url('front.index/index')}">
+                        <img class="logo-normal" alt="" src="__FIMAGES__/indeximg/logo/logo.png">
+                        <img class="logo-sticky" alt="" src="__FIMAGES__/indeximg/logo/logo-black.png">
                     </a>
                 </div>
             </div>
@@ -46,13 +47,23 @@
                             <i class="fa fa-search"></i>
                         </button>
                         <div class="search">
-                            <form action="#">
-                                <input type="search" placeholder="输入兑换码查询">
-                                <button type="submit">
+                            <form action="#" method="post" >
+                                <input id="inputcode" type="search" placeholder="输入兑换码查询" name="codenumber">
+                                <button type="submit" id="searchbutton">
                                     查询
                                 </button>
                             </form>
                         </div>
+                        <script src="__BJS__/jquery.min.js"></script>
+                        <script type="text/javascript">
+                            $(document).ready(function(){
+                                $("#searchbutton").click(function(){
+                                    var code;
+                                    code=$("#inputcode").val()
+                                    window.location.href ="{:url('front.index/searchcode','','')}"+"/codenumber/"+ code+".html";
+                                });
+                            });
+                        </script>
                     </div>
                 </div>
             </div>
@@ -87,11 +98,11 @@
                             </div>
                         </div>
                         <div class="social-icon">
-                            <ul>
+<!--                            <ul>
                                 <li><a class="facebook" href="#"><i class="ion-social-facebook"></i></a></li>
                                 <li><a class="twitter" href="#"><i class="ion-social-twitter"></i></a></li>
                                 <li><a class="instagram" href="#"><i class="ion-social-instagram-outline"></i></a></li>
-                            </ul>
+                            </ul>-->
                         </div>
                     </div>
                 </div>
@@ -175,20 +186,8 @@
                             <h4>商务合作</h4>
                         </div>
                         <div class="newsletter-style">
-                            <p> 商务合作请输入你的电子邮件地址，并注明相关合作意向与联系方式，我们将主动联系您</p>
-                            <div id="mc_embed_signup" class="subscribe-form ">
-                                <form id="mc-embedded-subscribe-form" class="validate" novalidate="" target="_blank" name="mc-embedded-subscribe-form" method="post" action="">
-                                    <div id="mc_embed_signup_scroll" class="mc-form">
-                                        <input class="email" type="email" required="" placeholder="Enter your email" name="EMAIL" value="">
-                                        <div class="mc-news" aria-hidden="true">
-                                            <input type="hidden" value="" tabindex="-1" name="b_6bbb9b6f5827bd842d9640c82_05d85f18ef">
-                                        </div>
-                                        <div class="clear">
-                                            <input id="mc-embedded-subscribe" class="button" type="submit" name="subscribe" value="发送">
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
+                            <p> 如需商务合作，请致电或电邮我们，我们将竭诚为你您服务</p>
+
                         </div>
                     </div>
                 </div>
