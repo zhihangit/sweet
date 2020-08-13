@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主机： 127.0.0.1:3306
--- 生成日期： 2020-07-22 09:50:30
+-- 生成日期： 2020-08-13 09:41:03
 -- 服务器版本： 5.7.24
 -- PHP 版本： 7.0.33
 
@@ -3327,7 +3327,7 @@ CREATE TABLE IF NOT EXISTS `sw_client` (
   `create_time` datetime NOT NULL,
   `update_time` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='客户表';
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='客户表';
 
 --
 -- 转存表中的数据 `sw_client`
@@ -3336,7 +3336,10 @@ CREATE TABLE IF NOT EXISTS `sw_client` (
 INSERT INTO `sw_client` (`id`, `companyname`, `companyaddress`, `contact`, `tel`, `email`, `create_time`, `update_time`) VALUES
 (1, '税务局', '河南岸', '刘先生', '5789355', '38020076@qq.com', '2020-07-31 00:00:00', '2020-07-31 00:00:00'),
 (2, '海关', '仲恺', '王经理', '5789365', '38020076@qq.com', '2020-07-31 00:00:00', '2020-07-31 00:00:00'),
-(3, '建设银行', '江北1路', '范经理', '5789399', 'sandliu55@1277.com', '2020-07-16 15:46:00', '2020-07-16 15:46:00');
+(3, '建设银行', '江北1路', '范经理', '5789399', 'sandliu55@1277.com', '2020-07-16 15:46:00', '2020-07-16 15:46:00'),
+(4, '发展银行', '江北文昌1路', '刘经理', '13829987002', '38020073@qq.com', '2020-08-13 16:26:59', '2020-08-13 16:26:59'),
+(5, '检察院', '江北文明路3号', '陈经理', '5789312', '1545@126.com', '2020-08-13 16:31:15', '2020-08-13 16:31:15'),
+(6, '防疫站', '江北文明路5号', '黄经理', '5789399', '38020073@qq.com', '2020-08-13 16:32:30', '2020-08-13 16:32:30');
 
 -- --------------------------------------------------------
 
@@ -3356,16 +3359,14 @@ CREATE TABLE IF NOT EXISTS `sw_code` (
   `create_time` datetime NOT NULL,
   `update_time` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='兑换码主表';
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='兑换码主表';
 
 --
 -- 转存表中的数据 `sw_code`
 --
 
 INSERT INTO `sw_code` (`id`, `amount`, `price`, `status`, `companyid`, `contract`, `indate`, `create_time`, `update_time`) VALUES
-(9, 5, 50, 1, 2, '20200714\\48fc69dcf66bf73b7a733b2632dc6bb1.docx', '2020-08-31 00:00:00', '2020-07-14 16:08:50', '2020-07-14 16:11:15'),
-(7, 5, 100, 3, 1, '20200714\\782d512eca0e513d750e47af494a3cf8.docx', '2020-07-31 00:00:00', '2020-07-14 10:33:00', '2020-07-14 10:42:54'),
-(8, 5, 200, 1, 1, '20200714\\c94ba5691b1354395810e367be7fa0ac.docx', '2020-08-31 00:00:00', '2020-07-14 10:40:42', '2020-07-14 10:41:55');
+(10, 10, 500, 2, 3, '', '2021-08-31 00:00:00', '2020-08-05 17:04:09', '2020-08-06 16:00:53');
 
 -- --------------------------------------------------------
 
@@ -3383,28 +3384,96 @@ CREATE TABLE IF NOT EXISTS `sw_codedetail` (
   `create_time` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `number` (`number`)
-) ENGINE=MyISAM AUTO_INCREMENT=102 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=112 DEFAULT CHARSET=utf8;
 
 --
 -- 转存表中的数据 `sw_codedetail`
 --
 
 INSERT INTO `sw_codedetail` (`id`, `code_id`, `number`, `proof`, `balance`, `create_time`) VALUES
-(51, 8, 'w7eu6ryq', 'Bjng', 200, '2020-07-14 10:41:55'),
-(50, 8, 'ioh6fzo3', 'BjQS', 200, '2020-07-14 10:41:55'),
-(49, 8, 'ky13omzu', 'qX2C', 200, '2020-07-14 10:41:55'),
-(48, 8, '3ygthddc', 'I5xO', 200, '2020-07-14 10:41:55'),
-(47, 8, '5l9mza82', 'xKvA', 200, '2020-07-14 10:41:55'),
-(56, 7, 'h85nzcgm', 'uJ83', 100, '2020-07-14 10:42:27'),
-(55, 7, 'q310um0b', 'QCUx', 100, '2020-07-14 10:42:27'),
-(54, 7, '1fxo0s1p', 'Nhow', 100, '2020-07-14 10:42:27'),
-(53, 7, 'f0401ckh', '9BzR', 100, '2020-07-14 10:42:27'),
-(52, 7, 'b74b43m7', 'J1Hc', 100, '2020-07-14 10:42:27'),
-(101, 9, 'rttml775', 'PdFQ', 50, '2020-07-14 16:11:15'),
-(100, 9, 'tkfet74y', 'r6eY', 50, '2020-07-14 16:11:15'),
-(99, 9, 'z20pp79k', 'VphI', 50, '2020-07-14 16:11:15'),
-(98, 9, 'ts1l7rqh', 'XE27', 50, '2020-07-14 16:11:15'),
-(97, 9, 'fbe4o94b', 'xuc4', 50, '2020-07-14 16:11:15');
+(102, 10, 'ph9m4kvn', 'e4hn', 110, '2020-08-05 17:04:09'),
+(103, 10, 'z509yoeu', 'oZw8', 202, '2020-08-05 17:04:09'),
+(104, 10, '4jbw8cms', 'x5iI', 141, '2020-08-05 17:04:09'),
+(105, 10, 'mwx2e1vq', 'CZMS', 500, '2020-08-05 17:04:09'),
+(106, 10, 'ul4tliv1', 'Z4YF', 380, '2020-08-05 17:04:09'),
+(107, 10, 'uwbua8ke', 'S4ml', 500, '2020-08-05 17:04:09'),
+(108, 10, 'orvuqw3x', 'pcdV', 500, '2020-08-05 17:04:09'),
+(109, 10, 'fln6t5jk', 'EtL4', 500, '2020-08-05 17:04:09'),
+(110, 10, 'imwl7w3h', 'yPLd', 260, '2020-08-05 17:04:09'),
+(111, 10, 'l0p9uv9e', 'xfqu', 500, '2020-08-05 17:04:09');
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `sw_order`
+--
+
+DROP TABLE IF EXISTS `sw_order`;
+CREATE TABLE IF NOT EXISTS `sw_order` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `codenumber` varchar(8) NOT NULL,
+  `storeid` int(11) NOT NULL,
+  `totalnum` float NOT NULL,
+  `productinfo` varchar(200) NOT NULL,
+  `storepid` int(11) NOT NULL,
+  `codecompanyid` int(11) NOT NULL,
+  `create_time` datetime NOT NULL,
+  `orderaddress` varchar(120) NOT NULL,
+  `ordercontact` varchar(30) NOT NULL,
+  `ordertel` varchar(20) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0待处理1已处理2争议处理中',
+  `takeself` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0配送1自取',
+  `expressid` varchar(60) NOT NULL,
+  `deal_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `result` varchar(200) NOT NULL COMMENT '处理结果',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COMMENT='订单表';
+
+--
+-- 转存表中的数据 `sw_order`
+--
+
+INSERT INTO `sw_order` (`id`, `codenumber`, `storeid`, `totalnum`, `productinfo`, `storepid`, `codecompanyid`, `create_time`, `orderaddress`, `ordercontact`, `ordertel`, `status`, `takeself`, `expressid`, `deal_time`, `result`) VALUES
+(16, 'z509yoeu', 35, 298, '订单商品明细： 商品[未来之星]数量[2]单价[89]; 商品[嘉年华]数量[1]单价[120];', 32, 10, '2020-08-06 17:28:07', '2', '2', '2', 1, 0, 'EMS:12546121', '2020-08-10 23:35:06', '已配送'),
+(15, 'ph9m4kvn', 35, 390, '订单商品明细： 商品[嘉年华]数量[2]单价[120]; 商品[骑士蛋糕]数量[1]单价[150];', 32, 10, '2020-08-06 17:26:36', '', '1', '1', 1, 1, '', '2020-08-10 23:35:06', '已自提'),
+(19, '4jbw8cms', 35, 89, '订单商品明细： 商品[未来之星]数量[1]单价[89];', 32, 10, '2020-08-06 23:31:46', '4', '4', '4', 1, 0, '申通配送，单号：124567846', '2020-08-10 23:35:06', '已进行配送'),
+(18, '4jbw8cms', 35, 270, '订单商品明细： 商品[嘉年华]数量[1]单价[120]; 商品[骑士蛋糕]数量[1]单价[150];', 32, 10, '2020-08-06 23:29:32', '3', '3', '3', 1, 0, '圆通快递4578431', '2020-08-10 23:35:06', '已配送'),
+(20, 'ul4tliv1', 35, 120, '订单商品明细： 商品[嘉年华]数量[1]单价[120];', 32, 10, '2020-08-07 00:26:48', '', '1', '1', 1, 1, '', '2020-08-10 23:35:06', '客户已自提'),
+(21, 'imwl7w3h', 35, 240, '订单商品明细： 商品[嘉年华]数量[2]单价[120];', 32, 10, '2020-08-12 10:34:40', '1', '1', '1', 1, 0, 'EMS:1259999', '2020-08-12 10:34:40', '已配送');
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `sw_orderdetail`
+--
+
+DROP TABLE IF EXISTS `sw_orderdetail`;
+CREATE TABLE IF NOT EXISTS `sw_orderdetail` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL,
+  `product` varchar(30) NOT NULL,
+  `num` int(11) NOT NULL,
+  `price` float NOT NULL,
+  `create_time` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+
+--
+-- 转存表中的数据 `sw_orderdetail`
+--
+
+INSERT INTO `sw_orderdetail` (`id`, `order_id`, `product`, `num`, `price`, `create_time`) VALUES
+(4, 15, '骑士蛋糕', 1, 150, '2020-08-06 17:26:36'),
+(3, 15, '嘉年华', 2, 120, '2020-08-06 17:26:36'),
+(5, 16, '未来之星', 2, 89, '2020-08-06 17:28:07'),
+(6, 16, '嘉年华', 1, 120, '2020-08-06 17:28:07'),
+(7, 17, '嘉年华', 1, 120, '2020-08-06 23:29:00'),
+(8, 17, '骑士蛋糕', 1, 150, '2020-08-06 23:29:00'),
+(9, 18, '嘉年华', 1, 120, '2020-08-06 23:29:32'),
+(10, 18, '骑士蛋糕', 1, 150, '2020-08-06 23:29:32'),
+(11, 19, '未来之星', 1, 89, '2020-08-06 23:31:46'),
+(12, 20, '嘉年华', 1, 120, '2020-08-07 00:26:48'),
+(13, 21, '嘉年华', 2, 120, '2020-08-12 10:34:40');
 
 -- --------------------------------------------------------
 
@@ -3427,16 +3496,22 @@ CREATE TABLE IF NOT EXISTS `sw_product` (
   `create_time` datetime NOT NULL,
   `update_time` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 --
 -- 转存表中的数据 `sw_product`
 --
 
 INSERT INTO `sw_product` (`id`, `user_id`, `name`, `price`, `material`, `introduce`, `mainimage`, `main_flag`, `del_flag`, `pint`, `create_time`, `update_time`) VALUES
-(5, 27, '满天星', 123, '奶油、草莓、芝麻', '好吃', '20200718\\f135150cc17b52b28877d33015b0c62d.jpg', 1, 0, '2', '2020-07-18 13:25:27', '2020-07-18 13:25:27'),
-(4, 27, '幸福满满', 120, '奶油、草莓', '无', '20200718\\5f1423ea2bc3820f482ddbc4dc0bd9a9.jpg', 1, 0, '6', '2020-07-18 13:21:02', '2020-07-18 13:21:02'),
-(6, 27, '一见钟情', 115, '115', '115', '20200722\\b715d9143c85021c34069d0c874b244b.jpg', 1, 0, '2', '2020-07-22 09:50:04', '2020-07-22 09:50:04');
+(8, 32, '骑士蛋糕', 150, '奶油、草莓、葡萄', '神殿骑士，勇夺荣耀', '20200725\\5655bafb9a4d4820a195b44b2b6c7483.jpg', 1, 0, '4', '2020-07-25 22:19:00', '2020-07-25 22:19:00'),
+(7, 32, '嘉年华', 120, '奶油、草莓', '畅想时光，快乐自如', '20200725\\d7d62610938090379987fbc0f5a2b55f.jpg', 1, 0, '3', '2020-07-25 22:17:35', '2020-07-25 22:17:35'),
+(9, 32, '未来之星', 89, '奶油、草莓、蓝莓', '未来之星，成就你我', '20200725\\5f3f755f51dda84e90ce3a51db4ac103.jpg', 0, 0, '5', '2020-07-25 22:27:20', '2020-07-25 22:27:20'),
+(10, 31, '提拉米苏', 110, '奶油、草莓、巧克力', '提拉米苏，浪漫之夜', '20200725\\88d6b24dcb2b23fc586775bca876fa55.jpg', 1, 0, '2', '2020-07-25 22:55:14', '2020-07-25 22:55:14'),
+(11, 31, '黑色森林', 100, '奶油、巧克力、芝士', '黑色森林，不能说的秘密', '20200725\\2c5c17804f555aec38c9f42dbd4d9167.jpg', 1, 0, '2', '2020-07-25 22:57:02', '2020-07-25 22:57:02'),
+(12, 31, '森林狂想曲', 99, '奶油、草莓、蓝莓、葡萄', '森林狂想曲，奏响你我的乐章', '20200725\\1fac416158c733370d60563fef2d90d2.jpg', 0, 0, '5', '2020-07-25 23:13:09', '2020-07-25 23:13:09'),
+(13, 30, '十里桃红', 120, '奶油、草莓、猕猴桃', '十里桃红，千千阙歌', '20200725\\e8a01f056641e773a9d74e15736dbe77.jpg', 1, 0, '3', '2020-07-25 23:32:11', '2020-07-25 23:32:11'),
+(14, 30, '甜心美莓', 99, '奶油、草莓、芝士', '甜心美莓、甜心妹妹', '20200725\\e34b744ebea886deca5b375fafe9f49f.jpg', 1, 0, '4', '2020-07-25 23:33:12', '2020-07-25 23:33:12'),
+(15, 30, '椰香心语', 168, '奶油、草莓、巧克力、椰汁', '椰香心语夜来香', '20200725\\e456955a4bcbd514131df3467c8733e8.jpg', 0, 0, '2', '2020-07-25 23:34:08', '2020-07-25 23:34:08');
 
 -- --------------------------------------------------------
 
@@ -3451,22 +3526,6 @@ CREATE TABLE IF NOT EXISTS `sw_productimage` (
   `image` varchar(60) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
-
---
--- 转存表中的数据 `sw_productimage`
---
-
-INSERT INTO `sw_productimage` (`id`, `product_id`, `image`) VALUES
-(26, 5, 'D:\\wamp64\\www\\sweet\\uploads/productimage/xu82imenu-1.jpg'),
-(25, 4, 'D:\\wamp64\\www\\sweet\\uploads/productimage/i5wropro-3.jpg'),
-(24, 4, 'D:\\wamp64\\www\\sweet\\uploads/productimage/9aja7pro-2.jpg'),
-(23, 4, 'D:\\wamp64\\www\\sweet\\uploads/productimage/3b7rapro-3.jpg'),
-(22, 5, 'D:\\wamp64\\www\\sweet\\uploads/productimage/a0217pro-1.jpg'),
-(21, 5, 'D:\\wamp64\\www\\sweet\\uploads/productimage/visj4menu-1.jpg'),
-(20, 5, 'D:\\wamp64\\www\\sweet\\uploads/productimage/37u3lpro-1.jpg'),
-(19, 4, 'D:\\wamp64\\www\\sweet\\uploads/productimage/tg1t5pro-3.jpg'),
-(17, 4, 'D:\\wamp64\\www\\sweet\\uploads/productimage/ljiyumenu-1.jpg'),
-(18, 4, 'D:\\wamp64\\www\\sweet\\uploads/productimage/6tzt1pro-1.jpg');
 
 -- --------------------------------------------------------
 
@@ -7816,16 +7875,16 @@ CREATE TABLE IF NOT EXISTS `sw_storeproduct` (
   `del_flag` tinyint(1) NOT NULL,
   `on_off` tinyint(1) NOT NULL DEFAULT '0' COMMENT '上下架标志0上架1下架',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 --
 -- 转存表中的数据 `sw_storeproduct`
 --
 
 INSERT INTO `sw_storeproduct` (`id`, `store_id`, `product_id`, `newprice`, `del_flag`, `on_off`) VALUES
-(1, 28, 5, '123', 0, 0),
-(2, 28, 4, '120', 0, 0),
-(3, 28, 6, '115', 0, 0);
+(6, 35, 9, '89', 0, 0),
+(5, 35, 7, '120', 0, 0),
+(4, 35, 8, '150', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -7845,17 +7904,26 @@ CREATE TABLE IF NOT EXISTS `sw_user` (
   `update_time` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`username`)
-) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=utf8 COMMENT='用户表';
+) ENGINE=MyISAM AUTO_INCREMENT=43 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 --
 -- 转存表中的数据 `sw_user`
 --
 
 INSERT INTO `sw_user` (`id`, `parent_id`, `username`, `userpwd`, `limite`, `area`, `create_time`, `update_time`) VALUES
-(1, 0, 'lzhsweet', 'e10adc3949ba59abbe56e057f20f883e', 1, 2019, '2020-07-01 23:07:33', '2020-07-21 00:18:19'),
-(28, 27, 'store1', 'af1a5e5f2cc759f127f6f406616ba84e', 3, 431026, '2020-07-20 00:45:32', '2020-07-20 00:45:32'),
-(29, 27, 'store2', 'af1a5e5f2cc759f127f6f406616ba84e', 3, 341602, '2020-07-20 00:48:00', '2020-07-20 00:48:00'),
-(27, 1, 'vender', 'af1a5e5f2cc759f127f6f406616ba84e', 2, 411628, '2020-07-20 00:06:43', '2020-07-20 00:17:06');
+(1, 0, 'lzhsweet', 'e10adc3949ba59abbe56e057f20f883e', 1, 2019, '2020-07-01 23:07:33', '2020-08-13 17:33:27'),
+(34, 32, 'xipumiqi', 'e10adc3949ba59abbe56e057f20f883e', 3, 441302, '2020-07-25 22:37:26', '2020-07-25 22:37:26'),
+(35, 32, 'jbmiqi', 'e10adc3949ba59abbe56e057f20f883e', 3, 441302, '2020-07-25 22:40:15', '2020-07-25 22:40:15'),
+(32, 1, 'miqi', 'e10adc3949ba59abbe56e057f20f883e', 2, 441302, '2020-07-25 16:49:35', '2020-07-25 16:49:35'),
+(30, 1, 'klst', 'e10adc3949ba59abbe56e057f20f883e', 2, 441302, '2020-07-25 16:41:20', '2020-07-25 16:41:20'),
+(31, 1, 'weiduomei', 'e10adc3949ba59abbe56e057f20f883e', 2, 441302, '2020-07-25 16:45:53', '2020-07-25 16:45:53'),
+(36, 32, 'mdmiqi', 'e10adc3949ba59abbe56e057f20f883e', 3, 441302, '2020-07-25 22:48:42', '2020-07-25 22:48:42'),
+(37, 31, 'skwdm', 'e10adc3949ba59abbe56e057f20f883e', 3, 441302, '2020-07-25 23:18:54', '2020-07-25 23:18:54'),
+(38, 31, 'spwdm', 'e10adc3949ba59abbe56e057f20f883e', 3, 441302, '2020-07-25 23:20:22', '2020-07-25 23:20:22'),
+(39, 31, 'zkwdm', 'e10adc3949ba59abbe56e057f20f883e', 3, 441302, '2020-07-25 23:21:36', '2020-07-25 23:21:36'),
+(40, 30, 'jbklst', 'e10adc3949ba59abbe56e057f20f883e', 3, 441302, '2020-07-25 23:35:44', '2020-07-25 23:35:44'),
+(41, 30, 'dpklst', 'e10adc3949ba59abbe56e057f20f883e', 3, 441302, '2020-07-25 23:37:16', '2020-07-25 23:37:16'),
+(42, 30, 'hnaklst', 'e10adc3949ba59abbe56e057f20f883e', 3, 441302, '2020-07-25 23:38:47', '2020-07-25 23:38:47');
 
 -- --------------------------------------------------------
 
@@ -7868,6 +7936,7 @@ CREATE TABLE IF NOT EXISTS `sw_userinfo` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `company` varchar(60) NOT NULL,
+  `adword` varchar(40) NOT NULL COMMENT '公司广告词',
   `address` varchar(100) NOT NULL,
   `contact` varchar(40) NOT NULL,
   `tel` varchar(40) NOT NULL,
@@ -7877,17 +7946,26 @@ CREATE TABLE IF NOT EXISTS `sw_userinfo` (
   `image` varchar(60) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='商家信息表';
+) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COMMENT='商家信息表';
 
 --
 -- 转存表中的数据 `sw_userinfo`
 --
 
-INSERT INTO `sw_userinfo` (`id`, `user_id`, `company`, `address`, `contact`, `tel`, `latitude`, `longitude`, `email`, `image`) VALUES
-(1, 1, '系统管理员', 'sweetaddr', '', '', 0, 0, '38020076@qq.com', '20200705\\c555d30635e463df048e02eb78722331.jp'),
-(7, 27, '11111', '1111', '111', '111', 111, 111, '342@157.com', '20200720\\a02d3aa8a376f532300eb05c5d3a879a.jpg'),
-(8, 28, '2222', '2222', '2222', '2222', 2222, 2222, 'test@126.com', '20200720\\8259d2788284a74d466eb8486ab568d1.jpg'),
-(9, 29, '333', '333', '333', '333', 333, 333, '2222@157.com', '20200720\\9afb830339cf678dfdf32b2982e62697.jpg');
+INSERT INTO `sw_userinfo` (`id`, `user_id`, `company`, `adword`, `address`, `contact`, `tel`, `latitude`, `longitude`, `email`, `image`) VALUES
+(1, 1, '系统管理员', '', 'sweetaddr', '', '', 0, 0, '38020076@qq.com', '20200705\\c555d30635e463df048e02eb78722331.jp'),
+(12, 32, '米琪', '蛋糕御品,金香四溢', '惠州市麦地1路25号国宾馆', '李经理', '13829987154', 222, 222, 'miqi@qq.com', '20200725\\6ff274fecac6f98f378a3535e90ad177.jpg'),
+(13, 34, '米琪下埔店', '', '惠州市惠城区下埔一路13号', '刘小姐', '13666645849', 222, 222, 'test@126.com', '20200725\\7f83f95d3a4e80d601187ee65e216195.jpg'),
+(10, 30, '克莉斯汀', '快乐的滋味,甜蜜的时光', '惠州市江北文传3路13号', '王经理', '13829553456', 1245.45, 333, 'klst@qq.com', '20200725\\41ee241b4116f3799af6703fa2ccceac.jpg'),
+(11, 31, '味多美', '爱的味道,唯你独享', '惠州市河南岸演达一路11号', '范经理', '13829987779', 222, 3333, 'wdm@qq.com', '20200725\\e8fb6012dad94a077364fe78dfc8f07d.jpg'),
+(14, 35, '米琪江北店', '', '江北文昌一路15号', '赵小姐', '13688879546', 222, 222, 'sandliu552@126.com', '20200725\\bc47215647cadb53242698681a36aee4.jpg'),
+(15, 36, '米琪麦地店', '', '惠城区麦地1路24号交银大厦', '李店长', '13988897778', 123, 121231, 'mdmiqi@126.com', '20200725\\7f962f43cfb621becc200b54f5288c72.jpg'),
+(16, 37, '味多美水口点', '', '惠州水口皇冠酒店1楼', '刘小姐', '13854879641', 222, 222, 'skwdm@126.com', '20200725\\3bb8ef7119407feb4389dbb49eae263b.jpg'),
+(17, 38, '味多美上排店', '', '惠州市惠城区上排红花湖旁', '杨经理', '222', 1245.45, 222, 'spwdm@126.com', '20200725\\0b47205cc40566b27477c6ceb3ea800e.jpg'),
+(18, 39, '味多美仲恺店', '', '惠州仲恺一路三阳酒店1楼', '伍经理', '1366667421', 222, 222, 'zkwdm@126.com', '20200725\\7b1950f9f35ba60450a9cd7b24cfc765.jpg'),
+(19, 40, '克莉斯汀江北店', '', '惠州市江北文明一路德赛大厦', '赖经理', '1355789263', 123131, 1213, 'jbklst@126.com', '20200725\\ae68533a9e00d6ac4576b7e4c54bcdc2.jpg'),
+(20, 41, '克莉斯汀东平店', '', '惠州市东平东平半岛酒店1楼', '许经理', '1348297854', 1245.45, 111, 'dpklst@126.com', '20200725\\b2f02f0399aaea286e247be6d372926d.jpg'),
+(21, 42, '克莉斯汀河南岸店', '', '惠州市河南岸港惠西区1楼', '马经理', '13898875464', 222, 333, 'hnaklst@126.com', '20200725\\355b8f6f12cdb637d561d617ba5eceae.jpg');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
