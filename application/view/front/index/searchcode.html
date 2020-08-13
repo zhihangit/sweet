@@ -1,6 +1,6 @@
 ﻿{layout name="frontlayout2" /}
 <script src="__BJS__/jquery.min.js"></script>
-<h3 style="text-align: center;margin-top: 60px;">兑换码：{$datainfo[0]['codenumber']}<span style="color:red">(余额:{$ye})使用记录</span></h3>
+<h4 style="text-align: center;margin-top: 60px;">兑换码：{$Request.param.codenumber}使用记录<span style="color:red;font-size: 14px;">(余额:{$ye},有效期：{$indate|date='Y-m-d'})</span></h4>
 <div style="min-height:400px; margin-bottom: 50px;">
     <div class="container">
         <div class="row">
@@ -20,6 +20,9 @@
                 </tr>
                 </thead>
                 <tbody>
+                {empty name="datainfo"}
+                <td colspan="9" style="font-size: 16px;color:red;text-align: center">暂无使用记录</td>
+                {else /}
                 {volist name="datainfo" id="vo" key="k" }
                     <tr>
                         <td>{$k}</td>
@@ -39,7 +42,7 @@
                             {/switch}</td>
                     </tr>
                 {/volist}
-
+                {/empty}
 
                 </tbody>
             </table>

@@ -35,13 +35,16 @@
     <?php }?>
 
 </head>
+    <div class="text-center" style="padding-top:10px;padding-bottom:10px;background:#fff;border-bottom:1px solid #ddd">
+        <img src="__BIMAGES__/logo-big.jpg" width="200" height="30">
+    </div>
 
-<div class="ip-attack"><dl>
+    <div class="ip-attack"><dl>
         <?php
 if($code==0){
-echo "<dt style='color: red'>".strip_tags($msg)."</dt>";}
+echo "<dt style='color: red;font-size:20px;'>".strip_tags($msg)."</dt>";}
         else{
-        echo "<dt style='color: green'>".strip_tags($msg)."</dt>";
+        echo "<dt style='color: green;font-size:20px;'>".strip_tags($msg)."</dt>";
         }
         ?>
         <br>

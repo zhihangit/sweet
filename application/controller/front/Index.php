@@ -239,12 +239,21 @@ class Index extends Controller
         $datainfo=Db::query($sql);
         if(!$datainfo){
             $this->error("没有该兑换码信息，请重新确认");
+        }
+        $this->assign('datainfo',$datainfo);
+        $ye=Db::table("sw_codedetail")->getFieldByNumber($code,"balance");
+        $this->assign('ye',$ye);
+        $code_id=Db::table("sw_codedetail")->getFieldByNumber($code,"code_id");
+        $indate=Db::table("sw_code")->getFieldById($code_id,"indate");
+        $this->assign('indate',$indate);
+/*        if(!$datainfo){
+            $this->error("没有该兑换码信息，请重新确认");
         }else{
             $this->assign('datainfo',$datainfo);
             $ye=Db::table("sw_codedetail")->getFieldByNumber($code,"balance");
             $this->assign('ye',$ye);
 
-        }
+        }*/
         return $this->fetch("searchcode");
   }
     public function dealorder(){
