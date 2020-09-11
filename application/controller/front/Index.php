@@ -77,7 +77,9 @@ class Index extends Controller
 
     }
     public function confirmorder()
+
     {
+        dump(Request::param());
         if (Request::isPost()) {
             $storeid = input('storeid');
             $p_data = (Request::param());

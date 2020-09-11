@@ -1,0 +1,174 @@
+{layout name="backlayout" /}
+
+
+<div class="container-fluid cm-container-white" style="margin-top:20px;padding-top: 30px;height: 120%">
+    <div class="row" >
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading"  style="font-size: 20px;" >订单补录</div>
+                <div class="panel-body" style="min-height: 214px;">
+                    <form class="form-inline"  enctype="multipart/form-data" action="{:url('back.home/doaddpatchorder')}" method="post" >
+                        <div class="form-group" style="display: block">
+                            <label for="username" class="control-label">用户名（必填）</label>
+                            <div>
+                                <input type="text" name="username" class="form-control" id="username" placeholder="用户名">
+                            </div>
+                        </div>
+                        <div class="form-group" style="display: block">
+                            <label for="user_pwd" class="control-label">登录密码（必填）</label>
+                            <div class="">
+                                <input name="userpwd" type="password" class="form-control" id="user_pwd" placeholder="密码">
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="limiteRadio1" class="control-label">取货方式（必选）</label>
+                            <div >
+
+                                <label class="radio-inline">
+                                    <input type="radio" name="limite" id="limiteRadio1" value="1"> 1自提
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="limite" id="limiteRadio2" value="2"> 2同城配送
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="venderid">处理机构：主店</label>
+                            <select name="venderid" id="venderid" style="height: 30px;">
+                                <option value="0">--全部--</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="storeid">分店</label>
+                            <select name="storeid" id="storeid" style="height: 30px;">
+                               <option value="0">--全部--</option>
+
+                            </select>
+                        </div>
+
+
+                        <div class="form-group" style="display: block">
+                            <label for="company" class="control-label">商家名称（必填）</label>
+                            <div>
+                                <input type="text" name="company" class="form-control" id="company" placeholder="商家名称">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="adword" class="control-label">公司广告词</label>
+                            <div>
+                                <input type="text" name="adword" class="form-control" id="adword" placeholder="公司广告词">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contact" class="control-label">联系人</label>
+                            <div>
+                                <input type="text" name="contact" class="form-control" id="contact" placeholder="联系人">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tel" class="control-label">联系电话</label>
+                            <div>
+                                <input type="text" name="tel" class="form-control" id="tel" placeholder="联系人">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="latitude" class="control-label">位置纬度</label>
+                            <div>
+                                <input type="text" name="latitude" class="form-control" id="latitude" placeholder="联系人">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="longitude" class="control-label">位置经度</label>
+                            <div>
+                                <input type="text" name="longitude" class="form-control" id="longitude" placeholder="联系人">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="company" class="control-label">商家形象图</label>
+                            <div>
+                              <!--<input type="text" name="company" class="form-control" id="company" placeholder="商家形象图">
+                         -->
+                                 <!--   <img id="plsod" style="display:none; border-color:#333; border-style:solid; border-width:1px;" width="80px" height="60px">-->
+                                <input type="file" name="info_photo" value="" id="info_photo"
+                                       onchange='PreviewImage(this)' />
+
+                                <div id="photo_info" class="photo_info" ></div>
+
+                            </div>
+                        </div>
+
+
+
+                        <!--<script src="https://cdn.bootcss.com/jquery/3.3.0/jquery.min.js"></script>-->
+                        <script src="__BJS__/jquery.min.js"></script>
+                        <script>
+
+
+
+                            function PreviewImage(imgFile) {
+                                var filextension = imgFile.value.substring(imgFile.value
+                                    .lastIndexOf("."), imgFile.value.length);
+                                filextension = filextension.toLowerCase();
+                                if ((filextension != '.jpg') && (filextension != '.gif')
+                                    && (filextension != '.jpeg') && (filextension != '.png')
+                                    && (filextension != '.bmp')) {
+                                    alert("对不起，系统仅支持标准格式的照片，请您调整格式后重新上传，谢谢 !");
+                                    imgFile.focus();
+                                } else {
+                                    var path;
+                                    if (document.all)//IE
+                                    {
+                                        imgFile.select();
+                                        path = document.selection.createRange().text;
+                                        document.getElementById("photo_info").innerHTML = "";
+                                        document.getElementById("photo_info").style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='scale',src=\""
+                                            + path + "\")";//使用滤镜效果
+                                    } else//FF
+                                    {
+                                        path = window.URL.createObjectURL(imgFile.files[0]);// FF 7.0以上
+                                        //path = imgFile.files[0].getAsDataURL();// FF 3.0
+                                        document.getElementById("photo_info").innerHTML = "<img id='img1' width='120px' height='100px'  style='border:black solid 1px;margin-top:5px;' src='"+path+"'/>";
+                                        //document.getElementById("img1").src = path;
+                                    }
+                                }
+                            }
+
+                        </script>
+
+                        <div class="form-group">
+                            <label for="email" class="control-label">email（必填）</label>
+                            <div>
+                                <input type="email"  name="email" class="form-control" id="email" placeholder="email">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="address" class="control-label">地址（必填）</label>
+                            <div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group" style="margin-bottom:0">
+                            <div class="col-sm-offset-2 col-sm-10 text-right">
+                                <!--<button type="reset" class="btn btn-default">Cancel</button>-->
+                                <button type="submit" class="btn btn-primary">注册</button>
+                            </div>
+                        </div>
+                        {:token()}
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+

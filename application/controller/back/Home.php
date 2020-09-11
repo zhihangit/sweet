@@ -1221,6 +1221,85 @@ class Home extends Controller
         $PHPWriter->save("php://output"); //表示在$path路径下面生成demo.xlsx文件*/
 
     }
+public  function patchorder(){
+
+    $userid=cookie('user_id');
+    if(cookie('user_limite')==1){
+        $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='2'";
+        $vender=Db::query($sql);
+        $this->assign('vender',$vender);
+    }
+    if(cookie('user_limite')==2){
+        $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='2' and a.id=$userid";
+        $vender=Db::query($sql);
+        $this->assign('vender',$vender);
+
+        $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='3' and a.parent_id=$userid";
+        $store=Db::query($sql);
+        $this->assign('store',$store);
+    }
+    if(cookie('user_limite')==3){
+        $pid=Db::table('sw_user')->getFieldById($userid,'parent_id');
+        $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='2' and a.id=$pid";
+        $vender=Db::query($sql);
+        $this->assign('vender',$vender);
+
+        $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='3' and a.id=$userid";
+        $store=Db::query($sql);
+        $this->assign('store',$store);
+    }
+
+    if(Request::isPost()){
+        $sqlinfo="订单查询条件：";
+        $venderid=Request::param('venderid');
+        $storeid=Request::param('storeid');
+        $startrq=Request::param('startrq');
+        $endrq=Request::param('endrq');
+        $sql="select a.*,b.company from sw_order a left join sw_userinfo b on a.storeid=b.user_id where date_format(create_time,'%Y-%m-%d') between '$startrq' and '$endrq'";
+        $sql2="select sum(totalnum) as totaldata from sw_order  where date_format(create_time,'%Y-%m-%d') between '$startrq' and '$endrq'";
+        if ($venderid<>'0'){
+            if($storeid<>'0'){
+                $sql=$sql." and a.storeid='$storeid'  order by a.storeid,a.create_time desc";
+                $sql2=$sql2." and storeid='$storeid' ";
+                $vendername=Db::table("sw_userinfo")->getFieldByUser_id($venderid,'company');
+                $storename=Db::table("sw_userinfo")->getFieldByUser_id($storeid,'company');
+                $sqlinfo="下列查询结果条件为："."商家:".$vendername.",分店:".$storename.",日期在".$startrq."---".$endrq."订单数据";
+
+            }else{
+
+                $sql=$sql."and a.storeid in (select id as storeid from sw_user where parent_id='$venderid') order by a.storeid,a.create_time desc";
+                $sql2=$sql2."and storeid in (select id as storeid from sw_user where parent_id='$venderid')";
+                $vendername=Db::table("sw_userinfo")->getFieldByUser_id($venderid,'company');
+                $sqlinfo="下列查询结果条件为："."商家".$vendername."所有分店日期在".$startrq."---".$endrq."订单数据";
+            }
 
 
+
+        }else{
+            $sql=$sql." order by a.storeid,a.create_time desc";
+            $sqlinfo="下列查询结果条件为："."全部商家包括商家分店日期在".$startrq."---".$endrq."订单数据";
+
+        }
+
+        $this->assign('sql',$sql);
+        cookie('user_sql', $sql, 3600); // 一个小时有效期
+        $list=Db::query($sql);
+        $total=Db::query($sql2);
+        $this->assign("list",$list);
+        // echo $total[0]['totaldata'];
+        $this->assign("total",$total[0]['totaldata']);
+        $this->assign('sqlinfo',$sqlinfo);
+    }else{
+
+        $this->assign('sql','sql empty');
+    }
+
+        return $this->fetch("patchorder");
+}
+  public function addpatchorder(){
+        return $this->fetch("addpatchorder");
+  }
+public function doaddpatchorder(){
+
+}
     }
