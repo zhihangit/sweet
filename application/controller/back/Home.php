@@ -3,6 +3,7 @@ namespace app\controller\back;
 use app\model\back\Product;
 use app\model\back\Userinfo;
 use app\model\front\Order;
+use app\model\front\Orderdetail;
 use think\facade\Env;
 use think\Db;
 use think\facade\Request;
@@ -11,6 +12,7 @@ use app\model\back\User;
 use app\model\back\Code;
 use app\model\back\Client;
 use app\model\back\Region;
+use app\model\back\Neworder;
 use PHPExcel;
 use PHPExcel_IOFactory;//引入两个类
 class Home extends Controller
@@ -1146,7 +1148,6 @@ class Home extends Controller
 
 
     }
-
     public function choosevender(){
         if (Request::isPost()) {
             $data = Request::param();
@@ -1221,7 +1222,8 @@ class Home extends Controller
         $PHPWriter->save("php://output"); //表示在$path路径下面生成demo.xlsx文件*/
 
     }
-public  function patchorder(){
+    public  function patchorder(){
+        //die("stop");
 
     $userid=cookie('user_id');
     if(cookie('user_limite')==1){
@@ -1296,10 +1298,78 @@ public  function patchorder(){
 
         return $this->fetch("patchorder");
 }
-  public function addpatchorder(){
+    public function addpatchorder(){
+      if(cookie('user_limite')==1){
+          $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='2'";
+          $vender=Db::query($sql);
+          $this->assign('vender',$vender);
+      }
         return $this->fetch("addpatchorder");
   }
-public function doaddpatchorder(){
+    public function choosevender2(){
+        if (Request::isPost()) {
+            $data = Request::param();
+            $id = $data['vender_id'];
+            $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite=3 and a.parent_id=$id";
+            $storedate=Db::query($sql);
 
-}
+            $opt = '';
+            foreach($storedate as $key=>$val){
+                $opt .= "<option value='{$val['id']}'>{$val['company']}</option>";
+            }
+            echo json_encode($opt);
+            die;
+        }
+
+    }
+    public function doaddpatchorder(){
+        if(input("dealstore_id")<=0){
+            $this->error('未选择处理机构');
+        }
+        $isfile=$_FILES;
+        $orderdata=Request::param();
+        if(Request::isPost())
+        {
+            $validate = new \app\validate\back\Vneworder;
+            if (!$validate->check(Request::param()))
+            {
+                dump($validate->getError());
+            }else
+            {
+                if($isfile['info_photo']['name']==''){
+                    $orderdata['orderimage']='';
+                }else{
+
+                    $file = request()->file('info_photo');
+                    // 移动到框架应用根目录/uploads/ 目录下
+                    $info = $file->move( '../uploads');
+
+                    if($info){
+                        $orderdata['orderimage']=$info->getSaveName();
+                    }else
+                    { $this->error('订单图上传失败！');}
+                }
+
+                $orderdata['status']=1;
+                $mod = new Neworder();
+                //dump($userdata);
+                //die('stop!');
+                $a=$mod->save($orderdata);
+                $maxid=$mod->id;
+                if($a){
+                    $this->success('补录订单成功', 'back.home/patchorder');
+
+                }else
+                {
+                    dump($mod->getError());
+                }
+            }
+
+        }else
+        {
+            $this->error('非法操作');
+        }
+
+
+    }
     }
