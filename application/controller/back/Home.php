@@ -13,6 +13,7 @@ use app\model\back\Code;
 use app\model\back\Client;
 use app\model\back\Region;
 use app\model\back\Neworder;
+use think\paginator\driver\Bootstrap;
 use PHPExcel;
 use PHPExcel_IOFactory;//引入两个类
 class Home extends Controller
@@ -1224,7 +1225,6 @@ class Home extends Controller
     }
     public  function patchorder(){
         //die("stop");
-
     $userid=cookie('user_id');
     if(cookie('user_limite')==1){
         $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='2'";
@@ -1250,36 +1250,74 @@ class Home extends Controller
         $store=Db::query($sql);
         $this->assign('store',$store);
     }
-
-    if(Request::isPost()){
+    if(Request::isPost() or Request::isGet() ){
+        $pageNumber = input('page') ? input('page') : '0';//客户端传过来的分页
+        if($pageNumber > 0){
+            $pageNumber_one = $pageNumber-1;
+        } else {
+            $pageNumber_one = 0;
+        }
+        $limit = 1;//每页显示条数
+        $offset = $pageNumber_one * $limit;//查询偏移值
         $sqlinfo="订单查询条件：";
+
+        $order_id=input('order_id') ? input('order_id') : '0';
+        $venderid=input('venderid') ? input('venderid') : '0';
+        $storeid=input('storeid') ? input('storeid') : '0';
+        $type=input('type') ? input('type') : '0';
+        $status=input('status') ? input('status') : '0';
+        $startrq=input('startrq') ? input('startrq') : date("Y-m-d");;
+        $endrq=input('endrq') ? input('endrq') : date("Y-m-d");;
+
+
+        /*$order_id=Request::param('order_id');
         $venderid=Request::param('venderid');
         $storeid=Request::param('storeid');
+        $type=Request::param('type');
+        $status=Request::param('status');
         $startrq=Request::param('startrq');
-        $endrq=Request::param('endrq');
-        $sql="select a.*,b.company from sw_order a left join sw_userinfo b on a.storeid=b.user_id where date_format(create_time,'%Y-%m-%d') between '$startrq' and '$endrq'";
-        $sql2="select sum(totalnum) as totaldata from sw_order  where date_format(create_time,'%Y-%m-%d') between '$startrq' and '$endrq'";
+        $endrq=Request::param('endrq');*/
+
+        $sql="select a.*,b.company from sw_neworder a left join sw_userinfo b on a.dealstore_id=b.user_id where date_format(create_time,'%Y-%m-%d') between '$startrq' and '$endrq'";
+        $sql2="select sum(total) as totaldata from sw_neworder  where date_format(create_time,'%Y-%m-%d') between '$startrq' and '$endrq'";
+        $sql3="select count(*) as count_num from sw_neworder a left join sw_userinfo b on a.dealstore_id=b.user_id where date_format(create_time,'%Y-%m-%d') between '$startrq' and '$endrq'";
+
+        if($type!='0'){
+            $sql=$sql." and a.type='$type' ";
+            $sql2=$sql2." and type='$type' ";
+            $sql3=$sql3." and type='$type' ";
+        }
+
+        if($status!='0'){
+            $sql=$sql." and a.status='$status' ";
+            $sql2=$sql2." and status='$status' ";
+            $sql3=$sql3." and status='$status' ";
+        }
+
+        if($order_id<>'0'){
+            $sql=$sql." and a.order_id='$order_id' ";
+            $sql2=$sql2." and order_id='$order_id' ";
+            $sql3=$sql3." and order_id='$order_id' ";
+        }
+
         if ($venderid<>'0'){
             if($storeid<>'0'){
-                $sql=$sql." and a.storeid='$storeid'  order by a.storeid,a.create_time desc";
-                $sql2=$sql2." and storeid='$storeid' ";
+                $sql=$sql." and a.dealstore_id='$storeid'  order by a.dealstore_id,a.create_time desc limit $offset,$limit";
+                $sql2=$sql2." and dealstore_id='$storeid' ";
+                $sql3=$sql3." and dealstore_id='$storeid' ";
                 $vendername=Db::table("sw_userinfo")->getFieldByUser_id($venderid,'company');
                 $storename=Db::table("sw_userinfo")->getFieldByUser_id($storeid,'company');
-                $sqlinfo="下列查询结果条件为："."商家:".$vendername.",分店:".$storename.",日期在".$startrq."---".$endrq."订单数据";
-
+                $sqlinfo="下列查询结果条件为："."商家:".$vendername.",分店:".$storename.",日期在".$startrq."---".$endrq."订单类型为".$type."状态为".$status."订单号为".$order_id."订单数据（订单类型:0全部1自提2配送；状态:0全面1未发货2已发货3完成交易4售后中）";
             }else{
-
-                $sql=$sql."and a.storeid in (select id as storeid from sw_user where parent_id='$venderid') order by a.storeid,a.create_time desc";
-                $sql2=$sql2."and storeid in (select id as storeid from sw_user where parent_id='$venderid')";
+                $sql=$sql."and a.dealstorep_id='$venderid'  order by a.dealstore_id,a.create_time desc limit $offset,$limit";
+                $sql2=$sql2."and dealstorep_id='$venderid'";
+                $sql3=$sql3."and dealstorep_id='$venderid'";
                 $vendername=Db::table("sw_userinfo")->getFieldByUser_id($venderid,'company');
-                $sqlinfo="下列查询结果条件为："."商家".$vendername."所有分店日期在".$startrq."---".$endrq."订单数据";
+                $sqlinfo="下列查询结果条件为："."商家".$vendername."所有分店日期在".$startrq."---".$endrq."订单类型为".$type."状态为".$status."订单号为".$order_id."订单数据（订单类型:0全部1自提2配送；状态:0全面1未发货2已发货3完成交易4售后中）";
             }
-
-
-
         }else{
-            $sql=$sql." order by a.storeid,a.create_time desc";
-            $sqlinfo="下列查询结果条件为："."全部商家包括商家分店日期在".$startrq."---".$endrq."订单数据";
+            $sql=$sql." order by a.dealstore_id,a.create_time desc limit $offset,$limit";
+            $sqlinfo="下列查询结果条件为："."全部商家包括商家分店日期在".$startrq."---".$endrq."订单类型为".$type."状态为".$status."订单号为".$order_id."订单数据（订单类型:0全部1自提2配送；状态:0全面1未发货2已发货3完成交易4售后中）";
 
         }
 
@@ -1287,22 +1325,33 @@ class Home extends Controller
         cookie('user_sql', $sql, 3600); // 一个小时有效期
         $list=Db::query($sql);
         $total=Db::query($sql2);
+        $counts = db()->query($sql3);
+        $count = $counts['0']['count_num'];
+        $pagernator = Bootstrap::make($list,$limit,$pageNumber,$count,false,['path'=>Bootstrap::getCurrentPath(),'query'=>request()->param()]);
+        $page = $pagernator->render();
+       // dump($page);
+        $this->assign('page', $page);
+
         $this->assign("list",$list);
         // echo $total[0]['totaldata'];
         $this->assign("total",$total[0]['totaldata']);
         $this->assign('sqlinfo',$sqlinfo);
     }else{
-
         $this->assign('sql','sql empty');
     }
-
         return $this->fetch("patchorder");
 }
     public function addpatchorder(){
       if(cookie('user_limite')==1){
           $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='2'";
           $vender=Db::query($sql);
+          //dump($vender);
           $this->assign('vender',$vender);
+          $parent_id=$vender[0]['id'];
+          $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='3' and a.parent_id='$parent_id'" ;
+          $store=Db::query($sql);
+          $this->assign('store',$store);
+          //dump($store);
       }
         return $this->fetch("addpatchorder");
   }

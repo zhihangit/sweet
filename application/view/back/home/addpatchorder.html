@@ -38,7 +38,7 @@
                         <div class="form-group" style="display: block;margin-top: 10px;margin-bottom: 10px;">
                             <label for="dealstorep_id">处理机构：主店</label>
                             <select name="dealstorep_id" id="dealstorep_id" style="height: 30px;">
-                                <option value="0">----</option>
+
                                 {foreach $vender as $vo1}
                                 <option value="{$vo1.id}">{$vo1.company}</option>
                                 {/foreach}
@@ -47,8 +47,9 @@
 
                             <label for="dealstore_id">分店</label>
                             <select name="dealstore_id" id="dealstore_id" style="height: 30px;">
-                                <option value="0">----</option>
-
+                                {foreach $store as $vo2}
+                                <option value="{$vo2.id}">{$vo2.company}</option>
+                                {/foreach}
                             </select>
                         </div>
                         <script src="__BJS__/jquery.min.js"></script>
