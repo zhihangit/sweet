@@ -1,0 +1,221 @@
+{layout name="backlayout" /}
+
+
+<div class="container-fluid cm-container-white" style="margin-top:20px;padding-top: 30px;height: 120%">
+    <div class="row" >
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading"  style="font-size: 20px;" >订单补录修改</div>
+                <div class="panel-body" style="min-height: 214px;">
+                    <form class="form-inline"  enctype="multipart/form-data" action="{:url('back.home/domodipatchorder')}" method="post" >
+                        <div class="form-group" style="display: block">
+                            <label for="order_id" class="control-label">订单号（必填）</label>
+                            <div>
+                                <input type="text"  style="width: 300px;" name="order_id" class="form-control" id="order_id" placeholder="订单号">
+                            </div>
+                        </div>
+                        <div class="form-group" style="display: block">
+                            <label for="order_time" class="control-label">SWEET下单时间（必填）</label>
+                            <div class="">
+                                <input name="order_time"  style="width: 300px;"  class="form-control" id="order_time" placeholder="订单创建时间">
+                            </div>
+                        </div>
+
+
+                        <div class="form-group" style="margin-top: 10px;">
+                            <label for="limiteRadio1" class="control-label">取货方式（必选）</label>
+                            <div >
+
+                                <label class="radio-inline">
+                                    <input type="radio" name="type" id="limiteRadio1" value="1" checked="checked"> 1自提
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="type" id="limiteRadio2" value="2"> 2同城配送
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="display: block;margin-top: 10px;margin-bottom: 10px;">
+                            <label for="dealstorep_id">处理机构：主店</label>
+                            <select name="dealstorep_id" id="dealstorep_id" style="height: 30px;">
+
+                                {foreach $vender as $vo1}
+                                <option value="{$vo1.id}">{$vo1.company}</option>
+                                {/foreach}
+                            </select>
+
+
+                            <label for="dealstore_id">分店</label>
+                            <select name="dealstore_id" id="dealstore_id" style="height: 30px;">
+                                {foreach $store as $vo2}
+                                <option value="{$vo2.id}">{$vo2.company}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                        <script src="__BJS__/jquery.min.js"></script>
+                        <script>
+
+                            $('#dealstorep_id').change(function(){
+                                 //alert(1);
+                                $.ajax({
+                                    type:"post",
+                                    url:"{:url('back.home/choosevender2')}",
+                                    data:'vender_id='+$('#dealstorep_id').val(),
+                                    dataType:"json",
+                                    success:function(data){
+                                        console.log(data);
+
+                                        $('#dealstore_id').html(data);
+
+                                    }
+                                });
+                            });
+                        </script>
+
+
+
+                        <div class="form-group" >
+                            <label for="product" class="control-label">商品名称</label>
+                            <div>
+                                <input type="text" name="product" class="form-control" id="product" placeholder="商品名称">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pecification" class="control-label">规格</label>
+                            <div>
+                                <input type="text" name="specification" class="form-control" id="pecification" placeholder="规格">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="price" class="control-label">价格</label>
+                            <div>
+                                <input type="text" name="price" class="form-control" id="price" placeholder="价格">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="num" class="control-label">数量</label>
+                            <div>
+                                <input type="text" name="num" class="form-control" id="num" placeholder="数量">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="total" class="control-label">订单总金额</label>
+                            <div>
+                                <input type="text" name="total" class="form-control" id="total" placeholder="订单总金额">
+                            </div>
+                        </div>
+                        <div style="display: block;margin-bottom: 10px;">
+                        </div>
+                        <div class="form-group"  >
+                            <label for="dispatchname" class="control-label">配送方式：收件人</label>
+                            <div>
+                                <input type="text" style="width: 150px;"  name="dispatchname" class="form-control" id="dispatchname" placeholder="配送收件人">
+                            </div>
+                        </div>
+                        <div class="form-group" >
+                            <label for="dispatchname" class="control-label">收件人电话</label>
+                            <div>
+                                <input type="text" style="width: 150px;"  name="dispatchtel" class="form-control" id="dispatchtel" placeholder="收件人电话">
+                            </div>
+                        </div>
+                        <div class="form-group" >
+                            <label for="dispatchname" class="control-label">配送地址</label>
+                            <div>
+                                <input type="text" style="width: 500px;"  name="dispatchaddress" class="form-control" id="dispatchaddress" placeholder="配送地址">
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+                        <div class="form-group" style="display: block">
+                            <label for="buyermemo" class="control-label">买家备注</label>
+                            <div>
+                                <input type="buyermemo"  style="width: 500px;" name="buyermemo" class="form-control" id="buyermemo" placeholder="买家备注">
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="display: block">
+                            <label for="sellermemo" class="control-label">卖家备注</label>
+                            <div>
+                                <input type="sellermemo" style="width: 500px;" name="sellermemo" class="form-control" id="sellermemo" placeholder="卖家备注">
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="display: block">
+                            <label for="sellermemo" class="control-label">温馨提示</label>
+                            <div>
+                                <input type="memo"  name="memo" style="width: 500px;"  class="form-control" id="memo" placeholder="备注">
+                            </div>
+                        </div>
+
+
+                            <div class="form-group" style="display: block">
+                                <label for="info_photo" class="control-label">订单图</label>
+                                <div>
+                                    <!--<input type="text" name="company" class="form-control" id="company" placeholder="商家形象图">
+                               -->
+                                    <!--   <img id="plsod" style="display:none; border-color:#333; border-style:solid; border-width:1px;" width="80px" height="60px">-->
+                                    <input type="file" name="info_photo" value="" id="info_photo"
+                                           onchange='PreviewImage(this)' />
+
+                                    <div id="photo_info" class="photo_info" ></div>
+
+                                </div>
+                            </div>
+
+
+                            <!--<script src="https://cdn.bootcss.com/jquery/3.3.0/jquery.min.js"></script>-->
+
+                            <script>
+                                function PreviewImage(imgFile) {
+                                    var filextension = imgFile.value.substring(imgFile.value
+                                        .lastIndexOf("."), imgFile.value.length);
+                                    filextension = filextension.toLowerCase();
+                                    if ((filextension != '.jpg') && (filextension != '.gif')
+                                        && (filextension != '.jpeg') && (filextension != '.png')
+                                        && (filextension != '.bmp')) {
+                                        alert("对不起，系统仅支持标准格式的照片，请您调整格式后重新上传，谢谢 !");
+                                        imgFile.focus();
+                                    } else {
+                                        var path;
+                                        if (document.all)//IE
+                                        {
+                                            imgFile.select();
+                                            path = document.selection.createRange().text;
+                                            document.getElementById("photo_info").innerHTML = "";
+                                            document.getElementById("photo_info").style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='scale',src=\""
+                                                + path + "\")";//使用滤镜效果
+                                        } else//FF
+                                        {
+                                            path = window.URL.createObjectURL(imgFile.files[0]);// FF 7.0以上
+                                            //path = imgFile.files[0].getAsDataURL();// FF 3.0
+                                            document.getElementById("photo_info").innerHTML = "<img id='img1' width='120px' height='100px'  style='border:black solid 1px;margin-top:5px;' src='"+path+"'/>";
+                                            //document.getElementById("img1").src = path;
+                                        }
+                                    }
+                                }
+
+                            </script>
+
+                        <div class="form-group pull-right" style="margin-top:-40px;padding-right: 250px;">
+                            <div >
+                                <!--<button type="reset" class="btn btn-default">Cancel</button>-->
+                                <button type="submit" class="btn btn-primary text-right"> 确 定 </button>
+                            </div>
+                        </div>
+                        {:token()}
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+

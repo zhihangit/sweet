@@ -1421,4 +1421,51 @@ class Home extends Controller
 
 
     }
+    public function delepatchorder(){
+        if (Request::has('id')) {
+            $delid = input('id');
+                $user = Neworder::get($delid);
+                $user->delete();
+                if($user){
+                    $this->success('删除成功', 'back.home/patchorder');
+                }else{
+                    $this->error('删除失败','back.home/patchorder');
+                }
+
+        } else {
+            $this->error('非法操作');
+        }
+
+    }
+
+    public function modipatchorder(){
+        if (Request::has('id'))
+        {
+            $modid = input('id');
+            $orderdata = Neworder::get($modid );
+            $psid=$orderdata['dealstorep_id'];
+            $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='2'";
+            $venderdata=Db::query($sql);
+            dump($venderdata);
+            $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.parent_id='$psid'";
+            $storedata=Db::query($sql);
+            dump($storedata);
+            $this->assign('venderdata',$venderdata);
+            $this->assign('storedata',storedata);
+
+
+
+
+
+            //return $this->fetch('modipatchorder');
+            //echo $pid."$".$ppid;
+        }
+        else{
+
+            $this->error('非法操作');
+
+        }
+
+    }
+
     }

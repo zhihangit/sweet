@@ -164,7 +164,10 @@
                                 {default /}争议订单
                                 {/switch}</td>
                             <td>处理详情</td>
-                            <td>删除\修改\完成交易</td>
+                            <td><a href="{:url('back.home/delepatchorder','','')}/id/{$vo.id}">删除</a>\
+                                <a href="{:url('back.home/modipatchorder','','')}/id/{$vo.id}">修改</a>\
+                                <a href="{:url('back.home/confirpatchorder','','')}/id/{$vo.id}">完成交易</a>
+                            </td>
 
                         </tr>
                         {/volist}
