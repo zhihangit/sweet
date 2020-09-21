@@ -10,7 +10,7 @@
             <form class="form-inline" action="{:url('back.home/patchorder')}" method="post">
 
                 <div class="form-group">
-                    <label for="startrq">订单号</label>
+                    <label for="order_id">订单号</label>
                     <input type="text" name="order_id"   placeholder="订单号" id="order_id" style="height: 30px;width: 500px">
                 </div>
                 <div style="display: block;margin-bottom: 10px;">
@@ -159,19 +159,25 @@
                             <td> {switch vo.status }
                                 {case 1 }<span style="color:red">未发货</span>{/case}
                                 {case 2 }已发货{/case}
-                                {case 3 }已完成{/case}
-                                {case 4 }售后中{/case}
+                                {case 3 }售后中{/case}
+                                {case 4 }已完成{/case}
                                 {default /}争议订单
                                 {/switch}</td>
                             <td>处理详情</td>
-                            <td><a href="{:url('back.home/delepatchorder','','')}/id/{$vo.id}">删除</a>\
-                                <a href="{:url('back.home/modipatchorder','','')}/id/{$vo.id}">修改</a>\
-                                <a href="{:url('back.home/confirpatchorder','','')}/id/{$vo.id}">完成交易</a>
+                            <td>
+                                <a href="{:url('back.home/dealpatchorder','','')}/id/{$vo.id}">订单处理</a>\
+
+                                <a href="{:url('back.home/delepatchorder','','')}/id/{$vo.id}">删除</a>\
+                                <a href="{:url('back.home/modipatchorder','','')}/id/{$vo.id}">修改</a>
+                                {if $vo.status != '4'}\<a href="{:url('back.home/finishpatchorder','','')}/id/{$vo.id}">完成交易</a>
+                                {/if}
+
+
                             </td>
 
                         </tr>
                         {/volist}
-                        <td colspan="12" style="font-size: 16px;color:red;text-align: right">合计: {$total|round=###,2}元</td>
+                        <td colspan="12" style="font-size: 16px;color:red;text-align: right">查询订单合计: {$total|round=###,2}元</td>
                         {/empty}
                         </tbody>
                     </table>

@@ -11,13 +11,14 @@
                         <div class="form-group" style="display: block">
                             <label for="order_id" class="control-label">订单号（必填）</label>
                             <div>
-                                <input type="text"  style="width: 300px;" name="order_id" class="form-control" id="order_id" placeholder="订单号">
+                                <input name="id" type="hidden" value="{$orderdata.id}">
+                                <input type="text"  value="{$orderdata.order_id}" style="width: 300px;" name="order_id" class="form-control" id="order_id" placeholder="订单号">
                             </div>
                         </div>
                         <div class="form-group" style="display: block">
                             <label for="order_time" class="control-label">SWEET下单时间（必填）</label>
                             <div class="">
-                                <input name="order_time"  style="width: 300px;"  class="form-control" id="order_time" placeholder="订单创建时间">
+                                <input name="order_time"  value="{$orderdata.order_time}" style="width: 300px;"  class="form-control" id="order_time" placeholder="订单创建时间">
                             </div>
                         </div>
 
@@ -27,10 +28,10 @@
                             <div >
 
                                 <label class="radio-inline">
-                                    <input type="radio" name="type" id="limiteRadio1" value="1" checked="checked"> 1自提
+                                    <input type="radio" name="type" id="limiteRadio1" value="1" {if $orderdata.type =='1'}checked="checked" {/if} > 1自提
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="type" id="limiteRadio2" value="2"> 2同城配送
+                                    <input type="radio" name="type" id="limiteRadio2"  {if $orderdata.type =='2'}checked="checked" {/if} value="2"> 2同城配送
                                 </label>
                             </div>
                         </div>
@@ -39,16 +40,23 @@
                             <label for="dealstorep_id">处理机构：主店</label>
                             <select name="dealstorep_id" id="dealstorep_id" style="height: 30px;">
 
-                                {foreach $vender as $vo1}
-                                <option value="{$vo1.id}">{$vo1.company}</option>
+
+
+                                {foreach $venderdata as $vo1}
+
+                                {if $vo1.id == $orderdata.dealstorep_id}
+                                <option value={$vo1.id} selected>{$vo1.company}</option>
+                                {else /}
+                                <option value={$vo1.id} >{$vo1.company}</option>
+                                {/if}
                                 {/foreach}
                             </select>
 
 
                             <label for="dealstore_id">分店</label>
                             <select name="dealstore_id" id="dealstore_id" style="height: 30px;">
-                                {foreach $store as $vo2}
-                                <option value="{$vo2.id}">{$vo2.company}</option>
+                                {foreach $storedata as $vo2}
+                                <option value="{$vo2.id}" {if $vo2.id == $orderdata.dealstore_id} selected {/if}>{$vo2.company}</option>
                                 {/foreach}
                             </select>
                         </div>
@@ -77,34 +85,34 @@
                         <div class="form-group" >
                             <label for="product" class="control-label">商品名称</label>
                             <div>
-                                <input type="text" name="product" class="form-control" id="product" placeholder="商品名称">
+                                <input type="text"  value="{$orderdata.product}" name="product" class="form-control" id="product" placeholder="商品名称">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="pecification" class="control-label">规格</label>
                             <div>
-                                <input type="text" name="specification" class="form-control" id="pecification" placeholder="规格">
+                                <input type="text" name="specification"  value="{$orderdata.specification}" class="form-control" id="pecification" placeholder="规格">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="price" class="control-label">价格</label>
                             <div>
-                                <input type="text" name="price" class="form-control" id="price" placeholder="价格">
+                                <input type="text" name="price"  value="{$orderdata.price}" class="form-control" id="price" placeholder="价格">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="num" class="control-label">数量</label>
                             <div>
-                                <input type="text" name="num" class="form-control" id="num" placeholder="数量">
+                                <input type="text" name="num" class="form-control" value="{$orderdata.num}" id="num" placeholder="数量">
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="total" class="control-label">订单总金额</label>
                             <div>
-                                <input type="text" name="total" class="form-control" id="total" placeholder="订单总金额">
+                                <input type="text" name="total" class="form-control" value="{$orderdata.total}" id="total" placeholder="订单总金额">
                             </div>
                         </div>
                         <div style="display: block;margin-bottom: 10px;">
@@ -112,19 +120,19 @@
                         <div class="form-group"  >
                             <label for="dispatchname" class="control-label">配送方式：收件人</label>
                             <div>
-                                <input type="text" style="width: 150px;"  name="dispatchname" class="form-control" id="dispatchname" placeholder="配送收件人">
+                                <input type="text" style="width: 150px;"  name="dispatchname" value="{$orderdata.dispatchname}" class="form-control" id="dispatchname" placeholder="配送收件人">
                             </div>
                         </div>
                         <div class="form-group" >
                             <label for="dispatchname" class="control-label">收件人电话</label>
                             <div>
-                                <input type="text" style="width: 150px;"  name="dispatchtel" class="form-control" id="dispatchtel" placeholder="收件人电话">
+                                <input type="text" style="width: 150px;"  name="dispatchtel" class="form-control"  value="{$orderdata.dispatchtel}"  id="dispatchtel" placeholder="收件人电话">
                             </div>
                         </div>
                         <div class="form-group" >
                             <label for="dispatchname" class="control-label">配送地址</label>
                             <div>
-                                <input type="text" style="width: 500px;"  name="dispatchaddress" class="form-control" id="dispatchaddress" placeholder="配送地址">
+                                <input type="text" style="width: 500px;"  name="dispatchaddress" class="form-control" value="{$orderdata.dispatchaddress}" id="dispatchaddress" placeholder="配送地址">
                             </div>
                         </div>
 
@@ -137,21 +145,21 @@
                         <div class="form-group" style="display: block">
                             <label for="buyermemo" class="control-label">买家备注</label>
                             <div>
-                                <input type="buyermemo"  style="width: 500px;" name="buyermemo" class="form-control" id="buyermemo" placeholder="买家备注">
+                                <input type="text" value="{$orderdata.buyermemo}" style="width: 500px;" name="buyermemo" class="form-control" id="buyermemo" placeholder="买家备注">
                             </div>
                         </div>
 
                         <div class="form-group" style="display: block">
                             <label for="sellermemo" class="control-label">卖家备注</label>
                             <div>
-                                <input type="sellermemo" style="width: 500px;" name="sellermemo" class="form-control" id="sellermemo" placeholder="卖家备注">
+                                <input type="text" value="{$orderdata.sellermemo}"   style="width: 500px;" name="sellermemo" class="form-control" id="sellermemo" placeholder="卖家备注">
                             </div>
                         </div>
 
                         <div class="form-group" style="display: block">
                             <label for="sellermemo" class="control-label">温馨提示</label>
                             <div>
-                                <input type="memo"  name="memo" style="width: 500px;"  class="form-control" id="memo" placeholder="备注">
+                                <input type="text"  value="{$orderdata.memo}"   name="memo" style="width: 500px;"  class="form-control" id="memo" placeholder="备注">
                             </div>
                         </div>
 
@@ -165,7 +173,9 @@
                                     <input type="file" name="info_photo" value="" id="info_photo"
                                            onchange='PreviewImage(this)' />
 
-                                    <div id="photo_info" class="photo_info" ></div>
+                                    <div id="photo_info" class="photo_info" >
+                                        <img id='img1' width='120px' height='100px'  style='border:black solid 1px;margin-top:5px;' src='__UPLOADS__/{$orderdata.orderimage}'/>
+                                    </div>
 
                                 </div>
                             </div>

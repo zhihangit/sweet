@@ -1257,7 +1257,7 @@ class Home extends Controller
         } else {
             $pageNumber_one = 0;
         }
-        $limit = 1;//每页显示条数
+        $limit = 10;//每页显示条数
         $offset = $pageNumber_one * $limit;//查询偏移值
         $sqlinfo="订单查询条件：";
 
@@ -1424,40 +1424,47 @@ class Home extends Controller
     public function delepatchorder(){
         if (Request::has('id')) {
             $delid = input('id');
+
                 $user = Neworder::get($delid);
-                $user->delete();
-                if($user){
-                    $this->success('删除成功', 'back.home/patchorder');
+                if($user->status!=1){
+                    $this->error('已发货订单不得删除','back.home/patchorder');
+
                 }else{
-                    $this->error('删除失败','back.home/patchorder');
+                    $user->delete();
+                    if($user){
+                        $this->success('删除成功', 'back.home/patchorder');
+                    }else{
+                        $this->error('删除失败','back.home/patchorder');
+                    }
+
                 }
+
 
         } else {
             $this->error('非法操作');
         }
 
     }
-
     public function modipatchorder(){
         if (Request::has('id'))
         {
             $modid = input('id');
             $orderdata = Neworder::get($modid );
+            if($orderdata->status!=1){
+                $this->error('已发货订单不得修改','back.home/patchorder');
+
+            }else{
             $psid=$orderdata['dealstorep_id'];
             $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='2'";
             $venderdata=Db::query($sql);
-            dump($venderdata);
+           // dump($venderdata);
             $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.parent_id='$psid'";
             $storedata=Db::query($sql);
-            dump($storedata);
+           // dump($storedata);
             $this->assign('venderdata',$venderdata);
-            $this->assign('storedata',storedata);
-
-
-
-
-
-            //return $this->fetch('modipatchorder');
+            $this->assign('storedata',$storedata);
+            $this->assign('orderdata',$orderdata);
+            return $this->fetch('modipatchorder');}
             //echo $pid."$".$ppid;
         }
         else{
@@ -1467,5 +1474,67 @@ class Home extends Controller
         }
 
     }
+    public function domodipatchorder(){
+        $userdata=Request::param();
+        $isfile=$_FILES;
+        if($isfile['info_photo']['name']==''){
+            $userdata['orderimage']=Db::table('sw_neworder')->getFieldById(input('id'),'orderimage');
+        }else{
+            $file = request()->file('info_photo');
+            // 移动到框架应用根目录/uploads/ 目录下
+            $info = $file->move( '../uploads');
+            if($info){
+                $userdata['orderimage']=$info->getSaveName();
+            }else
+            { $this->error('图片上传失败！');}}
+
+        if(Request::isPost())
+        {
+            $validate = new \app\validate\back\Vneworder;
+            if (!$validate->check(Request::param()))
+            {
+                dump($validate->getError());
+            }else
+            {
+                $mod = Neworder::get(input('id'));
+                $a=$mod->save($userdata);
+
+                if(false === $a){
+                    // 验证失败 输出错误信息
+                    dump($mod->getError());
+                    die;
+                }else
+                {
+                    $this->success('修改成功', 'back.home/patchorder');
+                }
+            }
+
+        }else
+        {
+            $this->error('非法操作');
+        }
+
+    }
+    public function finishpatchorder(){
+        $id=input('id');
+        $status=Db::table('sw_neworder')->getFieldById($id,'status');
+        if($status==1){
+            $this->error("未发货订单不能完成交易操作", 'back.home/patchorder');
+        }
+        if(Request::isGet()){
+            $res=Db::table('sw_neworder')
+                ->where('id', $id)
+                ->data(['status' => 4])
+                ->update();
+            //$s=Db::name('storeproduct')->getLastSql();
+            if ($res){
+                $this->success('修改状态成功', 'back.home/patchorder');
+            }else{
+                $this->success('修改状态失败', 'back.home/patchorder');
+            }
+        }
+
+    }
+
 
     }
