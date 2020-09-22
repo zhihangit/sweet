@@ -1027,6 +1027,7 @@ class Home extends Controller
         }
 
     }
+    //旧订单处理
     public function dealorder(){
         $storeid=cookie('user_id');
         $sql="select * from sw_order where storeid='$storeid' order by create_time desc";
@@ -1532,6 +1533,34 @@ class Home extends Controller
             }else{
                 $this->success('修改状态失败', 'back.home/patchorder');
             }
+        }
+
+    }
+    public function dealneworder(){
+
+
+        $newdata=Request::param();
+        //dump($newdata);
+       //die('');
+        $newdata["deal_time"]=date('Y-m-d h:i:s', time());
+
+        $order=Neworder::get(input('id'));
+        if($order['status']=='4'){
+            $this->error('该订单已完成交易，无法再次处理','back.home/patchorder');
+        }
+        if($order['status']=='1'){
+              $newdata["status"]='2';
+        }
+        if($order['type']=='1'){
+            $companyname=Db::table('sw_userinfo')->getFieldByUser_id(input('deal_user'),'company');
+            $newdata['pickplace']=$companyname;
+        }
+
+        $res=$order->save($newdata);
+        if($res){
+            $this->success('订单处理成功','back.home/patchorder');
+        }else{
+            $this->error('订单处理失败');
         }
 
     }

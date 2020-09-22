@@ -2,6 +2,34 @@
 <script src="__BJS__/jquery.min.js"></script>
 <script type="text/javascript">
 </script>
+<script type="text/javascript">
+
+    $(function() {
+        // 删除大修模态框的确定按钮的点击事件
+        $("#dealbutton").click(function() {
+            // ajax异步删除
+            dealinfo();
+        });
+
+    })
+
+    function dealinfo() {
+        //alert("你即将删除的ID" + $("#deleteHaulId").val());
+        window.location.href ="{:url('back.home/dealneworder','','')}"+"/id/"+ $("#dealid").val()+"/expressid/"+ $("#expressid").val()+"/dispatchname/"+ $("#dispatchname").val()+"/dispatchtel/"+ $("#dispatchtel").val()+"/dispatchaddress/"+ $("#dispatchaddress").val()+"/expresslink/"+ $("#expresslink").val()+"/pickname/"+ $("#pickname").val()+"/picktel/"+ $("#picktel").val()+"/sellermemo/"+ $("#sellermemo").val()+"/deal_user/"+ $("#deal_user").val()+".html";
+        //window.location.href="{:url('table/index')}?id="+id;
+    }
+    // 打开询问是否删除的模态框并设置需要删除的的ID
+    function showDealModal(obj) {
+        var $tds = $(obj).parent().parent().children();// 获取到所有列
+        var orderid = $($tds[0]).children("input").val();// 获取隐藏的ID
+        $("#dealid").val(orderid);// 将模态框中需要删除的ID设为需要删除的ID
+        $("#delcfmOverhaul").modal({
+            backdrop : 'static',
+            keyboard : false
+        });
+    }
+
+</script>
 <div class="container-fluid cm-container-white" style="margin-top:20px;padding-top: 30px;height: 100%">
     <div class="row">
         <div class="col-md-12">
@@ -165,7 +193,7 @@
                                 {/switch}</td>
                             <td>处理详情</td>
                             <td>
-                                <a href="{:url('back.home/dealpatchorder','','')}/id/{$vo.id}">订单处理</a>\
+                                <a href="javascript:void(0)" onclick="showDealModal(this)">订单处理</a>\
 
                                 <a href="{:url('back.home/delepatchorder','','')}/id/{$vo.id}">删除</a>\
                                 <a href="{:url('back.home/modipatchorder','','')}/id/{$vo.id}">修改</a>
@@ -191,6 +219,85 @@
 </div>
 </div>
 
+
+<div class="modal fade" id="delcfmOverhaul" style="margin-top: 150px;">
+    <div class="modal-dialog">
+        <div class="modal-content message_align">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">请填写处理订单信息</h4>
+            </div>
+            <div class="modal-body">
+                <!-- 隐藏需要删除的id -->
+                <input type="hidden" id="dealid" />
+
+                <form class="form-inline">
+                <div class="form-group">
+                    <label for="expressid">&nbsp&nbsp&nbsp&nbsp配送单号</label>
+                    <input type="text" class="form-control" id="expressid" placeholder="" name="expressid" onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\.]/g,'')" onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\.]/g,'')" oncontextmenu = "value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\.]/g,'')">
+                </div>
+
+
+                <div class="form-group">
+                    <label for="dispatchname">收货人姓名</label>
+                    <input type="text" class="form-control" id="dispatchname" placeholder="收货人姓名" name="dispatchname" onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\.]/g,'')" onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\.]/g,'')" oncontextmenu = "value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\.]/g,'')">
+                </div>
+
+                <div class="form-group">
+                    <label for="dispatchtel">收货人电话</label>
+                    <input type="text" class="form-control" id="dispatchtel" placeholder="收货人电话" name="dispatchtel" onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\.]/g,'')" onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\.]/g,'')" oncontextmenu = "value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\.]/g,'')">
+                </div>
+
+                <div class="form-group">
+                    <label for="dispatchaddress">收货人地址</label>
+                    <input type="text" class="form-control" id="dispatchaddress" placeholder="收货人地址" name="dispatchaddress	" onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\.]/g,'')" onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\.]/g,'')" oncontextmenu = "value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\.]/g,'')">
+                </div>
+
+
+
+                <div class="form-group" style="margin-top: 3px;">
+                    <label for="expresslink">&nbsp&nbsp&nbsp&nbsp配送链接</label>
+                    <input type="text" style="width: 400px;" class="form-control" id="expresslink" placeholder="查看配送状态的链接" name="expresslink" onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\.]/g,'')" onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\.]/g,'')" oncontextmenu = "value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\.]/g,'')">
+                </div>
+                    <div style="display: block;margin-top:5px;margin-bottom: 10px;border-bottom: 1px dashed dodgerblue  ">
+                    </div>
+
+                <div class="form-group">
+                    <label for="pickname">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp自提人</label>
+                    <input type="text" class="form-control" id="pickname" placeholder="自提人姓名" name="pickname" onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\.]/g,'')" onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\.]/g,'')" oncontextmenu = "value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\.]/g,'')">
+                </div>
+
+
+                <div class="form-group">
+                    <label for="picktel">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp自提人电话</label>
+                    <input type="text" class="form-control" id="picktel" placeholder="自提人电话" name="picktel" onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\.]/g,'')" onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\.]/g,'')" oncontextmenu = "value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\.]/g,'')">
+                </div>
+
+                <div class="form-group">
+                    <label for="deal_user">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp处理人</label>
+                    <input type="text" class="form-control" id="deal_user"  readonly="readonly" placeholder="处理人" name="deal_user"  value="{$Think.cookie.user_name}" onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\.]/g,'')" onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\.]/g,'')" oncontextmenu = "value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\.]/g,'')">
+                </div>
+                    <div style="display: block;margin-top:5px;margin-bottom: 10px;border-bottom: 1px dashed dodgerblue  ">
+                    </div>
+
+                <div class="form-group form-inline">
+                    <label for="sellermemo">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp卖家备注</label>
+                    <input type="text" style="width: 400px;" class="form-control" id="sellermemo" placeholder="卖家备注" name="sellermemo" onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\.]/g,'')" onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\.]/g,'')" oncontextmenu = "value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5\.]/g,'')">
+                </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary"
+                        id="dealbutton">确认</button>
+            </div>
+        </div>
+    </div>
 
 
 

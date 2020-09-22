@@ -20,6 +20,7 @@ class Demo extends Controller
         echo config('__IMAGES__')."------------------IMAGES目录</BR>";
 
         echo __DIR__ . '/../thinkphp/base.php';
+        echo now();
 
     }
 
