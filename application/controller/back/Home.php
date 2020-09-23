@@ -1308,17 +1308,17 @@ class Home extends Controller
                 $sql3=$sql3." and dealstore_id='$storeid' ";
                 $vendername=Db::table("sw_userinfo")->getFieldByUser_id($venderid,'company');
                 $storename=Db::table("sw_userinfo")->getFieldByUser_id($storeid,'company');
-                $sqlinfo="下列查询结果条件为："."商家:".$vendername.",分店:".$storename.",日期在".$startrq."---".$endrq."订单类型为".$type."状态为".$status."订单号为".$order_id."订单数据（订单类型:0全部1自提2配送；状态:0全面1未发货2已发货3完成交易4售后中）";
+                $sqlinfo="下列查询结果条件为："."商家:".$vendername.",分店:".$storename.",日期在".$startrq."---".$endrq."订单类型为".$type."状态为".$status."订单号为".$order_id."订单数据（订单类型:0全部1自提2配送；状态:0全面1未发货2已发货3售后中4完成交易）";
             }else{
                 $sql=$sql."and a.dealstorep_id='$venderid'  order by a.dealstore_id,a.create_time desc limit $offset,$limit";
                 $sql2=$sql2."and dealstorep_id='$venderid'";
                 $sql3=$sql3."and dealstorep_id='$venderid'";
                 $vendername=Db::table("sw_userinfo")->getFieldByUser_id($venderid,'company');
-                $sqlinfo="下列查询结果条件为："."商家".$vendername."所有分店日期在".$startrq."---".$endrq."订单类型为".$type."状态为".$status."订单号为".$order_id."订单数据（订单类型:0全部1自提2配送；状态:0全面1未发货2已发货3完成交易4售后中）";
+                $sqlinfo="下列查询结果条件为："."商家".$vendername."所有分店日期在".$startrq."---".$endrq."订单类型为".$type."状态为".$status."订单号为".$order_id."订单数据（订单类型:0全部1自提2配送；状态:0全面1未发货2已发货3售后中4完成交易）";
             }
         }else{
             $sql=$sql." order by a.dealstore_id,a.create_time desc limit $offset,$limit";
-            $sqlinfo="下列查询结果条件为："."全部商家包括商家分店日期在".$startrq."---".$endrq."订单类型为".$type."状态为".$status."订单号为".$order_id."订单数据（订单类型:0全部1自提2配送；状态:0全面1未发货2已发货3完成交易4售后中）";
+            $sqlinfo="下列查询结果条件为："."全部商家包括商家分店日期在".$startrq."---".$endrq."订单类型为".$type."状态为".$status."订单号为".$order_id."订单数据（订单类型:0全部1自提2配送；状态:0全面1未发货2已发货3售后中4完成交易）";
 
         }
 
@@ -1445,6 +1445,21 @@ class Home extends Controller
             $this->error('非法操作');
         }
 
+    }
+    public function pauseorder(){
+        $id=input('id');
+        if(Request::isGet()){
+            $res=Db::table('sw_neworder')
+                ->where('id', $id)
+                ->data(['status' => 3])
+                ->update();
+            //$s=Db::name('storeproduct')->getLastSql();
+            if ($res){
+                $this->success('已置争议', 'back.home/patchorder');
+            }else{
+                $this->error('置争议失败','back.home/patchorder');
+            }
+        }
     }
     public function modipatchorder(){
         if (Request::has('id'))

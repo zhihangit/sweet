@@ -187,17 +187,39 @@
                             <td> {switch vo.status }
                                 {case 1 }<span style="color:red">未发货</span>{/case}
                                 {case 2 }已发货{/case}
-                                {case 3 }售后中{/case}
+                                {case 3 }<span style="color:dodgerblue">售后中</span>{/case}
                                 {case 4 }已完成{/case}
                                 {default /}争议订单
                                 {/switch}</td>
                             <td>处理详情</td>
                             <td>
-                                <a href="javascript:void(0)" onclick="showDealModal(this)">订单处理</a>\
+                                {if $Think.cookie.user_limite == '3'   }
+                                {if $vo.status == '1'}<a href="javascript:void(0)" onclick="showDealModal(this)">订单处理</a>{else /}无
+                                {/if}
+                                {/if}
 
+                                {if $Think.cookie.user_limite == '2'   }
+                                {if $vo.status == '2' or $vo.status == '3' }
+                                无
+                               <!-- <a href="{:url('back.home/pauseorder','','')}/id/{$vo.id}">置争议</a>-->
+                                <!--如商家需要可以添加置争议操作-->
+                                {else /}无
+                                {/if}
+                                {/if}
+
+
+
+                                {if $Think.cookie.user_limite == '1'   }
+
+                                {if $vo.status == '1' }
                                 <a href="{:url('back.home/delepatchorder','','')}/id/{$vo.id}">删除</a>\
                                 <a href="{:url('back.home/modipatchorder','','')}/id/{$vo.id}">修改</a>
-                                {if $vo.status != '4'}\<a href="{:url('back.home/finishpatchorder','','')}/id/{$vo.id}">完成交易</a>
+                                {/if}
+
+                                {if $vo.status == '2' or $vo.status == '3' }
+                                <a href="{:url('back.home/finishpatchorder','','')}/id/{$vo.id}">完成交易</a>
+                                <a href="{:url('back.home/pauseorder','','')}/id/{$vo.id}">\置争议</a>
+                                {/if}
                                 {/if}
 
 
@@ -223,12 +245,12 @@
 <div class="modal fade" id="delcfmOverhaul" style="margin-top: 150px;">
     <div class="modal-dialog">
         <div class="modal-content message_align">
-            <div class="modal-header">
+            <div class="modal-header" style="background-color: #3498db">
                 <button type="button" class="close" data-dismiss="modal"
                         aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
-                <h4 class="modal-title">请填写处理订单信息</h4>
+                <h4 class="modal-title" style="color:white;">请填写处理订单信息</h4>
             </div>
             <div class="modal-body">
                 <!-- 隐藏需要删除的id -->
