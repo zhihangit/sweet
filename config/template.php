@@ -49,5 +49,6 @@ return [
         '__BCSS__' => '/sweet/public/back/css',
         '__BJS__' => '/sweet/public/back/js',
         '__BFONTS__' => '/sweet/public/back/fonts',
+        '__BUEDITOR__' => '/sweet/public/static/ueditor',
     ],
 ];
