@@ -9,6 +9,9 @@
             <input name="storeid" value="{$storeinfo.0.aid}" type="hidden">
             <div id="tab1" class="tab-pane active">
                 <div class="row">
+                    {empty name="product"}
+                    <h3 style="text-align:center;color:grey">该店没有上架相关商品</h3>
+                    {else /}
                     {volist name="product" id="vo" key="k"}
                     <div class="col-lg-6">
                         <div class="single-menu-product mb-30">
@@ -45,6 +48,10 @@
                         </div>
                     </div>
                     {/volist}
+                    {/empty}
+
+
+
 
                 </div>
             </div>

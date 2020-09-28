@@ -819,6 +819,13 @@ class Home extends Controller
                 {
                     //die('stop here');
                     //echo $mod->id;
+                      //为本地初始化主店已添加的商品
+                    $cureuserid=$mod->id;
+                    $par_id=Db::table('sw_user')->getFieldById($cureuserid,'parent_id');
+                    //同步产品种类
+                    $sql=" insert into sw_storeproduct (product_id,del_flag,store_id,newprice) select id as product_id,del_flag,$cureuserid as store_id,price as newprice from sw_product where user_id= $par_id  and id not in (select product_id as id from sw_storeproduct where store_id=$cureuserid)";
+                    //echo "</br>添加同步产品种类sql</br>".$sql;
+                    Db::execute($sql);//同步完毕
                     //sleep("6");
                     $this->success('新增成功', 'back.home/storemanage');
                 }
@@ -943,10 +950,10 @@ class Home extends Controller
         //echo $par_id;
        // $con['user_id']=$par_id;
         //同步产品种类
-        $sql="select id as product_id,del_flag,$cureuserid as store_id,price as newprice from sw_product where user_id= $par_id  and id not in (select product_id as id from sw_storeproduct where store_id=$cureuserid)";
+        //$sql="select id as product_id,del_flag,$cureuserid as store_id,price as newprice from sw_product where user_id= $par_id  and id not in (select product_id as id from sw_storeproduct where store_id=$cureuserid)";
         //echo "</br>查询同步产品种类sql</br>".$sql;
 
-        $pdata=Db::query($sql);
+        //$pdata=Db::query($sql);
         //dump($pdata);
 
         $sql=" insert into sw_storeproduct (product_id,del_flag,store_id,newprice) select id as product_id,del_flag,$cureuserid as store_id,price as newprice from sw_product where user_id= $par_id  and id not in (select product_id as id from sw_storeproduct where store_id=$cureuserid)";

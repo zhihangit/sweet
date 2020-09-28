@@ -104,29 +104,46 @@
 
 
 
+
+
                         <div class="form-group">
-                            <label for="pricesystem" class="col-sm-2 control-label">是否设为主打商品</label>
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <div class="checkbox">
+                            <label for="main_flag" class="col-sm-2 control-label">是否设为主打商品</label>
+                            <div class="col-sm-10">
 
-                                        <input name="main_flag" type="checkbox" {if $productdata.main_flag == '1'}checked {/if}> 主打商品标志
 
-                                </div>
+                                <input name="main_flag"  style="height: 20px;width: 20px" id="main_flag" type="checkbox" {if $productdata.main_flag == '1'}checked {/if}>
+
                             </div>
                         </div>
 
                         <!-- 加载编辑器的容器 -->
-                        <script id="container" name="content" type="text/plain">
+                        <input id='rawcontent' type='hidden'  value="{$productdata.content}" />
+                        <div class="form-group">
+                            <label for="main_flag" class="col-sm-2 control-label">商品详情</label>
+                            <div class="col-sm-10">
 
-                        </script>
-                        <!-- 配置文件 -->
-                        <script type="text/javascript" src="__UEDITOR__/ueditor.config.js"></script>
-                        <!-- 编辑器源码文件 -->
-                        <script type="text/javascript" src="__UEDITOR__/ueditor.all.js"></script>
-                        <!-- 实例化编辑器 -->
-                        <script type="text/javascript">
-                            var editor = UE.getEditor('container');
-                        </script>
+
+                                <script id="container" name="content" type="text/plain">
+
+                                </script>
+                                <!-- 配置文件 -->
+                                <script type="text/javascript" src="__BUEDITOR__/ueditor.config.js"></script>
+                                <!-- 编辑器源码文件 -->
+                                <script type="text/javascript" src="__BUEDITOR__/ueditor.all.js"></script>
+                                <!-- 实例化编辑器 -->
+                                <script type="text/javascript">
+                                    var editor = UE.getEditor('container');
+
+
+                                    $(document).ready(function () {
+
+                                        editor.ready(function () {
+                                            editor.setContent($("#rawcontent").val());  //赋值给UEditor
+                                        });
+
+                                    });
+                                </script>
+                            </div>
 
 
                         <div class="form-group" style="margin-bottom:0">

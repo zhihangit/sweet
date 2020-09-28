@@ -1,0 +1,23 @@
+一:ueditor的使用
+拷贝ueditor插件至public/static目录下，配置php目录下config.json下："imagePathFormat": "/sweet/ueditor/upload/image/{yyyy}{mm}{dd}/{time}{rand:6}",目录，该目录为编辑器内图片上传路径。
+前端页面在表单添加：
+ <script id="container" name="content" type="text/plain"></script>
+  <!-- 配置文件 -->
+  <script type="text/javascript" src="__BUEDITOR__/ueditor.config.js"></script>
+  <!-- 编辑器源码文件 -->
+   <script type="text/javascript" src="__BUEDITOR__/ueditor.all.js"></script>
+  <!-- 实例化编辑器 -->
+  <script type="text/javascript">
+  var editor = UE.getEditor('container');
+  </script>
+即可正常显示。
+修改数据回显时，由于直接读数据库内容将会把html标签一起显示，采取先设定一个隐藏域： <input id='rawcontent' type='hidden'  value="{$productdata.content}" />将内容读取，然后在用JavaScript把内容移植编辑器内：
+  <script type="text/javascript">
+    var editor = UE.getEditor('container');
+    $(document).ready(function () {
+    editor.ready(function () {
+    editor.setContent($("#rawcontent").val());  //赋值给UEditor
+                                        });
+                                    });
+</script>
+############部署到服务器时，请注意检查图片上传目录
