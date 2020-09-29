@@ -69,16 +69,20 @@ class Index extends Controller
             $res=Db::query($sql);
 
             foreach ($res as $key=> $value){
-                echo $value['name'];
+                echo  $res[$key]["pricesystem"];
                 $dp=explode("|",$value["pricesystem"]);
-                //dump($dp);
-                foreach ($dp as $value2){
-                    $dpinfo[$key]=explode("/",$value2);
+                $dpinf = (array) null;
+
+                foreach ($dp as $key2 =>$value2){
+                      $dpinfo[$key2]=explode("/",$value2);
                 }
-                dump($dpinfo);
+                $res[$key]["pricesystem"]=$dpinfo;
+            //dump($dpinfo);
+
 
             }
-            //dump($res);
+            foreach ($res as $value)
+            {dump($value);}
             $this->assign('product',$res);
             //return $this->fetch('storeexchange');
         }else{
