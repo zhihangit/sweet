@@ -57,7 +57,7 @@ class Index extends Controller
             if(Request::param('pid')){
                 $pid=Request::param('pid');
             }else{$pid="";}
-
+          //pid这里是客户点击了单个商品传进的商品id
             if($pid<>""){
                 $sql="select *,a.id as aid  from sw_storeproduct a left join sw_product b on a.product_id=b.id where b.del_flag=0 and a.on_off=0 and a.store_id=$storeid and a.product_id=$pid" ;
             }else
@@ -67,11 +67,22 @@ class Index extends Controller
 
             //echo $sql;
             $res=Db::query($sql);
+
+            foreach ($res as $key=> $value){
+                echo $value['name'];
+                $dp=explode("|",$value["pricesystem"]);
+                //dump($dp);
+                foreach ($dp as $value2){
+                    $dpinfo[$key]=explode("/",$value2);
+                }
+                dump($dpinfo);
+
+            }
             //dump($res);
             $this->assign('product',$res);
-            return $this->fetch('storeexchange');
+            //return $this->fetch('storeexchange');
         }else{
-            $this->error('没有改门店，请重新选择');
+            $this->error('没有该门店，请重新选择');
         }
 
 
