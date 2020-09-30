@@ -29,12 +29,11 @@
                                         <span>￥{$vo.price}</span>
                                     </div>
                                 </div>
-                                <p>{$vo.introduce}</p>
-                                <p style="font-size: 12px;">原材料：{$vo.material}</p>
-                                <p style="font-size: 12px;">
-
-                                    <a style=" float:left;"class="btn btn-warning " href="#" role="button">兑换数量</a>
-                                    <select name="p{$vo.aid}" class="form-control" style="width: 60px;float:left;height: 32px;margin-left: 5px;">
+                                <h4>{$vo.introduce}</h4>
+                                <h4 style="font-size: 12px;">原材料：{$vo.material}</h4>
+                                <h4 style="font-size: 12px;">
+                                    <a class="btn btn-warning " href="#" role="button">兑换数量</a>
+                                    <select name="n{$vo.aid}" class="form-control" style="width: 200px;float:right;height: 32px;margin-left: 5px;">
 
                                         <option  value="0" selected>0</option>
                                         <option  value="1" >1</option>
@@ -43,7 +42,37 @@
                                         <option value="4" >4</option>
                                         <option value="5" >5</option>
                                     </select>
-                                </p>
+                                </h4>
+
+                                <h4 style="font-size: 12px;">
+                                <a class="btn btn-warning " href="#" role="button">规&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp格</a>
+                                <select name="p{$vo.aid}" class="form-control" style="width: 200px;float:right;height: 35px;margin-left: 5px;">
+                                    {volist name="vo['pricesystem']" id="vo2" key="k2"}
+                                    <option value="{$vo2[0]}-{$vo2[2]}" >{$vo2[0]}:{$vo2[2]}元</option>
+                                    {/volist}
+                                </select>
+                            </h4>
+
+                                <h4 style="font-size: 12px;">
+                                    <a class="btn btn-warning " href="#" role="button">可&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp选</a>
+
+                                    {if sizeof($vo.freeoption1)>0}
+                                    <select name="x{$vo.aid}" class="form-control" style="width: 98px;float:right;height: 35px;margin-left: 5px;">
+
+                                        {volist name="vo['freeoption1']" id="vo3"}
+                                        <option value="{$vo3}" >{$vo3}</option>
+                                        {/volist}
+                                    </select>
+                                    {/if}
+                                    {if $vo.freeoption2[0] !=''}
+
+                                    <select name="s{$vo.aid}" class="form-control" style="width: 98px;float:right;height: 35px;margin-left: 5px;">
+                                        {volist name="vo['freeoption2']" id="vo4"}
+                                        <option value="{$vo4}" >{$vo4}</option>
+                                        {/volist}
+                                    </select>
+                                    {/if}
+                                </h4>
                             </div>
                         </div>
                     </div>

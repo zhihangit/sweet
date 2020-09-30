@@ -69,7 +69,12 @@ class Index extends Controller
             $res=Db::query($sql);
 
             foreach ($res as $key=> $value){
-                echo  $res[$key]["pricesystem"];
+                //echo  $res[$key]["pricesystem"];
+                $free=explode("/",$value["freeoption1"]);
+                $res[$key]["freeoption1"]=$free;
+                $free=explode("/",$value["freeoption2"]);
+                $res[$key]["freeoption2"]=$free;
+                //echo count($res[$key]["freeoption2"]);
                 $dp=explode("|",$value["pricesystem"]);
                 $dpinf = (array) null;
 
@@ -78,13 +83,11 @@ class Index extends Controller
                 }
                 $res[$key]["pricesystem"]=$dpinfo;
             //dump($dpinfo);
-
-
             }
-            foreach ($res as $value)
-            {dump($value);}
+            //foreach ($res as $value)
+            //{dump($value);}
             $this->assign('product',$res);
-            //return $this->fetch('storeexchange');
+            return $this->fetch('storeexchange');
         }else{
             $this->error('没有该门店，请重新选择');
         }
@@ -100,10 +103,12 @@ class Index extends Controller
             $p_data = (Request::param());
             $totalnum = 0;
             $totalinfo = "";
+            $tkey="";
             foreach ($p_data as $key => $value) {
-                if (substr($key, 0, 1) == 'p') {//取订单明细数据
+                if (substr($key, 0, 1) == 'n') {//取订单明细数据
+                    $tkey=$key;
                     if ($value <> 0) {
-                        $lookid = substr($key, 1, 1);
+                        $lookid = substr($key, 1);
                         //echo $key.'|'.substr($key,1,1)."|".$value."</br>";
                         $newdata["$key"] = Db::table('sw_storeproduct')
                             ->alias('a')
@@ -120,16 +125,32 @@ class Index extends Controller
                     }
 
                 }
+
+           /*     if (substr($key, 0, 1) == 'p') {
+                    $g=explode('-',$value);
+                    $newdata["$tkey"]['newprice'] = $g[1];
+                    $newdata["$tkey"]['guige'] = $g[0];
+                }*/
+
+                if (substr($key, 0, 1) == 'x') {
+                    $newdata["$tkey"]['option1'] = $value;
+                }
+
+
+
+                if (substr($key, 0, 1) == 's') {
+                    $newdata["$tkey"]['option2'] = $value;
+                }
             }
             if (isset($newdata)) {
-                //dump($newdata);
+                dump($newdata);
                 $this->assign('newdata', $newdata);
                 $storename = Db::table("sw_userinfo")->getFieldByUser_id($storeid, 'company');
                 $this->assign('storeid', $storeid);
                 $this->assign('storename', $storename);
                 $this->assign("totalnum", $totalnum);
                 $this->assign("totalinfo", substr($totalinfo,1));
-                return $this->fetch("confirmorder");
+               // return $this->fetch("confirmorder");
             } else {
                 $this->error("请选择相关商品，并确定数量不为零进行兑换");
             }
