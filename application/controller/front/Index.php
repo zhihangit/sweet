@@ -97,13 +97,15 @@ class Index extends Controller
     public function confirmorder()
 
     {
-        dump(Request::param());
+        //dump(Request::param());
         if (Request::isPost()) {
             $storeid = input('storeid');
             $p_data = (Request::param());
-            $totalnum = 0;
+            $totalnum = 0;//商品总数
+            $totalfee=0;//总金额
             $totalinfo = "";
             $tkey="";
+
             foreach ($p_data as $key => $value) {
                 if (substr($key, 0, 1) == 'n') {//取订单明细数据
                     $tkey=$key;
@@ -116,41 +118,54 @@ class Index extends Controller
                             ->where('a.id', $lookid)
                             ->where('a.store_id', $storeid)
                             ->find();
-                        $totalnum = $totalnum + $value * $newdata["$key"]['newprice'];
-                        $tempstr = $lookid . "|" . $newdata["$key"]['name'] . "|" . $value . "|" . $newdata["$key"]['newprice'];
-                        $totalinfo = $totalinfo . "," . $tempstr;
-                        $newdata["$key"]['num'] = $value;
-
-
+                        $newdata["$key"]['ordernum'] = $value;
+                        $totalnum = $totalnum + $value;//总商品数量
+                        $tempstr='';
+                        $tempstr = $lookid .  "|" . $value;
                     }
 
                 }
 
-           /*     if (substr($key, 0, 1) == 'p') {
-                    $g=explode('-',$value);
-                    $newdata["$tkey"]['newprice'] = $g[1];
-                    $newdata["$tkey"]['guige'] = $g[0];
-                }*/
+              if (substr($key, 0, 1) == 'p') {
+                  $g=explode('-',$value);
+                    //echo $g[1];
+                  $newdata["$tkey"]['orderprice'] = $g[1];$newdata["$tkey"]['guige'] = $g[0];
+                  $totalfee=$totalfee+ $newdata["$tkey"]['ordernum']*$g[1];
+                  $tempstr =$tempstr."|".$newdata["$tkey"]['orderprice']."|".$newdata["$tkey"]['ordernum']*$g[1]."|".$g[0];
+                  //totalinfo格式:商品ID|数量|单价|合计|规格|可选项1|可选项2
+                }
 
-                if (substr($key, 0, 1) == 'x') {
-                    $newdata["$tkey"]['option1'] = $value;
+               if (substr($key, 0, 1) == 'x') {
+                    $newdata["$tkey"]['orderoption1'] = $value;
+                    $tempstr =$tempstr."|".$value;
+                    //echo $totalinfo."</br>";
+                    $totalinfo=$totalinfo.",".$tempstr;
+                   //totalinfo格式:商品ID|数量|单价|合计|规格|可选项1|可选项2  其中可选项2未必有，所以进行单独处理
+                   //echo $tempstr."</br>";
                 }
 
 
 
-                if (substr($key, 0, 1) == 's') {
-                    $newdata["$tkey"]['option2'] = $value;
+                if (substr($key, 0, 1) == 'v') {
+                    $newdata["$tkey"]['orderoption2'] = $value;
+                    $totalinfo=$totalinfo."|".$value;
+                    //totalinfo格式:商品ID|数量|单价|合计|规格|可选项1|可选项2  其中可选项2未必有，所以进行单独处理
                 }
+
+
+
             }
+            //echo $totalinfo;
             if (isset($newdata)) {
-                dump($newdata);
+                //dump($newdata);
                 $this->assign('newdata', $newdata);
                 $storename = Db::table("sw_userinfo")->getFieldByUser_id($storeid, 'company');
                 $this->assign('storeid', $storeid);
                 $this->assign('storename', $storename);
                 $this->assign("totalnum", $totalnum);
+                $this->assign("totalfee", $totalfee);
                 $this->assign("totalinfo", substr($totalinfo,1));
-               // return $this->fetch("confirmorder");
+                return $this->fetch("confirmorder");
             } else {
                 $this->error("请选择相关商品，并确定数量不为零进行兑换");
             }
@@ -158,7 +173,8 @@ class Index extends Controller
             $this->error('非法操作',url('front.index/index'));
         }
     }
-    public function addorder(){
+    //旧方法
+    /*public function addorder(){
        // dump(Request::param());
         if(Request::isPost()){
             //$r兑换码本身信息
@@ -251,7 +267,103 @@ class Index extends Controller
             $this->error('非法操作',url('front.index/index'));
 
         }
+    }*/
+    public function addorder(){
+         dump(Request::param());
+        if(Request::isPost()){
+            //$r兑换码本身信息
+            $r=Db::table('sw_codedetail')->where('number',input('codenumber'))->find();
+            if($r){
+                if(input('proof')<>$r['proof']){
+                    $this->error('兑换码对应验证码不对，请重新兑换',url('front.index/storeexchange',['storeid'=>input('storeid')]));
+                }else{
+                    //$c兑换码对应批次信息
+                    $c=Db::table('sw_code')->where('id',$r['code_id'])->find();
+                    if($c['status']<>2){
+                        $this->error('该兑换码未激活或已作废',url('front.index/index'));
+                    }else{
+                        $endtime=strtotime($c['indate']);
+                        $nowtime = time();
+                        if($nowtime > $endtime){
+                            $this->error('该兑换码已过期',url('front.index/index'));
+                        }else{
+                            $s=Request::param();
+                            $sorder=explode('^',$s["totalinfo"]);
+                            if ($sorder[2]>$r['balance']){
+                                $this->error('余额不足，请重新兑换',url('front.index/storeexchange',['storeid'=>input('storeid')]));
+                            }else{
+                                $insertdata['grouporderid']=getrandstr1(1).time();
+                                $insertdata['codenumber']=input('codenumber');
+                                $insertdata['codecompanyid'] = Db::table('sw_codedetail')->getFieldByNumber(input('codenumber'), 'code_id');
+
+                                $insertdata['dealstore_id']=input('storeid');
+                                //$insertdata['totalnum']=$sorder[2];
+                                $insertdata['dealstorep_id'] = Db::table('sw_user')->getFieldById(input('storeid'), 'parent_id');
+
+                                $insertdata['order_time']=date_create()->format('Y-m-d H:i:s');
+                                $insertdata['dispatchname']=input('ordercontact');
+                                $insertdata['dispatchtel']=input('ordertel');
+                                $insertdata['buyermemo']=input('memo');
+                                $insertdata['status']=1;
+                               // $insertdata['sellermemo']='';
+                                //$insertdata['expressid']='';
+                                if(isset($_POST['takeself']) &&$_POST['takeself'] == '1')
+                                {
+                                    $insertdata['type']=1;
+                                    $insertdata['orderaddress']='';
+                                }
+                                else{
+                                    $insertdata['takeself']=2;
+                                    $insertdata['orderaddress']=input('orderaddress');
+                                }
+                                //$insertdata['create_time']=date_create()->format('Y-m-d H:i:s');
+                                 $arroder=explode(",",$sorder[0]);
+
+                                foreach ($arroder as $key=> $value ){
+                                    $orderarr = (array) null;
+                                    $orderarr = $insertdata;
+                                    $o=explode('|',$value);
+                                    //商品ID|数量|单价|合计|规格|可选项1|可选项2  其中可选项2未必有，所以进行单独处理
+                                    //$ss=$ss." 商品[".$o[1]."]数量[".$o[2]."]单价[".$o[3]."];";
+                                    $orderarr['order_id']="S".$orderarr['grouporderid'].$key;
+                                    //这里的id是主店添加商品的id而非门店的商品id
+                                    $orderarr['product_id']=Db::table('sw_storeproduct')->getFieldById($o[0], 'product_id');
+                                    $orderarr['product']=Db::table('sw_product')->getFieldById($orderarr['product_id'], 'name');
+                                    $orderarr['num']=$o[1];
+                                    $orderarr['price']=$o[2];
+                                    $orderarr['total']=$o[3];
+                                    $orderarr['specification']=$o[4];
+                                    $orderarr['orderoption1']=$o[5];
+                                    if(isset($o[6])){
+                                        $orderarr['orderoption2']=$o[6];
+                                    }
+                                    //dump($orderarr);
+                                    //die("stop");
+                                    $dorder = new \app\model\back\Neworder;
+                                    $res=$dorder->save($orderarr);
+                                   // $oid = $dorder->id;
+                                }
+                            if($res){
+                                    $this->success('已提交兑换订单，等待商家处理', url('front.index/searchcode',['codenumber'=>input('codenumber')]));
+                                }else{
+                                    $this->error('兑换失败异常，请重新兑换',url('front.index/storeexchange',['storeid'=>input('storeid')]));
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }else{
+                $this->error('没有该兑换码信息，请重新兑换',url('front.index/storeexchange',['storeid'=>input('storeid')]));
+            }
+
+
+        }else{
+            $this->error('非法操作',url('front.index/index'));
+
+        }
     }
+
     public function singleexchange(){
 
         if(Request::param('id')){
@@ -270,7 +382,7 @@ class Index extends Controller
 
 
     }
-    public function searchcode(){
+/* 旧订单查询   public function searchcode(){
 
         $code=trim(input("codenumber"));
         $sql="select a.*,b.company from sw_order a left join sw_userinfo b on a.storeid=b.user_id where a.codenumber='$code' order by a.create_time desc ";
@@ -284,16 +396,26 @@ class Index extends Controller
         $code_id=Db::table("sw_codedetail")->getFieldByNumber($code,"code_id");
         $indate=Db::table("sw_code")->getFieldById($code_id,"indate");
         $this->assign('indate',$indate);
-/*        if(!$datainfo){
-            $this->error("没有该兑换码信息，请重新确认");
-        }else{
-            $this->assign('datainfo',$datainfo);
-            $ye=Db::table("sw_codedetail")->getFieldByNumber($code,"balance");
-            $this->assign('ye',$ye);
-
-        }*/
         return $this->fetch("searchcode");
-  }
+  }*/
+    public function searchcode(){
+
+        $code=trim(input("codenumber"));
+        $sql="select a.*,b.company from sw_neworder a left join sw_userinfo b on a.dealstore_id=b.user_id where a.codenumber='$code' order by a.create_time desc ";
+        $datainfo=Db::query($sql);
+        if(!$datainfo){
+            $this->error("没有该兑换码信息，请重新确认");
+        }
+        $this->assign('datainfo',$datainfo);
+        $ye=Db::table("sw_codedetail")->getFieldByNumber($code,"balance");
+        $this->assign('ye',$ye);
+        $code_id=Db::table("sw_codedetail")->getFieldByNumber($code,"code_id");
+        $indate=Db::table("sw_code")->getFieldById($code_id,"indate");
+        $this->assign('indate',$indate);
+        return $this->fetch("searchcode");
+    }
+
+
     public function dealorder(){
 
 }
