@@ -1,0 +1,60 @@
+﻿{layout name="frontlayout2" /}
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style type="text/css">
+    .m_image{width: 100%}
+    .carousel-control.left {
+        background-image:none;
+        background-repeat: repeat-x;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#80000000', endColorstr='#00000000', GradientType=1);
+    }
+    .carousel-control.right {
+        left: auto; right: 0;
+        background-image:none;
+        background-repeat: repeat-x;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#80000000', GradientType=1);
+    }
+</style>
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        {volist name="pimage" id="vo" key="k"}
+        <li data-target="#carousel-example-generic" data-slide-to="{$k-1}"{eq name="k" value="1"} class="active" {/eq}</li>
+        {/volist}
+
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" role="listbox">
+
+        {volist name="pimage" id="vo2" key="k2"}
+
+        <div class="item{eq name="k2" value="1"} active{/eq}">
+        <a href="#" ><img class="m_image" src="__UPLOADS__{$vo2.image}" alt=""></a>
+        </div>
+       {/volist}
+    </div>
+
+
+
+<!-- Controls -->
+<a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+</a>
+<a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+</a>
+</div>
+<script>
+    $(function() {
+        //轮播自动播放事件
+        $(function() {
+            $('#myCarousel').carousel({
+                interval: 2000
+            });
+        })
+    })
+</script>

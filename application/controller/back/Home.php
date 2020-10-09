@@ -716,9 +716,10 @@ class Home extends Controller
         }
     public function douploadimage()
     {
-        $uploaddir =Env::get('ROOT_PATH'). 'uploads/productimage/';
+        $uploaddir_true =Env::get('ROOT_PATH'). 'uploads/productimage/';//物理路径
+        $uploaddir_data ='/productimage/';//数据库路径
         $name = $_FILES['file']['name'];
-        $uploadfile = $uploaddir . $name;
+        $uploadfile = $uploaddir_true . $name;
         $type = strtolower(substr(strrchr($name, '.'), 1));
 //获取文件类型
         $typeArr = array("jpg","png","gif");
@@ -726,10 +727,12 @@ class Home extends Controller
             echo "请上传jpg,png或gif类型的图片！";
             exit;
         }
-        $targetfile=$uploaddir .getrandstr1(5). $_FILES['file']['name'];
+        $imageode=getrandstr1(5);
+        $targetfile_true=$uploaddir_true .$imageode. $_FILES['file']['name'];
+        $targetfile_data=$uploaddir_data .$imageode. $_FILES['file']['name'];
         print "<pre>";
-        if (move_uploaded_file($_FILES['file']['tmp_name'], $targetfile)) {
-            $data = ['product_id' => input('id'), 'image' => $targetfile];
+        if (move_uploaded_file($_FILES['file']['tmp_name'], $targetfile_true)) {
+            $data = ['product_id' => input('id'), 'image' => $targetfile_data];
             Db::name('productimage')->strict(false)->insert($data);
             //print "File is valid, and was successfully uploaded.  Here's some more debugging info:\n";
            // print_r($_FILES);

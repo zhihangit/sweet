@@ -419,6 +419,27 @@ class Index extends Controller
     public function dealorder(){
 
 }
+
+    public function productdetail(){
+
+        $aid=input("aid");
+        //echo $aid;
+        $id=Db::table("sw_storeproduct")->getFieldById($aid,'product_id');
+        $pdata=Db::table("sw_product")->where('id',$id)->find();
+        //$pimage=Db::table("sw_productimage")->where('product_id',$id)->select();
+        $pimage=Db::table("sw_productimage")->where('product_id',$id)->select();
+        $pdata['pricesystem']=explode('|',$pdata["pricesystem"]);
+        foreach ($pdata['pricesystem'] as $key=>$value){
+            $pdata['pricesystem'][$key]= explode('/',$value);
+        }
+        $this->assign("pdata",$pdata);
+        $this->assign("pimage",$pimage);
+        return $this->fetch("productdetail");
+        //dump($pdata);
+        //dump($pimage);
+
+
+}
     public function demo()
     {
         //echo md5('987001');
