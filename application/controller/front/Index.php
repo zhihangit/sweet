@@ -108,6 +108,7 @@ class Index extends Controller
 
             foreach ($p_data as $key => $value) {
                 if (substr($key, 0, 1) == 'n') {//取订单明细数据
+                    $newdata_flag=1;//设置新数据标志
                     $tkey=$key;
                     if ($value <> 0) {
                         $lookid = substr($key, 1);
@@ -119,38 +120,50 @@ class Index extends Controller
                             ->where('a.store_id', $storeid)
                             ->find();
                         $newdata["$key"]['ordernum'] = $value;
+//echo $newdata["$key"]["name"];
                         $totalnum = $totalnum + $value;//总商品数量
                         $tempstr='';
                         $tempstr = $lookid .  "|" . $value;
+                    }else{
+                        $newdata_flag=0;//如果商品数量为0则不处理后续2-3条记录
                     }
 
                 }
 
               if (substr($key, 0, 1) == 'p') {
+                  if($newdata_flag==1){
                   $g=explode('-',$value);
                     //echo $g[1];
-                  $newdata["$tkey"]['orderprice'] = $g[1];$newdata["$tkey"]['guige'] = $g[0];
+                  $newdata["$tkey"]['orderprice'] = $g[1];
+                  $newdata["$tkey"]['guige'] = $g[0];
+                  //dump($newdata);
                   $totalfee=$totalfee+ $newdata["$tkey"]['ordernum']*$g[1];
                   $tempstr =$tempstr."|".$newdata["$tkey"]['orderprice']."|".$newdata["$tkey"]['ordernum']*$g[1]."|".$g[0];
                   //totalinfo格式:商品ID|数量|单价|合计|规格|可选项1|可选项2
+                  }
                 }
 
                if (substr($key, 0, 1) == 'x') {
-                    $newdata["$tkey"]['orderoption1'] = $value;
-                    $tempstr =$tempstr."|".$value;
-                    //echo $totalinfo."</br>";
-                    $totalinfo=$totalinfo.",".$tempstr;
-                   //totalinfo格式:商品ID|数量|单价|合计|规格|可选项1|可选项2  其中可选项2未必有，所以进行单独处理
-                   //echo $tempstr."</br>";
+                   if($newdata_flag==1) {
+                       $newdata["$tkey"]['orderoption1'] = $value;
+                       $tempstr = $tempstr . "|" . $value;
+                       //echo $totalinfo."</br>";
+                       $totalinfo = $totalinfo . "," . $tempstr;
+                       //totalinfo格式:商品ID|数量|单价|合计|规格|可选项1|可选项2  其中可选项2未必有，所以进行单独处理
+                       //echo $tempstr."</br>";
+                   }
                 }
 
 
 
                 if (substr($key, 0, 1) == 'v') {
+                    if($newdata_flag==1) {
                     $newdata["$tkey"]['orderoption2'] = $value;
                     $totalinfo=$totalinfo."|".$value;
                     //totalinfo格式:商品ID|数量|单价|合计|规格|可选项1|可选项2  其中可选项2未必有，所以进行单独处理
+                    }
                 }
+
 
 
 
@@ -434,8 +447,9 @@ class Index extends Controller
         }
         $this->assign("pdata",$pdata);
         $this->assign("pimage",$pimage);
-        return $this->fetch("productdetail");
         //dump($pdata);
+        return $this->fetch("productdetail");
+
         //dump($pimage);
 
 
