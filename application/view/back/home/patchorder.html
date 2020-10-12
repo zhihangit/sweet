@@ -15,7 +15,34 @@
 
     function dealinfo() {
         //alert("你即将删除的ID" + $("#deleteHaulId").val());
-        window.location.href ="{:url('back.home/dealneworder','','')}"+"/id/"+ $("#dealid").val()+"/expressid/"+ $("#expressid").val()+"/dispatchname/"+ $("#dispatchname").val()+"/dispatchtel/"+ $("#dispatchtel").val()+"/dispatchaddress/"+ $("#dispatchaddress").val()+"/expresslink/"+ $("#expresslink").val()+"/pickname/"+ $("#pickname").val()+"/picktel/"+ $("#picktel").val()+"/sellermemo/"+ $("#sellermemo").val()+"/deal_user/"+ $("#deal_user").val()+".html";
+        var $tijiaourl="{:url('back.home/dealneworder','','')}"+"/id/"+ $("#dealid").val();
+            if ($("#expressid").val()!=''){
+            $tijiaourl=$tijiaourl+"/expressid/"+ $("#expressid").val();
+            }
+        if ($("#dispatchname").val()!=''){
+             $tijiaourl=$tijiaourl+"/dispatchname/"+ $("#dispatchname").val();
+            }
+        if ($("#dispatchtel").val()!=''){
+             $tijiaourl=$tijiaourl+"/dispatchtel/"+ $("#dispatchtel").val();
+        }
+        if ($("#dispatchaddress").val()!=''){
+            $tijiaourl=$tijiaourl+"/dispatchaddress/"+ $("#dispatchaddress").val();
+        }
+        if ($("#expresslink").val()!=''){
+            $tijiaourl=$tijiaourl+"/expresslink/"+ $("#expresslink").val();
+        }
+        if ($("#pickname").val()!=''){
+            $tijiaourl=$tijiaourl+"/picknamek/"+ $("#pickname").val();
+        }
+        if ($("#picktel").val()!=''){
+            $tijiaourl=$tijiaourl+"/picktel/"+ $("#picktel").val();
+        }
+        if ($("#sellermemo").val()!=''){
+            $tijiaourl=$tijiaourl+"/sellermemo/"+ $("#sellermemo").val();
+        }
+
+        window.location.href =$tijiaourl;
+        /*window.location.href ="{:url('back.home/dealneworder','','')}"+"/id/"+ $("#dealid").val()+"/expressid/"+ $("#expressid").val()+"/dispatchname/"+ $("#dispatchname").val()+"/dispatchtel/"+ $("#dispatchtel").val()+"/dispatchaddress/"+ $("#dispatchaddress").val()+"/expresslink/"+ $("#expresslink").val()+"/pickname/"+ $("#pickname").val()+"/picktel/"+ $("#picktel").val()+"/sellermemo/"+ $("#sellermemo").val()+"/deal_user/"+ $("#deal_user").val()+".html";*/
         //window.location.href="{:url('table/index')}?id="+id;
     }
     // 打开询问是否删除的模态框并设置需要删除的的ID

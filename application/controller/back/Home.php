@@ -1566,7 +1566,7 @@ class Home extends Controller
 
         $newdata=Request::param();
         //dump($newdata);
-       //die('');
+      // die('');
         $newdata["deal_time"]=date('Y-m-d h:i:s', time());
 
         $order=Neworder::get(input('id'));
@@ -1583,6 +1583,13 @@ class Home extends Controller
 
         $res=$order->save($newdata);
         if($res){
+            $codenumber=Db::table('sw_neworder')->getFieldById($order['id'], 'codenumber');
+            $ye=Db::table('sw_codedetail')->getFieldByNumber($codenumber, 'balance');
+            $ye=(float)$ye-(float)$order['total'];
+            Db::name('codedetail')
+                ->where('number', $codenumber)
+                ->data(['balance' => $ye])
+                ->update();
             $this->success('订单处理成功','back.home/patchorder');
         }else{
             $this->error('订单处理失败');

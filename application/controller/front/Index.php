@@ -282,7 +282,7 @@ class Index extends Controller
         }
     }*/
     public function addorder(){
-         dump(Request::param());
+         //dump(Request::param());
         if(Request::isPost()){
             //$r兑换码本身信息
             $r=Db::table('sw_codedetail')->where('number',input('codenumber'))->find();
@@ -326,7 +326,7 @@ class Index extends Controller
                                     $insertdata['orderaddress']='';
                                 }
                                 else{
-                                    $insertdata['takeself']=2;
+                                    $insertdata['type']=2;
                                     $insertdata['orderaddress']=input('orderaddress');
                                 }
                                 //$insertdata['create_time']=date_create()->format('Y-m-d H:i:s');
@@ -376,7 +376,6 @@ class Index extends Controller
 
         }
     }
-
     public function singleexchange(){
 
         if(Request::param('id')){
@@ -427,8 +426,6 @@ class Index extends Controller
         $this->assign('indate',$indate);
         return $this->fetch("searchcode");
     }
-
-
     public function dealorder(){
 
 }
