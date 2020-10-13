@@ -1,0 +1,103 @@
+﻿{layout name="frontlayout2" /}
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style type="text/css">
+    .m_image{width: 100%}
+    .carousel-control.left {
+        background-image:none;
+        background-repeat: repeat-x;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#80000000', endColorstr='#00000000', GradientType=1);
+    }
+    .carousel-control.right {
+        left: auto; right: 0;
+        background-image:none;
+        background-repeat: repeat-x;
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#80000000', GradientType=1)
+    }
+    #content img{width: 100%;}
+    #content p{font-size: 12px;text-indent: 2em}
+</style>
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel" >
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        {empty name="pimage"}
+                <li data-target="#carousel-example-generic" data-slide-to="0"  class="active"</li>
+        {else /}
+
+                {volist name="pimage" id="vo" key="k"}
+                <li data-target="#carousel-example-generic" data-slide-to="{$k-1}"{eq name="k" value="1"} class="active" {/eq}</li>
+                {/volist}
+        {/empty}
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" role="listbox">
+        {empty name="pimage"}
+                <div class="item active">
+                <a href="#" ><img class="m_image" src="__UPLOADS__/productimage/noimage.jpg" alt=""></a>
+                </div>
+
+        {else /}
+
+                {volist name="pimage" id="vo2" key="k2"}
+
+                <div class="item{eq name="k2" value="1"} active{/eq}">
+                <a href="#" ><img class="m_image" src="__UPLOADS__{$vo2.image}" alt=""></a>
+                </div>
+               {/volist}
+       {/empty}
+    </div>
+
+
+
+<!-- Controls -->
+<a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+</a>
+<a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+</a>
+</div>
+<script>
+    $(function() {
+        //轮播自动播放事件
+        $(function() {
+            $('#myCarousel').carousel({
+                interval: 2000
+            });
+        })
+    })
+</script>
+
+<div id="detail" class="container-fluid">
+    <div class="row">
+        <h4 class="col-xs-12" style="border-bottom: grey solid 1px;"><span style="background-color: orangered;color:white;padding: 3px 3px 0px 3px">产品详情</span><span style="font-size: 20px;text-decoration:line-through;color:red;display: block;float: right"><b>¥{$pdata.price}元</b></span></h4>
+        <div class="col-xs-4" style="margin-top: 2px;"><span style="background-color: orangered;color:white;padding: 3px 3px 0px 3px">产品名称：</span></div><div class="col-xs-8 pull-left" style="margin-top: 2px;padding-left: 0px;" >{$pdata.name}</div>
+        <div class="col-xs-4" style="margin-top: 2px;"><span style="background-color: orangered;color:white;padding: 3px 3px 0px 3px">加工原料：</span></div><div class="col-xs-8" style="margin-top: 2px;padding-left: 0px;">{$pdata.material}</div>
+        <div class="col-xs-4" style="margin-top: 2px;"><span style="background-color: orangered;color:white;padding: 3px 3px 0px 3px">可&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp选：</span></div><div class="col-xs-8" style="margin-top: 2px;padding-left: 0px;">{$pdata.freeoption1} {$pdata.freeoption2}</div>
+        <div class="col-xs-4" style="margin-top: 2px;"><span style="background-color: orangered;color:white;padding: 3px 3px 0px 3px">加工原料：</span></div><div class="col-xs-8" style="margin-top: 2px;padding-left: 0px;">{$pdata.material}</div>
+        <div class="col-xs-4" style="margin-top: 2px;"><span style="background-color: orangered;color:white;padding: 3px 3px 0px 3px">价&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp格：</span></div>
+        <div class="col-xs-8" style="margin-top: 2px;padding-left: 0px;">
+            {volist name="$pdata.pricesystem" id="vo"}
+            <h5 style="margin-top: 0px;">{$vo[0]} 原价：<span style="text-decoration:line-through;width: 100px;">{$vo[1]}元</span> <span style="color:red;font-size: 15px;">优惠价：{$vo[2]}元</h5>
+            {/volist}
+        </div>
+
+        <div class="col-xs-4" style="margin-top: 2px;"><span style="background-color: orangered;color:white;padding: 3px 3px 0px 3px">简&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp介：</span></div>
+        <div class="col-xs-8" style="margin-top: 2px;padding-left: 0px;">{$pdata.introduce}</div>
+        <div class="col-xs-12" style="margin-top: 2px;"><span style="background-color: orangered;color:white;padding: 3px 3px 0px 3px">更&nbsp&nbsp&nbsp多>>：</span></div>
+        <div id="content" class="col-xs-12" style="margin-top: 2px;font-size: 8px;">{$pdata.content|raw}</div>
+
+
+    </div>
+
+</div>
+<p style="text-align: right;padding-right: 20px;">
+
+    <a  style="width:150px;height:40px;" href="{:url('front.index/singleexchange','','')}/id/{$pdata.id}" class="btn btn-danger btn-large">兑  换</a>
+
+</p>
+

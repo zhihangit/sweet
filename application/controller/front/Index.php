@@ -314,8 +314,6 @@ class Index extends Controller
                                 $insertdata['dealstorep_id'] = Db::table('sw_user')->getFieldById(input('storeid'), 'parent_id');
 
                                 $insertdata['order_time']=date_create()->format('Y-m-d H:i:s');
-                                $insertdata['dispatchname']=input('ordercontact');
-                                $insertdata['dispatchtel']=input('ordertel');
                                 $insertdata['buyermemo']=input('memo');
                                 $insertdata['status']=1;
                                // $insertdata['sellermemo']='';
@@ -323,11 +321,14 @@ class Index extends Controller
                                 if(isset($_POST['takeself']) &&$_POST['takeself'] == '1')
                                 {
                                     $insertdata['type']=1;
-                                    $insertdata['orderaddress']='';
+                                    $insertdata['pickname']=input('ordercontact');
+                                    $insertdata['picktel']=input('ordertel');
                                 }
                                 else{
                                     $insertdata['type']=2;
-                                    $insertdata['orderaddress']=input('orderaddress');
+                                    $insertdata['dispatchname']=input('ordercontact');
+                                    $insertdata['dispatchtel']=input('ordertel');
+                                    $insertdata['dispatchaddress']=input('orderaddress');
                                 }
                                 //$insertdata['create_time']=date_create()->format('Y-m-d H:i:s');
                                  $arroder=explode(",",$sorder[0]);
@@ -413,10 +414,13 @@ class Index extends Controller
     public function searchcode(){
 
         $code=trim(input("codenumber"));
+        if($code=='' or  empty($code)){
+            $this->error("请输入兑换码信息，再查询",'front.index/index');
+        }
         $sql="select a.*,b.company from sw_neworder a left join sw_userinfo b on a.dealstore_id=b.user_id where a.codenumber='$code' order by a.create_time desc ";
         $datainfo=Db::query($sql);
         if(!$datainfo){
-            $this->error("没有该兑换码信息，请重新确认");
+            $this->error("没有该兑换码信息，请重新确认",'front.index/index');
         }
         $this->assign('datainfo',$datainfo);
         $ye=Db::table("sw_codedetail")->getFieldByNumber($code,"balance");
@@ -451,6 +455,19 @@ class Index extends Controller
 
 
 }
+    public function nostoreidproductdetail(){
+
+        $aid=input("aid");
+        $pdata=Db::table("sw_product")->where('id',$aid)->find();
+        $pimage=Db::table("sw_productimage")->where('product_id',$aid)->select();
+        $pdata['pricesystem']=explode('|',$pdata["pricesystem"]);
+        foreach ($pdata['pricesystem'] as $key=>$value){
+            $pdata['pricesystem'][$key]= explode('/',$value);
+        }
+        $this->assign("pdata",$pdata);
+        $this->assign("pimage",$pimage);
+        return $this->fetch("nostoreidproductdetail");
+    }
     public function demo()
     {
         //echo md5('987001');

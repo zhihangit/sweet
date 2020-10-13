@@ -1563,10 +1563,11 @@ class Home extends Controller
     }
     public function dealneworder(){
 
-
+        if(!Request::isPost()){
+            $this->error('无法处理订单');
+        }
         $newdata=Request::param();
         //dump($newdata);
-      // die('');
         $newdata["deal_time"]=date('Y-m-d h:i:s', time());
 
         $order=Neworder::get(input('id'));
@@ -1580,8 +1581,10 @@ class Home extends Controller
             $companyname=Db::table('sw_userinfo')->getFieldByUser_id(input('deal_user'),'company');
             $newdata['pickplace']=$companyname;
         }
-
+       // dump($newdata);
+        //die('stop');
         $res=$order->save($newdata);
+
         if($res){
             $codenumber=Db::table('sw_neworder')->getFieldById($order['id'], 'codenumber');
             $ye=Db::table('sw_codedetail')->getFieldByNumber($codenumber, 'balance');
@@ -1590,12 +1593,24 @@ class Home extends Controller
                 ->where('number', $codenumber)
                 ->data(['balance' => $ye])
                 ->update();
+
             $this->success('订单处理成功','back.home/patchorder');
         }else{
             $this->error('订单处理失败');
         }
 
     }
-
-
+    public function checkneworder()
+    {
+        if (Request::isPost() or Request::isGet()) {
+            $id = input("id");
+            $checkdata = Db::table('sw_neworder')->field('id,type,dispatchname,dispatchtel,dispatchname,dispatchaddress,pickname,picktel')->where('id', $id)->find();
+            foreach ( $checkdata as $key => $value ) {
+                $checkdata[$key] = urlencode ( $value );
+            }
+            echo urldecode (json_encode ($checkdata));
+           // $str = json_encode($checkdata);
+            //echo $str;
+        }
+    }
     }
