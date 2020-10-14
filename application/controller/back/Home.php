@@ -648,7 +648,7 @@ class Home extends Controller
         $p = Product::get($id);
         $p->del_flag = '1';
         $r=$p->save();
-        echo $p->getlastsql();
+        //echo $p->getlastsql();
         //die('stop');
         if($r){
             $this->success('删除成功','back.home/productmanage');
