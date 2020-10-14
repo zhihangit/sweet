@@ -441,7 +441,7 @@ class Index extends Controller
         $id=Db::table("sw_storeproduct")->getFieldById($aid,'product_id');
         $pdata=Db::table("sw_product")->where('id',$id)->find();
         //$pimage=Db::table("sw_productimage")->where('product_id',$id)->select();
-        $pimage=Db::table("sw_productimage")->where('product_id',$id)->select();
+        $pimage=Db::table("sw_productimage")->where('product_id',$id)->order('id')->select();
         $pdata['pricesystem']=explode('|',$pdata["pricesystem"]);
         foreach ($pdata['pricesystem'] as $key=>$value){
             $pdata['pricesystem'][$key]= explode('/',$value);
@@ -459,7 +459,7 @@ class Index extends Controller
 
         $aid=input("aid");
         $pdata=Db::table("sw_product")->where('id',$aid)->find();
-        $pimage=Db::table("sw_productimage")->where('product_id',$aid)->select();
+        $pimage=Db::table("sw_productimage")->where('product_id',$aid)->order('id')->select();
         $pdata['pricesystem']=explode('|',$pdata["pricesystem"]);
         foreach ($pdata['pricesystem'] as $key=>$value){
             $pdata['pricesystem'][$key]= explode('/',$value);
