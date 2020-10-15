@@ -66,5 +66,31 @@
 
     });
 </script>
+
+<div style="text-align: center;">
+               <h3 style="text-align: center">图片管理</h3>
+
+                    <table style="text-align: center;width: 60%;margin:10px auto;" >
+                        <thead  >
+                        <tr>
+                            <th  style="text-align: center;border-bottom:1px solid;black;">序号</th>
+                            <th  style="text-align: center;border-bottom:1px solid;black;">图片</th>
+                            <th style="text-align: center;border-bottom:1px solid;black;">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {volist name="imgdata" id="vo" key="k"}
+                        <tr>
+                            <td scope="row" style="border-bottom:1px solid;black;">{$k}</td>
+                            <td style="border-bottom:1px solid;black;"><img src="__UPLOADS__/{$vo.image}" alt="..." class="img-rounded" style="width: 60px;height: 60px;"></td>
+                            <td style="border-bottom:1px solid;black;">
+                                <a href="{:url('back.home/deleproductimg','','')}/id/{$vo.id}.html">删除</a>
+                            </td>
+                        </tr>
+                        {/volist}
+                        </tbody>
+                    </table>
+</div>
+
 </body>
 </html>

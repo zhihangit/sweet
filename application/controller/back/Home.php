@@ -711,7 +711,11 @@ class Home extends Controller
             }
         }
     public function uploadimage(){
+        $imgdata=Db::table("sw_productimage")->where('product_id',input('id'))->order('id')->select();
+        //dump($imgdata);
+        $this->assign('imgdata',$imgdata);
         $this->assign('prodcutid',input('id'));
+
         return $this->fetch('uploadimage');
         }
     public function douploadimage()
