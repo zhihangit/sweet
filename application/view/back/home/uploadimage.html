@@ -16,7 +16,7 @@
 <!--    <script type="text/javascript" src="__PUBLIC__/plug/manyupload/demo.js"></script>-->
 </head>
 <body>
-<h1 style="text-align:center;color:red">商品:{$Request.param.name} 图片上传</h1>
+<h1 style="text-align:center;color:red">商品:{$Request.param.name} 轮播图片上传</h1>
 <input    type="hidden" value="{:url('back.home/douploadimage','','')}/id/{$prodcutid}" id="actionurl">
 <div id="demo" class="demo"></div>
 <script type="text/javascript">
@@ -60,6 +60,8 @@
             },
             onComplete: function(response){           	  // 上传完成的回调方法
                 console.info("文件上传完成");
+
+                window.location.reload();
                 console.info(response);
             }
         });
@@ -68,9 +70,9 @@
 </script>
 
 <div style="text-align: center;">
-               <h3 style="text-align: center">图片管理</h3>
+               <h3 style="text-align: center">轮播图片管理</h3>
 
-                    <table style="text-align: center;width: 60%;margin:10px auto;" >
+                    <table style="text-align: center;width: 35%;margin:10px auto;" >
                         <thead  >
                         <tr>
                             <th  style="text-align: center;border-bottom:1px solid;black;">序号</th>
@@ -81,9 +83,9 @@
                         <tbody>
                         {volist name="imgdata" id="vo" key="k"}
                         <tr>
-                            <td scope="row" style="border-bottom:1px solid;black;">{$k}</td>
-                            <td style="border-bottom:1px solid;black;"><img src="__UPLOADS__/{$vo.image}" alt="..." class="img-rounded" style="width: 60px;height: 60px;"></td>
-                            <td style="border-bottom:1px solid;black;">
+                            <td scope="row" style="border-bottom:1px solid black;">{$k}</td>
+                            <td style="border-bottom:1px solid black"><img   src="__UPLOADS__/{$vo.image}" alt="..." class="img-rounded" style="width: 100px;height: 100px;"></td>
+                            <td style="border-bottom:1px solid black">
                                 <a href="{:url('back.home/deleproductimg','','')}/id/{$vo.id}.html">删除</a>
                             </td>
                         </tr>

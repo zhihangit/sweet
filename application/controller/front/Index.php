@@ -16,10 +16,29 @@ class Index extends Controller
         $vender=User::with('Userinfo')->where($con)->select();
         //dump($vender);
         $this->assign('vender', $vender);
-        $sql="select * from sw_product where main_flag=1 and del_flag=0 order by create_time desc ";
+        $sql="select a.*,b.company from sw_product a  left join sw_userinfo b on a.user_id=b.user_id where a.main_flag=1 and a.del_flag=0 order by a.create_time desc ";
+        $res=Db::query($sql);
 
-        $product=Db::query($sql);
-        $this->assign('product',$product);
+        foreach ($res as $key=> $value){
+            //echo  $res[$key]["pricesystem"];
+            $free=explode("/",$value["freeoption1"]);
+            $res[$key]["freeoption1"]=$free;
+            $free=explode("/",$value["freeoption2"]);
+            $res[$key]["freeoption2"]=$free;
+            //echo count($res[$key]["freeoption2"]);
+            $dp=explode("|",$value["pricesystem"]);
+            $dpinf = (array) null;
+
+            foreach ($dp as $key2 =>$value2){
+                $dpinfo[$key2]=explode("/",$value2);
+            }
+            $res[$key]["pricesystem"]=$dpinfo;
+            //dump($dpinfo);
+        }
+        //dump($res);
+        //die('s');
+        $this->assign('product',$res);
+
         return $this->fetch('index');
     }
     public function hello($name = 'ThinkPHP5')
@@ -450,12 +469,10 @@ class Index extends Controller
         $this->assign("pimage",$pimage);
         //dump($pdata);
         return $this->fetch("productdetail");
-
         //dump($pimage);
 
-
 }
-    public function nostoreidproductdetail(){
+    /*public function nostoreidproductdetail(){
 
         $aid=input("aid");
         $pdata=Db::table("sw_product")->where('id',$aid)->find();
@@ -467,7 +484,7 @@ class Index extends Controller
         $this->assign("pdata",$pdata);
         $this->assign("pimage",$pimage);
         return $this->fetch("nostoreidproductdetail");
-    }
+    }*/
     public function demo()
     {
         //echo md5('987001');

@@ -71,7 +71,7 @@
           <div class="col-lg-6">
             <div class="single-menu-product mb-30">
               <div class="menu-product-img">
-                <a href="{:url('front.index/nostoreidproductdetail','','')}/aid/{$vo.id}"><img  height="100" width="100" alt="" src="__UPLOADS__/{$vo.mainimage}"></a>
+                <a href="{:url('front.index/productdetail','','')}/aid/{$vo.id}/s/1/foot/1"><img  height="100" width="100" alt="" src="__UPLOADS__/{$vo.mainimage}"></a>
               </div>
               <div class="menu-product-content">
                 <div class="menu-title-price">
@@ -82,13 +82,15 @@
                   </div>
                   <div class="menu-price">￥
 
-                    <span style="text-decoration:line-through;width: 100px;">{$vo.price}</span>
+                    <span style="text-decoration:line-through;width: 100px;color:black;font-size: 14px;">{$vo.price}元</span>
+                    <span style="font-size: 15px;">/优惠价:{$vo.pricesystem[0][2]}元</span>
                   </div>
                 </div>
                 <p>{$vo.introduce}</p>
+                <p style="font-size: 13px;">品牌：<span style="background-color: darkred;color:white;">&nbsp&nbsp&nbsp{$vo.company}&nbsp&nbsp&nbsp</span></p>
                 <p style="font-size: 12px;">原材料：{$vo.material}</p>
                 <p style="font-size: 12px;"><a class="btn btn-danger" href="{:url('front.index/singleexchange','','')}/id/{$vo.id}" role="button">兑 换</a></p>
-                <p style="text-align: right;font-size: 14px;"><a href="{:url('front.index/nostoreidproductdetail','','')}/aid/{$vo.id}">>>查看详情</a></p>
+                <p style="text-align: right;font-size: 14px;"><a href="{:url('front.index/productdetail','','')}/aid/{$vo.id}/s/1/foot/1">>>查看详情</a></p>
               </div>
             </div>
           </div>

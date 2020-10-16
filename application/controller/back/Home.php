@@ -33,6 +33,7 @@ class Home extends Controller
     {
         //echo  "juse test";
         $this->assign('todaytime', time());
+
        // echo  "juse  home test";
 
         return $this->fetch('index');
@@ -744,6 +745,15 @@ class Home extends Controller
             print "上传失败，错误信息如下:\n";
             print_r($_FILES);
         }
+    }
+    public function deleproductimg(){
+        $r=Db::table('sw_productimage')->delete(input('id'));
+        if($r){
+            $this->success('删除成功');
+        }else{
+            $this->error('删除失败');
+        }
+
     }
     public function storemanage(){
 
