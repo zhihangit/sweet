@@ -17,9 +17,9 @@ return [
     // 数据库名
     'database'        => 'sweet',
     // 用户名
-    'username'        => 'root',
+    'username'        => 'legao',
     // 密码
-    'password'        => '987001',
+    'password'        => '5789355sweet',
     // 端口
     'hostport'        => '',
     // 连接dsn

@@ -19,6 +19,9 @@ class Demo extends Controller
         echo config('__UPLOADS__')."------------------UPLOADS目录</BR>";
         echo config('__IMAGES__')."------------------IMAGES目录</BR>";
 
+        echo dirname(__FILE__)."------------------dirname</BR>";
+        echo __FILE__."</BR>";
+echo  __DIR__."</BR>";
         echo __DIR__ . '/../thinkphp/base.php';
         echo date("Y-m-d");
 

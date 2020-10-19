@@ -23,8 +23,8 @@ class Home extends Controller
     ];
     //安全考虑
     protected  function judge(){
-       // if (!isset(cookie('user_name')) or !isset(cookie('user_id')) )
-       if (!isset($_COOKIE['user_name']) or !isset($_COOKIE['user_id']) )
+        // if (!isset(cookie('user_name')) or !isset(cookie('user_id')) )
+        if (!isset($_COOKIE['user_name']) or !isset($_COOKIE['user_id']) )
         {
             $this->redirect(url('back.login/index'));
         }
@@ -34,7 +34,7 @@ class Home extends Controller
         //echo  "juse test";
         $this->assign('todaytime', time());
 
-       // echo  "juse  home test";
+        // echo  "juse  home test";
 
         return $this->fetch('index');
     }
@@ -93,7 +93,7 @@ class Home extends Controller
         $list=User::with('Userinfo')->where($con)->select();
         $this->assign('list',$list);
         //$list= User::with(['Userinfo' => function($query) { $query->field('user_id,company,email');}])->select();
-       // dump($list);
+        // dump($list);
         return $this->fetch('vendermanage');
     }
     public function modivender(){
@@ -107,7 +107,7 @@ class Home extends Controller
             $p['id']=Region::where('id',$user->area)->value('parent_id');
             $p['name']=Region::where('id',$p['id'])->value('name');
             $pp['id']=Region::where('id',$p['id'])->value('parent_id');
-           // $pp['name']=Region::where('id',$p['id'])->value('name');
+            // $pp['name']=Region::where('id',$p['id'])->value('name');
 
             $region = Db::name('region')->where(['level_type' => 1])->select();
             $this->assign('userareaname',$userareaname);
@@ -135,7 +135,7 @@ class Home extends Controller
             $flag=true;//设置密码保留标志
             $modidata['userpwd']=Db::table('sw_user')->getFieldById(input('userid'), 'userpwd');
         }
-       // die('stop here');
+        // die('stop here');
         $isfile=$_FILES;
         if($isfile['info_photo']['name']==''){
             $vimage = Db::table('sw_userinfo')->getFieldByUser_id(input('userid'), 'image');
@@ -143,50 +143,50 @@ class Home extends Controller
         else{
             $file = request()->file('info_photo');
             // 移动到框架应用根目录/uploads/ 目录下
-            $info = $file->move( '../uploads');
+            $info = $file->move( './uploads');
             if($info){
                 $vimage=$info->getSaveName();
             }else
-                { $this->error('图片上传失败！');}
+            { $this->error('图片上传失败！');}
         }
         if(Request::isPost()){
-        $validate = new \app\validate\back\Vuser;
-        if (!$validate->check($modidata)) {
-            dump($validate->getError());
-        }else{
-            $user = User::get($modidata['userid']);
-            $user->username=$modidata['username'];
-            if(cookie('limite')==2){
-                $modidata['limite']=3;
-            }
-            $user->limite= $modidata['limite'];//品牌店仅可以添加门店
-            if($flag==false){
-                $user->userpwd=md5($modidata['userpwd']);
-            }
-            $user->userinfo->adword=input('adword');
-            $user->userinfo->email=input('email');
-            $user->userinfo->company=input('company');
-            $user->userinfo->address=input('address');
-            $user->userinfo->image=$vimage;
-// 更新当前模型及关联模型
-            $res=$user->together('userinfo')->save();
-            if($res){
-
-                $this->success('修改成功', 'back.home/vendermanage');
+            $validate = new \app\validate\back\Vuser;
+            if (!$validate->check($modidata)) {
+                dump($validate->getError());
             }else{
-                $this->error('修改失败');
-            }
-        }
+                $user = User::get($modidata['userid']);
+                $user->username=$modidata['username'];
+                if(cookie('limite')==2){
+                    $modidata['limite']=3;
+                }
+                $user->limite= $modidata['limite'];//品牌店仅可以添加门店
+                if($flag==false){
+                    $user->userpwd=md5($modidata['userpwd']);
+                }
+                $user->userinfo->adword=input('adword');
+                $user->userinfo->email=input('email');
+                $user->userinfo->company=input('company');
+                $user->userinfo->address=input('address');
+                $user->userinfo->image=$vimage;
+// 更新当前模型及关联模型
+                $res=$user->together('userinfo')->save();
+                if($res){
 
-    }else
-    {
-        $this->error('非法操作');
-    }
+                    $this->success('修改成功', 'back.home/vendermanage');
+                }else{
+                    $this->error('修改失败');
+                }
+            }
+
+        }else
+        {
+            $this->error('非法操作');
+        }
 
 
     }
     public function addvender(){
-      if (Request::isPost()) {
+        if (Request::isPost()) {
             $data = Request::param();
             $id = $data['pro_id'];
             $region = Db::name('region')->where(['parent_id' => $id])->select();
@@ -203,67 +203,67 @@ class Home extends Controller
         $this->assign('region', $region);
 
         return $this->fetch('addvender');
-          }
+    }
     public function doaddvender()
-      {
+    {
         if(Request::isPost())
+        {
+            $validate = new \app\validate\back\Vuser;
+            if (!$validate->check(Request::param()))
             {
-                 $validate = new \app\validate\back\Vuser;
-                 if (!$validate->check(Request::param()))
-                    {
-                           dump($validate->getError());
-                    }else
-                        {
-                                $userdata=Request::param();
-                                $userdata['parent_id']=cookie('user_id');
-                                $userdata['userpwd']=md5(input('userpwd'));
-                                if(cookie('user_limite')==2){
-                                $userdata['limite']=3;
-                                }
-                                //dump($userdata);
-                                //die('stop');
-                                $file = request()->file('info_photo');
-                              // 移动到框架应用根目录/uploads/ 目录下
-                                 $info = $file->move( '../uploads');
-                                if($info){
-                                             $userdata['image']=$info->getSaveName();
-                                         }else
-                                             { $this->error('图片上传失败！');}
+                dump($validate->getError());
+            }else
+            {
+                $userdata=Request::param();
+                $userdata['parent_id']=cookie('user_id');
+                $userdata['userpwd']=md5(input('userpwd'));
+                if(cookie('user_limite')==2){
+                    $userdata['limite']=3;
+                }
+                //dump($userdata);
+                //die('stop');
+                $file = request()->file('info_photo');
+                // 移动到框架应用根目录/uploads/ 目录下
+                $info = $file->move( './uploads');
+                if($info){
+                    $userdata['image']=$info->getSaveName();
+                }else
+                { $this->error('图片上传失败！');}
 
-                                $mod = new User();
-                                //品牌店仅可以添加门店
+                $mod = new User();
+                //品牌店仅可以添加门店
 
-                                $modinfo=new Userinfo();
-                                $modinfo->adword=$userdata['adword'];
-                                $modinfo->email=$userdata['email'];
-                                $modinfo->address=$userdata['address'];
-                                $modinfo->company=$userdata['company'];
-                                $modinfo->image=$userdata['image'];
-                                $modinfo->contact=$userdata['contact'];
-                                $modinfo->tel=$userdata['tel'];
-                                $modinfo->latitude=$userdata['latitude'];
-                                $modinfo->longitude=$userdata['longitude'];
+                $modinfo=new Userinfo();
+                $modinfo->adword=$userdata['adword'];
+                $modinfo->email=$userdata['email'];
+                $modinfo->address=$userdata['address'];
+                $modinfo->company=$userdata['company'];
+                $modinfo->image=$userdata['image'];
+                $modinfo->contact=$userdata['contact'];
+                $modinfo->tel=$userdata['tel'];
+                $modinfo->latitude=$userdata['latitude'];
+                $modinfo->longitude=$userdata['longitude'];
 
-                                $mod->userinfo=$modinfo;
-                                $a=$mod->allowField(['username','userpwd','limite','area','parent_id'])->together('userinfo')->save($userdata);
+                $mod->userinfo=$modinfo;
+                $a=$mod->allowField(['username','userpwd','limite','area','parent_id'])->together('userinfo')->save($userdata);
 
-                                if(false === $a){
-                                    // 验证失败 输出错误信息
-                                    dump($mod->getError());
-                                    die;
-                                }else
-                                {
-                                    //die('stop here');
-                                    //echo $mod->id;
-                                    //sleep("6");
-                                    $this->success('新增成功', 'back.home/vendermanage');
-                                }
-                                 }
+                if(false === $a){
+                    // 验证失败 输出错误信息
+                    dump($mod->getError());
+                    die;
+                }else
+                {
+                    //die('stop here');
+                    //echo $mod->id;
+                    //sleep("6");
+                    $this->success('新增成功', 'back.home/vendermanage');
+                }
+            }
 
         }else
-            {
-                $this->error('非法操作');
-             }
+        {
+            $this->error('非法操作');
+        }
 
 
 
@@ -276,7 +276,7 @@ class Home extends Controller
             //Userinfo::destroy($delid);
 
             $data = User::get($delid,'userinfo');
-             // 删除当前及关联模型
+            // 删除当前及关联模型
             $data->together('userinfo')->delete();
             //die('stop here');
             $this->success('删除成功', 'back.home/vendermanage');
@@ -285,7 +285,7 @@ class Home extends Controller
         }
     }
     public function codemanage(){
-         $list = Code::withJoin([
+        $list = Code::withJoin([
             'client'    =>  ['id', 'companyname']
         ],'LEFT')->order('create_time desc')->select();
         $this->assign('list',$list);
@@ -317,18 +317,18 @@ class Home extends Controller
 
                     $file = request()->file('contract');
                     // 移动到框架应用根目录/uploads/ 目录下
-                    $info = $file->move( '../uploads');
+                    $info = $file->move( './uploads');
 
                     if($info){
                         $userdata['contract']=$info->getSaveName();
                     }else
-                       { $this->error('合同上传失败！');}
-                    }
+                    { $this->error('合同上传失败！');}
+                }
 
                 $userdata['status']=1;
                 $mod = new Code();
                 //dump($userdata);
-               //die('stop!');
+                //die('stop!');
                 $a=$mod->save($userdata);
                 $maxid=$mod->id;
                 if(false === $a){
@@ -349,7 +349,7 @@ class Home extends Controller
 
                         //echo "数字是：$x <br>";
 
-                         }
+                    }
                     $this->success('新增批次消费码成功', 'back.home/codemanage');
                 }
             }
@@ -370,7 +370,7 @@ class Home extends Controller
             $code->status= 3;
             $code->save();
             //echo $code->getLastSql();
-           // die('stop here');
+            // die('stop here');
             $this->success('改批次已作废', 'back.home/codemanage');
         } else {
             $this->error('非法操作');
@@ -404,95 +404,95 @@ class Home extends Controller
             $this->error('已激活或作废批次无法进行修改！');
         }
 
-        }
+    }
     public function domodicode(){
-            $isfile=$_FILES;
-            $userdata=Request::param();
-            if(Request::isPost())
+        $isfile=$_FILES;
+        $userdata=Request::param();
+        if(Request::isPost())
+        {
+            $validate = new \app\validate\back\Vcode;
+            if (!$validate->check(Request::param()))
             {
-                $validate = new \app\validate\back\Vcode;
-                if (!$validate->check(Request::param()))
-                {
-                    dump($validate->getError());
-                }else
-                {
-                    if($isfile['contract']['name']==''){
-                        $userdata['contract']=Db::table('sw_code')->getFieldById(input('id'), 'contract');
-                    }else{
-
-                        $file = request()->file('contract');
-                        // 移动到框架应用根目录/uploads/ 目录下
-                        $info = $file->move( '../uploads');
-
-                        if($info){
-                            $userdata['contract']=$info->getSaveName();
-                        }else
-                        { $this->error('合同上传失败！');}
-                    }
-
-                    $userdata['status']=1;
-                    $mod = Code::get(input('id'));
-                    $a=$mod->save($userdata);
-                    //dump($userdata);
-                    //die('stop !');
-                    if(false === $a){
-                        // 验证失败 输出错误信息
-                        dump($mod->getError());
-                        die;
-                    }else
-                    {
-                        $b=input('amount');
-                        $balance=$userdata['price'];
-                        //Db::table('think_user')->where('id',1)->delete();
-                        Db::table('sw_codedetail')->where('code_id',input('id'))->delete();
-                        //die('stop!!');
-                        for ($x=0; $x<$b; $x++) {
-                            $number= getrandstr1(8);
-                            $proof=getrandstr2();
-                            $codedata = ['code_id' => input('id'), 'number' =>$number,'proof'=>$proof,'balance'=>$balance,'create_time'=>date('Y-m-d H:i:s',time())];
-                            Db::table('sw_codedetail')
-                                ->data($codedata)
-                                ->insert();
-
-
-                        }
-                        $this->success('修改成功', 'back.home/codemanage');
-                    }
-                }
-
+                dump($validate->getError());
             }else
             {
-                $this->error('非法操作');
+                if($isfile['contract']['name']==''){
+                    $userdata['contract']=Db::table('sw_code')->getFieldById(input('id'), 'contract');
+                }else{
+
+                    $file = request()->file('contract');
+                    // 移动到框架应用根目录/uploads/ 目录下
+                    $info = $file->move( './uploads');
+
+                    if($info){
+                        $userdata['contract']=$info->getSaveName();
+                    }else
+                    { $this->error('合同上传失败！');}
+                }
+
+                $userdata['status']=1;
+                $mod = Code::get(input('id'));
+                $a=$mod->save($userdata);
+                //dump($userdata);
+                //die('stop !');
+                if(false === $a){
+                    // 验证失败 输出错误信息
+                    dump($mod->getError());
+                    die;
+                }else
+                {
+                    $b=input('amount');
+                    $balance=$userdata['price'];
+                    //Db::table('think_user')->where('id',1)->delete();
+                    Db::table('sw_codedetail')->where('code_id',input('id'))->delete();
+                    //die('stop!!');
+                    for ($x=0; $x<$b; $x++) {
+                        $number= getrandstr1(8);
+                        $proof=getrandstr2();
+                        $codedata = ['code_id' => input('id'), 'number' =>$number,'proof'=>$proof,'balance'=>$balance,'create_time'=>date('Y-m-d H:i:s',time())];
+                        Db::table('sw_codedetail')
+                            ->data($codedata)
+                            ->insert();
+
+
+                    }
+                    $this->success('修改成功', 'back.home/codemanage');
+                }
             }
 
-
-
+        }else
+        {
+            $this->error('非法操作');
         }
+
+
+
+    }
     public function out(){
         require_once Env::get('ROOT_PATH').'public/static/PHPExcel/Classes/PHPExcel.php';
         require_once Env::get('ROOT_PATH').'public/static/PHPExcel/Classes/PHPExcel/IOFactory.php';
-         //导出
-         $path = dirname(__FILE__); //找到当前脚本所在路径
-         $objPHPExcel = new \PHPExcel();
-         $objWriter = new \PHPExcel_Writer_Excel5($objPHPExcel);
-         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+        //导出
+        $path = dirname(__FILE__); //找到当前脚本所在路径
+        $objPHPExcel = new \PHPExcel();
+        $objWriter = new \PHPExcel_Writer_Excel5($objPHPExcel);
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
 
 
-         // 实例化完了之后就先把数据库里面的数据查出来
-         $sql =Db::table('sw_codedetail')
-             ->where('code_id',input('id'))
+        // 实例化完了之后就先把数据库里面的数据查出来
+        $sql =Db::table('sw_codedetail')
+            ->where('code_id',input('id'))
 
-             ->select();
+            ->select();
 
-         // 设置表头信息
-         $objPHPExcel->setActiveSheetIndex(0)
-             ->setCellValue('A1', '序号')
-             ->setCellValue('B1', '批次号	')
-             ->setCellValue('C1', '兑换码')
-             ->setCellValue('D1', '验证码')
-             ->setCellValue('E1', '余额')
-             ->setCellValue('F1', '创建时间');
-         /*--------------开始从数据库提取信息插入Excel表中------------------*/
+        // 设置表头信息
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A1', '序号')
+            ->setCellValue('B1', '批次号  ')
+            ->setCellValue('C1', '兑换码')
+            ->setCellValue('D1', '验证码')
+            ->setCellValue('E1', '余额')
+            ->setCellValue('F1', '创建时间');
+        /*--------------开始从数据库提取信息插入Excel表中------------------*/
 
         $i=2;  //定义一个i变量，目的是在循环输出数据是控制行数
         $count = count($sql);  //计算有多少条数据
@@ -530,20 +530,20 @@ class Home extends Controller
     }
     public function doaddclient(){
         $userdata=Request::param();
-       // dump($userdata);
+        // dump($userdata);
         if(Request::isPost())
         {
-                $client=new Client();
+            $client=new Client();
 
-                $a=$client->allowField(true)->save($userdata);
+            $a=$client->allowField(true)->save($userdata);
 
-                if(false === $a){
-                    dump($mod->getError());
-                    die;
-                }else
-                {
-                    $this->success('新增客户成功', 'back.home/clientmanage');
-                }
+            if(false === $a){
+                dump($mod->getError());
+                die;
+            }else
+            {
+                $this->success('新增客户成功', 'back.home/clientmanage');
+            }
 
 
         }else
@@ -582,7 +582,7 @@ class Home extends Controller
         //dump($list);
         $this->assign('list',$list);
 
-       return $this->fetch('productmanage');
+        return $this->fetch('productmanage');
     }
     public function addproduct(){
         return $this->fetch('addproduct');
@@ -592,10 +592,10 @@ class Home extends Controller
         //die('s');
         $isfile=$_FILES;
         if($isfile['info_photo']['name']==''){
-                $this->error('添加商品必须上传商品主图');
+            $this->error('添加商品必须上传商品主图');
 
-            }else{
-                if(Request::isPost())
+        }else{
+            if(Request::isPost())
             {
                 $validate = new \app\validate\back\Vproduct;
                 if (!$validate->check(Request::param()))
@@ -613,9 +613,9 @@ class Home extends Controller
                     //die('2 step');
                     $file = request()->file('info_photo');
                     //dump($file);
-                   // die('stop');
+                    // die('stop');
                     // 移动到框架应用根目录/uploads/ 目录下
-                    $info = $file->move( '../uploads');
+                    $info = $file->move( './uploads');
                     if($info){
                         $userdata['mainimage']=$info->getSaveName();
                     }else
@@ -639,7 +639,7 @@ class Home extends Controller
             {
                 $this->error('非法操作');
             }
-            }
+        }
 
 
     }
@@ -672,45 +672,45 @@ class Home extends Controller
             $file = request()->file('info_photo');
 
             // 移动到框架应用根目录/uploads/ 目录下
-            $info = $file->move( '../uploads');
+            $info = $file->move( './uploads');
             if($info){
                 $userdata['mainimage']=$info->getSaveName();
             }else
             { $this->error('图片上传失败！');}}
 
-           if(Request::isPost())
+        if(Request::isPost())
+        {
+            $validate = new \app\validate\back\Vproduct;
+            if (!$validate->check(Request::param()))
             {
-                $validate = new \app\validate\back\Vproduct;
-                if (!$validate->check(Request::param()))
-                {
-                    dump($validate->getError());
-                }else
-                {
-                    $userdata['user_id']=cookie('user_id');
-                    if(isset($userdata['main_flag']))
-                    {
-                        $userdata['main_flag']=1;
-                    }else
-                        {$userdata['main_flag']=0;}
-
-                    $mod = Product::get(input('id'));
-                    $a=$mod->save($userdata);
-
-                    if(false === $a){
-                        // 验证失败 输出错误信息
-                        dump($mod->getError());
-                        die;
-                    }else
-                    {
-                        $this->success('修改成功', 'back.home/productmanage');
-                    }
-                }
-
+                dump($validate->getError());
             }else
             {
-                $this->error('非法操作');
+                $userdata['user_id']=cookie('user_id');
+                if(isset($userdata['main_flag']))
+                {
+                    $userdata['main_flag']=1;
+                }else
+                {$userdata['main_flag']=0;}
+
+                $mod = Product::get(input('id'));
+                $a=$mod->save($userdata);
+
+                if(false === $a){
+                    // 验证失败 输出错误信息
+                    dump($mod->getError());
+                    die;
+                }else
+                {
+                    $this->success('修改成功', 'back.home/productmanage');
+                }
             }
+
+        }else
+        {
+            $this->error('非法操作');
         }
+    }
     public function uploadimage(){
         $imgdata=Db::table("sw_productimage")->where('product_id',input('id'))->order('id')->select();
         //dump($imgdata);
@@ -718,10 +718,10 @@ class Home extends Controller
         $this->assign('prodcutid',input('id'));
 
         return $this->fetch('uploadimage');
-        }
+    }
     public function douploadimage()
     {
-        $uploaddir_true =Env::get('ROOT_PATH'). 'uploads/productimage/';//物理路径
+        $uploaddir_true =Env::get('ROOT_PATH'). 'public/uploads/productimage/';//物理路径
         $uploaddir_data ='/productimage/';//数据库路径
         $name = $_FILES['file']['name'];
         $uploadfile = $uploaddir_true . $name;
@@ -740,7 +740,7 @@ class Home extends Controller
             $data = ['product_id' => input('id'), 'image' => $targetfile_data];
             Db::name('productimage')->strict(false)->insert($data);
             //print "File is valid, and was successfully uploaded.  Here's some more debugging info:\n";
-           // print_r($_FILES);
+            // print_r($_FILES);
         } else {
             print "上传失败，错误信息如下:\n";
             print_r($_FILES);
@@ -804,7 +804,7 @@ class Home extends Controller
                 //die('stop');
                 $file = request()->file('info_photo');
                 // 移动到框架应用根目录/uploads/ 目录下
-                $info = $file->move( '../uploads');
+                $info = $file->move( './uploads');
                 if($info){
                     $userdata['image']=$info->getSaveName();
                 }else
@@ -836,7 +836,7 @@ class Home extends Controller
                 {
                     //die('stop here');
                     //echo $mod->id;
-                      //为本地初始化主店已添加的商品
+                    //为本地初始化主店已添加的商品
                     $cureuserid=$mod->id;
                     $par_id=Db::table('sw_user')->getFieldById($cureuserid,'parent_id');
                     //同步产品种类
@@ -903,7 +903,7 @@ class Home extends Controller
         else{
             $file = request()->file('info_photo');
             // 移动到框架应用根目录/uploads/ 目录下
-            $info = $file->move( '../uploads');
+            $info = $file->move( './uploads');
             if($info){
                 $vimage=$info->getSaveName();
             }else
@@ -965,7 +965,7 @@ class Home extends Controller
         $cureuserid=cookie('user_id');
         $par_id=Db::table('sw_user')->getFieldById($cureuserid,'parent_id');
         //echo $par_id;
-       // $con['user_id']=$par_id;
+        // $con['user_id']=$par_id;
         //同步产品种类
         //$sql="select id as product_id,del_flag,$cureuserid as store_id,price as newprice from sw_product where user_id= $par_id  and id not in (select product_id as id from sw_storeproduct where store_id=$cureuserid)";
         //echo "</br>查询同步产品种类sql</br>".$sql;
@@ -1046,7 +1046,7 @@ class Home extends Controller
                 $this->success('修改成功','back.home/storeproductmanage');
             }else{
                 echo Db::table('sw_storeproduct')->getLastSql();
-               $this->error("修改失败",'back.home/storeproductmanage');
+                $this->error("修改失败",'back.home/storeproductmanage');
             }
         }
 
@@ -1131,41 +1131,41 @@ class Home extends Controller
             $storeid=Request::param('storeid');
             $startrq=Request::param('startrq');
             $endrq=Request::param('endrq');
-             $sql="select a.*,b.company from sw_order a left join sw_userinfo b on a.storeid=b.user_id where date_format(create_time,'%Y-%m-%d') between '$startrq' and '$endrq'";
-             $sql2="select sum(totalnum) as totaldata from sw_order  where date_format(create_time,'%Y-%m-%d') between '$startrq' and '$endrq'";
-             if ($venderid<>'0'){
-                      if($storeid<>'0'){
-                          $sql=$sql." and a.storeid='$storeid'  order by a.storeid,a.create_time desc";
-                          $sql2=$sql2." and storeid='$storeid' ";
-                          $vendername=Db::table("sw_userinfo")->getFieldByUser_id($venderid,'company');
-                          $storename=Db::table("sw_userinfo")->getFieldByUser_id($storeid,'company');
-                          $sqlinfo="下列查询结果条件为："."商家:".$vendername.",分店:".$storename.",日期在".$startrq."---".$endrq."订单数据";
+            $sql="select a.*,b.company from sw_order a left join sw_userinfo b on a.storeid=b.user_id where date_format(create_time,'%Y-%m-%d') between '$startrq' and '$endrq'";
+            $sql2="select sum(totalnum) as totaldata from sw_order  where date_format(create_time,'%Y-%m-%d') between '$startrq' and '$endrq'";
+            if ($venderid<>'0'){
+                if($storeid<>'0'){
+                    $sql=$sql." and a.storeid='$storeid'  order by a.storeid,a.create_time desc";
+                    $sql2=$sql2." and storeid='$storeid' ";
+                    $vendername=Db::table("sw_userinfo")->getFieldByUser_id($venderid,'company');
+                    $storename=Db::table("sw_userinfo")->getFieldByUser_id($storeid,'company');
+                    $sqlinfo="下列查询结果条件为："."商家:".$vendername.",分店:".$storename.",日期在".$startrq."---".$endrq."订单数据";
 
-                      }else{
+                }else{
 
-                          $sql=$sql."and a.storeid in (select id as storeid from sw_user where parent_id='$venderid') order by a.storeid,a.create_time desc";
-                          $sql2=$sql2."and storeid in (select id as storeid from sw_user where parent_id='$venderid')";
-                          $vendername=Db::table("sw_userinfo")->getFieldByUser_id($venderid,'company');
-                          $sqlinfo="下列查询结果条件为："."商家".$vendername."所有分店日期在".$startrq."---".$endrq."订单数据";
-                      }
+                    $sql=$sql."and a.storeid in (select id as storeid from sw_user where parent_id='$venderid') order by a.storeid,a.create_time desc";
+                    $sql2=$sql2."and storeid in (select id as storeid from sw_user where parent_id='$venderid')";
+                    $vendername=Db::table("sw_userinfo")->getFieldByUser_id($venderid,'company');
+                    $sqlinfo="下列查询结果条件为："."商家".$vendername."所有分店日期在".$startrq."---".$endrq."订单数据";
+                }
 
 
 
-                    }else{
-                 $sql=$sql." order by a.storeid,a.create_time desc";
-                 $sqlinfo="下列查询结果条件为："."全部商家包括商家分店日期在".$startrq."---".$endrq."订单数据";
+            }else{
+                $sql=$sql." order by a.storeid,a.create_time desc";
+                $sqlinfo="下列查询结果条件为："."全部商家包括商家分店日期在".$startrq."---".$endrq."订单数据";
 
-             }
+            }
 
-             $this->assign('sql',$sql);
-             cookie('user_sql', $sql, 3600); // 一个小时有效期
-             $list=Db::query($sql);
-             $total=Db::query($sql2);
-             $this->assign("list",$list);
+            $this->assign('sql',$sql);
+            cookie('user_sql', $sql, 3600); // 一个小时有效期
+            $list=Db::query($sql);
+            $total=Db::query($sql2);
+            $this->assign("list",$list);
             // echo $total[0]['totaldata'];
-             $this->assign("total",$total[0]['totaldata']);
-             $this->assign('sqlinfo',$sqlinfo);
-         }else{
+            $this->assign("total",$total[0]['totaldata']);
+            $this->assign('sqlinfo',$sqlinfo);
+        }else{
 
             $this->assign('sql','sql empty');
         }
@@ -1210,7 +1210,7 @@ class Home extends Controller
         $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('A1', '序号')
             ->setCellValue('B1', '订单号')
-            ->setCellValue('C1', '下单日期	')
+            ->setCellValue('C1', '下单日期  ')
             ->setCellValue('D1', '订单明细')
             ->setCellValue('E1', '兑换金额')
             ->setCellValue('F1', '提货方式：1自提0配送')
@@ -1250,136 +1250,136 @@ class Home extends Controller
     }
     public  function patchorder(){
         //die("stop");
-    $userid=cookie('user_id');
-    if(cookie('user_limite')==1){
-        $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='2'";
-        $vender=Db::query($sql);
-        $this->assign('vender',$vender);
-    }
-    if(cookie('user_limite')==2){
-        $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='2' and a.id=$userid";
-        $vender=Db::query($sql);
-        $this->assign('vender',$vender);
-
-        $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='3' and a.parent_id=$userid";
-        $store=Db::query($sql);
-        $this->assign('store',$store);
-    }
-    if(cookie('user_limite')==3){
-        $pid=Db::table('sw_user')->getFieldById($userid,'parent_id');
-        $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='2' and a.id=$pid";
-        $vender=Db::query($sql);
-        $this->assign('vender',$vender);
-
-        $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='3' and a.id=$userid";
-        $store=Db::query($sql);
-        $this->assign('store',$store);
-    }
-    if(Request::isPost() or Request::isGet() ){
-        $pageNumber = input('page') ? input('page') : '0';//客户端传过来的分页
-        if($pageNumber > 0){
-            $pageNumber_one = $pageNumber-1;
-        } else {
-            $pageNumber_one = 0;
+        $userid=cookie('user_id');
+        if(cookie('user_limite')==1){
+            $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='2'";
+            $vender=Db::query($sql);
+            $this->assign('vender',$vender);
         }
-        $limit = 10;//每页显示条数
-        $offset = $pageNumber_one * $limit;//查询偏移值
-        $sqlinfo="订单查询条件：";
+        if(cookie('user_limite')==2){
+            $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='2' and a.id=$userid";
+            $vender=Db::query($sql);
+            $this->assign('vender',$vender);
 
-        $order_id=input('order_id') ? input('order_id') : '0';
-        $venderid=input('venderid') ? input('venderid') : '0';
-        $storeid=input('storeid') ? input('storeid') : '0';
-        $type=input('type') ? input('type') : '0';
-        $status=input('status') ? input('status') : '0';
-        $startrq=input('startrq') ? input('startrq') : date("Y-m-d");;
-        $endrq=input('endrq') ? input('endrq') : date("Y-m-d");;
-
-
-        /*$order_id=Request::param('order_id');
-        $venderid=Request::param('venderid');
-        $storeid=Request::param('storeid');
-        $type=Request::param('type');
-        $status=Request::param('status');
-        $startrq=Request::param('startrq');
-        $endrq=Request::param('endrq');*/
-
-        $sql="select a.*,b.company from sw_neworder a left join sw_userinfo b on a.dealstore_id=b.user_id where date_format(create_time,'%Y-%m-%d') between '$startrq' and '$endrq'";
-        $sql2="select sum(total) as totaldata from sw_neworder  where date_format(create_time,'%Y-%m-%d') between '$startrq' and '$endrq'";
-        $sql3="select count(*) as count_num from sw_neworder a left join sw_userinfo b on a.dealstore_id=b.user_id where date_format(create_time,'%Y-%m-%d') between '$startrq' and '$endrq'";
-
-        if($type!='0'){
-            $sql=$sql." and a.type='$type' ";
-            $sql2=$sql2." and type='$type' ";
-            $sql3=$sql3." and type='$type' ";
+            $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='3' and a.parent_id=$userid";
+            $store=Db::query($sql);
+            $this->assign('store',$store);
         }
+        if(cookie('user_limite')==3){
+            $pid=Db::table('sw_user')->getFieldById($userid,'parent_id');
+            $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='2' and a.id=$pid";
+            $vender=Db::query($sql);
+            $this->assign('vender',$vender);
 
-        if($status!='0'){
-            $sql=$sql." and a.status='$status' ";
-            $sql2=$sql2." and status='$status' ";
-            $sql3=$sql3." and status='$status' ";
+            $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='3' and a.id=$userid";
+            $store=Db::query($sql);
+            $this->assign('store',$store);
         }
-
-        if($order_id<>'0'){
-            $sql=$sql." and a.order_id='$order_id' ";
-            $sql2=$sql2." and order_id='$order_id' ";
-            $sql3=$sql3." and order_id='$order_id' ";
-        }
-
-        if ($venderid<>'0'){
-            if($storeid<>'0'){
-                $sql=$sql." and a.dealstore_id='$storeid'  order by a.dealstore_id,a.create_time desc limit $offset,$limit";
-                $sql2=$sql2." and dealstore_id='$storeid' ";
-                $sql3=$sql3." and dealstore_id='$storeid' ";
-                $vendername=Db::table("sw_userinfo")->getFieldByUser_id($venderid,'company');
-                $storename=Db::table("sw_userinfo")->getFieldByUser_id($storeid,'company');
-                $sqlinfo="下列查询结果条件为："."商家:".$vendername.",分店:".$storename.",日期在".$startrq."---".$endrq."订单类型为".$type."状态为".$status."订单号为".$order_id."订单数据（订单类型:0全部1自提2配送；状态:0全面1未发货2已发货3售后中4完成交易）";
-            }else{
-                $sql=$sql."and a.dealstorep_id='$venderid'  order by a.dealstore_id,a.create_time desc limit $offset,$limit";
-                $sql2=$sql2."and dealstorep_id='$venderid'";
-                $sql3=$sql3."and dealstorep_id='$venderid'";
-                $vendername=Db::table("sw_userinfo")->getFieldByUser_id($venderid,'company');
-                $sqlinfo="下列查询结果条件为："."商家".$vendername."所有分店日期在".$startrq."---".$endrq."订单类型为".$type."状态为".$status."订单号为".$order_id."订单数据（订单类型:0全部1自提2配送；状态:0全面1未发货2已发货3售后中4完成交易）";
+        if(Request::isPost() or Request::isGet() ){
+            $pageNumber = input('page') ? input('page') : '0';//客户端传过来的分页
+            if($pageNumber > 0){
+                $pageNumber_one = $pageNumber-1;
+            } else {
+                $pageNumber_one = 0;
             }
+            $limit = 10;//每页显示条数
+            $offset = $pageNumber_one * $limit;//查询偏移值
+            $sqlinfo="订单查询条件：";
+
+            $order_id=input('order_id') ? input('order_id') : '0';
+            $venderid=input('venderid') ? input('venderid') : '0';
+            $storeid=input('storeid') ? input('storeid') : '0';
+            $type=input('type') ? input('type') : '0';
+            $status=input('status') ? input('status') : '0';
+            $startrq=input('startrq') ? input('startrq') : date("Y-m-d");;
+            $endrq=input('endrq') ? input('endrq') : date("Y-m-d");;
+
+
+            /*$order_id=Request::param('order_id');
+            $venderid=Request::param('venderid');
+            $storeid=Request::param('storeid');
+            $type=Request::param('type');
+            $status=Request::param('status');
+            $startrq=Request::param('startrq');
+            $endrq=Request::param('endrq');*/
+
+            $sql="select a.*,b.company from sw_neworder a left join sw_userinfo b on a.dealstore_id=b.user_id where date_format(create_time,'%Y-%m-%d') between '$startrq' and '$endrq'";
+            $sql2="select sum(total) as totaldata from sw_neworder  where date_format(create_time,'%Y-%m-%d') between '$startrq' and '$endrq'";
+            $sql3="select count(*) as count_num from sw_neworder a left join sw_userinfo b on a.dealstore_id=b.user_id where date_format(create_time,'%Y-%m-%d') between '$startrq' and '$endrq'";
+
+            if($type!='0'){
+                $sql=$sql." and a.type='$type' ";
+                $sql2=$sql2." and type='$type' ";
+                $sql3=$sql3." and type='$type' ";
+            }
+
+            if($status!='0'){
+                $sql=$sql." and a.status='$status' ";
+                $sql2=$sql2." and status='$status' ";
+                $sql3=$sql3." and status='$status' ";
+            }
+
+            if($order_id<>'0'){
+                $sql=$sql." and a.order_id='$order_id' ";
+                $sql2=$sql2." and order_id='$order_id' ";
+                $sql3=$sql3." and order_id='$order_id' ";
+            }
+
+            if ($venderid<>'0'){
+                if($storeid<>'0'){
+                    $sql=$sql." and a.dealstore_id='$storeid'  order by a.dealstore_id,a.create_time desc limit $offset,$limit";
+                    $sql2=$sql2." and dealstore_id='$storeid' ";
+                    $sql3=$sql3." and dealstore_id='$storeid' ";
+                    $vendername=Db::table("sw_userinfo")->getFieldByUser_id($venderid,'company');
+                    $storename=Db::table("sw_userinfo")->getFieldByUser_id($storeid,'company');
+                    $sqlinfo="下列查询结果条件为："."商家:".$vendername.",分店:".$storename.",日期在".$startrq."---".$endrq."订单类型为".$type."状态为".$status."订单号为".$order_id."订单数据（订单类型:0全部1自提2配送；状态:0全面1未发货2已发货3售后中4完成交易）";
+                }else{
+                    $sql=$sql."and a.dealstorep_id='$venderid'  order by a.dealstore_id,a.create_time desc limit $offset,$limit";
+                    $sql2=$sql2."and dealstorep_id='$venderid'";
+                    $sql3=$sql3."and dealstorep_id='$venderid'";
+                    $vendername=Db::table("sw_userinfo")->getFieldByUser_id($venderid,'company');
+                    $sqlinfo="下列查询结果条件为："."商家".$vendername."所有分店日期在".$startrq."---".$endrq."订单类型为".$type."状态为".$status."订单号为".$order_id."订单数据（订单类型:0全部1自提2配送；状态:0全面1未发货2已发货3售后中4完成交易）";
+                }
+            }else{
+                $sql=$sql." order by a.dealstore_id,a.create_time desc limit $offset,$limit";
+                $sqlinfo="下列查询结果条件为："."全部商家包括商家分店日期在".$startrq."---".$endrq."订单类型为".$type."状态为".$status."订单号为".$order_id."订单数据（订单类型:0全部1自提2配送；状态:0全面1未发货2已发货3售后中4完成交易）";
+
+            }
+
+            $this->assign('sql',$sql);
+            cookie('user_sql', $sql, 3600); // 一个小时有效期
+            $list=Db::query($sql);
+            $total=Db::query($sql2);
+            $counts = db()->query($sql3);
+            $count = $counts['0']['count_num'];
+            $pagernator = Bootstrap::make($list,$limit,$pageNumber,$count,false,['path'=>Bootstrap::getCurrentPath(),'query'=>request()->param()]);
+            $page = $pagernator->render();
+            // dump($page);
+            $this->assign('page', $page);
+
+            $this->assign("list",$list);
+            // echo $total[0]['totaldata'];
+            $this->assign("total",$total[0]['totaldata']);
+            $this->assign('sqlinfo',$sqlinfo);
         }else{
-            $sql=$sql." order by a.dealstore_id,a.create_time desc limit $offset,$limit";
-            $sqlinfo="下列查询结果条件为："."全部商家包括商家分店日期在".$startrq."---".$endrq."订单类型为".$type."状态为".$status."订单号为".$order_id."订单数据（订单类型:0全部1自提2配送；状态:0全面1未发货2已发货3售后中4完成交易）";
-
+            $this->assign('sql','sql empty');
         }
-
-        $this->assign('sql',$sql);
-        cookie('user_sql', $sql, 3600); // 一个小时有效期
-        $list=Db::query($sql);
-        $total=Db::query($sql2);
-        $counts = db()->query($sql3);
-        $count = $counts['0']['count_num'];
-        $pagernator = Bootstrap::make($list,$limit,$pageNumber,$count,false,['path'=>Bootstrap::getCurrentPath(),'query'=>request()->param()]);
-        $page = $pagernator->render();
-       // dump($page);
-        $this->assign('page', $page);
-
-        $this->assign("list",$list);
-        // echo $total[0]['totaldata'];
-        $this->assign("total",$total[0]['totaldata']);
-        $this->assign('sqlinfo',$sqlinfo);
-    }else{
-        $this->assign('sql','sql empty');
-    }
         return $this->fetch("patchorder");
-}
+    }
     public function addpatchorder(){
-      if(cookie('user_limite')==1){
-          $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='2'";
-          $vender=Db::query($sql);
-          //dump($vender);
-          $this->assign('vender',$vender);
-          $parent_id=$vender[0]['id'];
-          $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='3' and a.parent_id='$parent_id'" ;
-          $store=Db::query($sql);
-          $this->assign('store',$store);
-          //dump($store);
-      }
+        if(cookie('user_limite')==1){
+            $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='2'";
+            $vender=Db::query($sql);
+            //dump($vender);
+            $this->assign('vender',$vender);
+            $parent_id=$vender[0]['id'];
+            $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='3' and a.parent_id='$parent_id'" ;
+            $store=Db::query($sql);
+            $this->assign('store',$store);
+            //dump($store);
+        }
         return $this->fetch("addpatchorder");
-  }
+    }
     public function choosevender2(){
         if (Request::isPost()) {
             $data = Request::param();
@@ -1416,7 +1416,7 @@ class Home extends Controller
 
                     $file = request()->file('info_photo');
                     // 移动到框架应用根目录/uploads/ 目录下
-                    $info = $file->move( '../uploads');
+                    $info = $file->move( './uploads');
 
                     if($info){
                         $orderdata['orderimage']=$info->getSaveName();
@@ -1450,19 +1450,19 @@ class Home extends Controller
         if (Request::has('id')) {
             $delid = input('id');
 
-                $user = Neworder::get($delid);
-                if($user->status!=1){
-                    $this->error('已发货订单不得删除','back.home/patchorder');
+            $user = Neworder::get($delid);
+            if($user->status!=1){
+                $this->error('已发货订单不得删除','back.home/patchorder');
 
+            }else{
+                $user->delete();
+                if($user){
+                    $this->success('删除成功', 'back.home/patchorder');
                 }else{
-                    $user->delete();
-                    if($user){
-                        $this->success('删除成功', 'back.home/patchorder');
-                    }else{
-                        $this->error('删除失败','back.home/patchorder');
-                    }
-
+                    $this->error('删除失败','back.home/patchorder');
                 }
+
+            }
 
 
         } else {
@@ -1494,17 +1494,17 @@ class Home extends Controller
                 $this->error('已发货订单不得修改','back.home/patchorder');
 
             }else{
-            $psid=$orderdata['dealstorep_id'];
-            $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='2'";
-            $venderdata=Db::query($sql);
-           // dump($venderdata);
-            $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.parent_id='$psid'";
-            $storedata=Db::query($sql);
-           // dump($storedata);
-            $this->assign('venderdata',$venderdata);
-            $this->assign('storedata',$storedata);
-            $this->assign('orderdata',$orderdata);
-            return $this->fetch('modipatchorder');}
+                $psid=$orderdata['dealstorep_id'];
+                $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.limite='2'";
+                $venderdata=Db::query($sql);
+                // dump($venderdata);
+                $sql="select a.id,b.company from sw_user a left join sw_userinfo b on a.id=b.user_id where a.parent_id='$psid'";
+                $storedata=Db::query($sql);
+                // dump($storedata);
+                $this->assign('venderdata',$venderdata);
+                $this->assign('storedata',$storedata);
+                $this->assign('orderdata',$orderdata);
+                return $this->fetch('modipatchorder');}
             //echo $pid."$".$ppid;
         }
         else{
@@ -1522,7 +1522,7 @@ class Home extends Controller
         }else{
             $file = request()->file('info_photo');
             // 移动到框架应用根目录/uploads/ 目录下
-            $info = $file->move( '../uploads');
+            $info = $file->move( './uploads');
             if($info){
                 $userdata['orderimage']=$info->getSaveName();
             }else
@@ -1589,13 +1589,13 @@ class Home extends Controller
             $this->error('该订单已完成交易，无法再次处理','back.home/patchorder');
         }
         if($order['status']=='1'){
-              $newdata["status"]='2';
+            $newdata["status"]='2';
         }
         if($order['type']=='1'){
             $companyname=Db::table('sw_userinfo')->getFieldByUser_id(input('deal_user'),'company');
             $newdata['pickplace']=$companyname;
         }
-       // dump($newdata);
+        // dump($newdata);
         //die('stop');
         $res=$order->save($newdata);
 
@@ -1623,8 +1623,8 @@ class Home extends Controller
                 $checkdata[$key] = urlencode ( $value );
             }
             echo urldecode (json_encode ($checkdata));
-           // $str = json_encode($checkdata);
+            // $str = json_encode($checkdata);
             //echo $str;
         }
     }
-    }
+}
