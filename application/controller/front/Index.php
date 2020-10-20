@@ -457,10 +457,17 @@ class Index extends Controller
 
         $aid=input("aid");
         //echo $aid;
-        $id=Db::table("sw_storeproduct")->getFieldById($aid,'product_id');
-        $pdata=Db::table("sw_product")->where('id',$id)->find();
+        if(null!=input("sid") or input("sid")!=''){
+            $id=Db::table("sw_storeproduct")->getFieldById($aid,'product_id');
+            $pdata=Db::table("sw_product")->where('id',$id)->find();
+            $pimage=Db::table("sw_productimage")->where('product_id',$id)->order('id')->select();
+        }else{
+            $pdata=Db::table("sw_product")->where('id',$aid)->find();
+            $pimage=Db::table("sw_productimage")->where('product_id',$aid)->order('id')->select();
+        }
+
         //$pimage=Db::table("sw_productimage")->where('product_id',$id)->select();
-        $pimage=Db::table("sw_productimage")->where('product_id',$id)->order('id')->select();
+        //$pimage=Db::table("sw_productimage")->where('product_id',$id)->order('id')->select();
         $pdata['pricesystem']=explode('|',$pdata["pricesystem"]);
         foreach ($pdata['pricesystem'] as $key=>$value){
             $pdata['pricesystem'][$key]= explode('/',$value);
