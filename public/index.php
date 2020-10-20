@@ -22,5 +22,5 @@ require __DIR__ . '/../thinkphp/base.php';
 // 执行应用并响应
 Container::get('app')->run()->send();
 // 绑定当前访问到index模块的index控制器
-//Container::get('app')->bind('index/index')->run()->send();
+//Container::get('app')->bind('front.index/index')->run()->send();
 

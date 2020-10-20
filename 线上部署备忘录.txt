@@ -1,0 +1,4 @@
+一：入口文件修改：将本地define('SITE_URL', 'http://localhost/sweet/public');改为define('SITE_URL','http://'.$_SERVER['HTTP_HOST']);
+二：将config-app下app_debug和app_trace 改为false
+三：批量更新数据库poduct表中content字段图片路径（update sw_product set content=replace(content,"/sweet/public/ueditor/upload/","/ueditor/upload/")）使图片正常显示
+    同时修改/www/admin/www.legaosweet.cn_80/wwwroot/sweet/public/static/ueditor/php目录下config.json文件，将第12行的图片上传目录修改为"imagePathFormat": "/ueditor/upload/image/{yyyy}{mm}{dd}/{time}{rand:6}",使日后维护时图片能正常上传和数据库信息与目录保持一致。 

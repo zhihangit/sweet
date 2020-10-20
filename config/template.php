@@ -32,6 +32,8 @@ return [
     'taglib_begin' => '{',
     // 标签库标签结束标记
     'taglib_end'   => '}',
+    //runtime缓存开关
+    //'html_cache_on' => false,
     // 模板参数
     'tpl_replace_string' => [ // 视图输出字符串内容替换
         '__PUBLIC__' => SITE_URL,

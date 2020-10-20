@@ -21,6 +21,7 @@ class Demo extends Controller
 
         echo __DIR__ . '/../thinkphp/base.php';
         echo now();
+        echo $_GET['dir'];
 
     }
 

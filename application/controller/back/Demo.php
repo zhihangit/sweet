@@ -20,6 +20,7 @@ class Demo extends Controller
         echo config('__IMAGES__')."------------------IMAGES目录</BR>";
 
         echo dirname(__FILE__)."------------------dirname</BR>";
+        echo $_GET['dir']."------------------getdir</BR>";
         echo __FILE__."</BR>";
 echo  __DIR__."</BR>";
         echo __DIR__ . '/../thinkphp/base.php';
