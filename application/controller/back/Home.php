@@ -128,6 +128,8 @@ class Home extends Controller
     public function domodivender(){
         $flag=false;
         $modidata=Request::param();
+       //dump($modidata);
+       //die('s');
         $modidata['parent_id']=cookie('user_id');
 
         //如果没有设置新密码则保留旧密码
@@ -151,7 +153,7 @@ class Home extends Controller
         }
         if(Request::isPost()){
             $validate = new \app\validate\back\Vuser;
-            if (!$validate->check($modidata)) {
+            if (!$validate->scene('edit')->check($modidata)) {
                 dump($validate->getError());
             }else{
                 $user = User::get($modidata['userid']);
@@ -167,8 +169,16 @@ class Home extends Controller
                 $user->userinfo->email=input('email');
                 $user->userinfo->company=input('company');
                 $user->userinfo->address=input('address');
+                $user->userinfo->company=input('company');
+                $user->userinfo->latitude=input('latitude');
+                $user->userinfo->longitude=input('longitude');
+                $user->userinfo->sdistance=input('sdistance');
+                $user->userinfo->sprice=input('sprice');
+                $user->userinfo->exprice =input('exprice');
                 $user->userinfo->image=$vimage;
 // 更新当前模型及关联模型
+               // dump($user);
+                //die('s');
                 $res=$user->together('userinfo')->save();
                 if($res){
 
@@ -241,8 +251,12 @@ class Home extends Controller
                 $modinfo->image=$userdata['image'];
                 $modinfo->contact=$userdata['contact'];
                 $modinfo->tel=$userdata['tel'];
+                $modinfo->sdistance=$userdata['sdistance'];
+                $modinfo->sprice=$userdata['sprice'];
+                $modinfo->exprice=$userdata['exprice'];
                 $modinfo->latitude=$userdata['latitude'];
                 $modinfo->longitude=$userdata['longitude'];
+
 
                 $mod->userinfo=$modinfo;
                 $a=$mod->allowField(['username','userpwd','limite','area','parent_id'])->together('userinfo')->save($userdata);
@@ -538,7 +552,7 @@ class Home extends Controller
             $a=$client->allowField(true)->save($userdata);
 
             if(false === $a){
-                dump($mod->getError());
+                dump($client->getError());
                 die;
             }else
             {
@@ -895,7 +909,7 @@ class Home extends Controller
             $flag=true;//设置密码保留标志
             $modidata['userpwd']=Db::table('sw_user')->getFieldById(input('userid'), 'userpwd');
         }
-        // die('stop here');
+
         $isfile=$_FILES;
         if($isfile['info_photo']['name']==''){
             $vimage = Db::table('sw_userinfo')->getFieldByUser_id(input('userid'), 'image');
@@ -909,10 +923,13 @@ class Home extends Controller
             }else
             { $this->error('图片上传失败！');}
         }
+        //dump($modidata);
         if(Request::isPost()){
             $validate = new \app\validate\back\Vuser;
-            if (!$validate->check($modidata)) {
+            if (!$validate->scene('edit')->check($modidata)) {
+
                 dump($validate->getError());
+
             }else{
                 $user = User::get($modidata['userid']);
                 $user->username=$modidata['username'];
@@ -924,10 +941,15 @@ class Home extends Controller
                     $user->userpwd=md5($modidata['userpwd']);
                 }
                 $user->userinfo->email=input('email');
-                $modinfo->adword='';
+                //$modinfo->adword='';
                 $user->userinfo->company=input('company');
                 $user->userinfo->address=input('address');
+                $user->userinfo->latitude=input('latitude');
+                $user->userinfo->longitude=input('longitude');
+                //echo "vimage：".$vimage;
                 $user->userinfo->image=$vimage;
+               // dump($user);
+                //die("stop here");
 // 更新当前模型及关联模型
                 $res=$user->together('userinfo')->save();
                 if($res){

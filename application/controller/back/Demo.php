@@ -42,5 +42,13 @@ echo  __DIR__."</BR>";
         setcookie('user_name',1,time()-3600);
         echo "已删除所有cookie";
     }
+
+    public function baidutest(){
+        //114.403513,23.096066 西湖-火车站 114.422629,23.157219
+        echo "西湖-火车站两点间距离测试:".GetDistance(23.096066,114.403513,23.157219,114.422629)."</br>";
+        $data=getLatLng($address='合生上观国际观涛轩',$city='惠州');
+        echo "根据地址获得坐标"."</br>";
+        dump($data);
+    }
 }
 

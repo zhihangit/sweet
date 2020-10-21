@@ -14,7 +14,8 @@ Route::get('think', function () {
 });
 
 Route::get('hello/:name', 'index/hello');
-
+//Route::get('index/:name', 'front.index/index');
+//Route::get('index/:id','index/front.index/index');
 return [
 
 ];
