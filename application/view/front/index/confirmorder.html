@@ -13,6 +13,9 @@
                 $("#orderaddress").attr("disabled", false).val("请填入配送地址");
             }
         });
+        $("#orderaddress").blur(function(){
+            alert(1);
+        });
     });
 </script>
 <div class="contact-area pt-100" style="margin-bottom: 30px;">
@@ -22,7 +25,7 @@
             <div class="col-lg-6">
                 <div class="contact-info-area">
                     <h4 class="contact-title mb-18">你的订单信息如下，如无问题请输入兑换码信息进行兑换</h4>
-                    <p>订单明细:商品种类：{$newdata|count}种，总商品数:{$totalnum},合计金额：<span style="color:red;"> ¥{$totalfee} 元</span>，兑换门店：<span style="color:red;">{$storename}</span></p>
+                    <p>订单明细:商品种类：{$newdata|count}种，总商品数:{$totalnum},合计金额：<span style="color:red;"> ¥{$totalfee} 元</span>(不含运费)，兑换门店：<span style="color:red;">{$storename}</span></p>
                     <div class="contact-info-wrap">
 
                         {volist name="newdata" id="vo" key="k"}

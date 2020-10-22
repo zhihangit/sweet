@@ -191,7 +191,9 @@ class Index extends Controller
             if (isset($newdata)) {
                 //dump($newdata);
                 $this->assign('newdata', $newdata);
-                $storename = Db::table("sw_userinfo")->getFieldByUser_id($storeid, 'company');
+                $storeinfo = Db::table("sw_userinfo")->where(['user_id'  =>  $storeid])->find(); 
+                $storename = $storeinfo['company'];
+                dump($storeinfo);
                 $this->assign('storeid', $storeid);
                 $this->assign('storename', $storename);
                 $this->assign("totalnum", $totalnum);

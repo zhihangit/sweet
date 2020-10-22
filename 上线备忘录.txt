@@ -1,0 +1,2 @@
+1:入口文件修改：配置环境变量:
+     将define('SITE_URL', 'http://localhost/sweet/public')注释掉，启用define('SITE_URL','http://'.$_SERVER['HTTP_HOST']);
