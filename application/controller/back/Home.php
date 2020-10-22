@@ -1624,7 +1624,7 @@ class Home extends Controller
         if($res){
             $codenumber=Db::table('sw_neworder')->getFieldById($order['id'], 'codenumber');
             $ye=Db::table('sw_codedetail')->getFieldByNumber($codenumber, 'balance');
-            $ye=(float)$ye-(float)$order['total'];
+            $ye=(float)$ye-(float)$order['total']-(float)$order['expressfee'];
             Db::name('codedetail')
                 ->where('number', $codenumber)
                 ->data(['balance' => $ye])
@@ -1648,5 +1648,12 @@ class Home extends Controller
             // $str = json_encode($checkdata);
             //echo $str;
         }
+    }
+    public function lookorder(){
+        $modid = input('id');
+        $orderdata = Neworder::get($modid );
+        $this->assign('vo',$orderdata);
+        return $this->fetch('lookorder');
+        
     }
 }

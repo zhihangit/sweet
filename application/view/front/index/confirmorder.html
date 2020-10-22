@@ -8,13 +8,48 @@
             //alert($cr);
             if ($cr.is(":checked")) {
                 $("#orderaddress").attr("disabled", true).val("");
+                $("#expressfee").val("");
+                $("#currentexpressfee").text("");
+                $("#expressinfo").hide();
+
             }
             else {
                 $("#orderaddress").attr("disabled", false).val("请填入配送地址");
+                $("#expressinfo").show();
             }
         });
+        $("#refresh").click(function(){
+            var address=$("#orderaddress").val();
+            var lat={$storeinfo.latitude};
+            var lon={$storeinfo.longitude};
+            $.ajax({
+                type:"post",
+                url:"{:url('front.index/countexpressfee')}",
+                data:{lat:lat,lon:lon,address:address,sdistance:{$pstoreinfo.sdistance},sprice:{$pstoreinfo.sprice},exprice:{$pstoreinfo.exprice}},
+                dataType:"json",
+                success:function(data){
+                    console.log(data);
+                    $("#expressfee").val(data);
+                    $("#currentexpressfee").text(data+"元");
+                }
+            });
+        });
         $("#orderaddress").blur(function(){
-            alert(1);
+            var address=$("#orderaddress").val();
+            var lat={$storeinfo.latitude};
+            var lon={$storeinfo.longitude};
+            $.ajax({
+                type:"post",
+                url:"{:url('front.index/countexpressfee')}",
+                data:{lat:lat,lon:lon,address:address,sdistance:{$pstoreinfo.sdistance},sprice:{$pstoreinfo.sprice},exprice:{$pstoreinfo.exprice}},
+                dataType:"json",
+                success:function(data){
+                                console.log(data);
+                           $("#expressfee").val(data);
+                           $("#currentexpressfee").text(data+"元");
+                }
+             });
+
         });
     });
 </script>
@@ -26,6 +61,7 @@
                 <div class="contact-info-area">
                     <h4 class="contact-title mb-18">你的订单信息如下，如无问题请输入兑换码信息进行兑换</h4>
                     <p>订单明细:商品种类：{$newdata|count}种，总商品数:{$totalnum},合计金额：<span style="color:red;"> ¥{$totalfee} 元</span>(不含运费)，兑换门店：<span style="color:red;">{$storename}</span></p>
+                    <p style="font-size: 10px;">订单配送费：{$pstoreinfo.sdistance}公里以内{$pstoreinfo.sprice}元，超过部分按百度地图直线距离，每公里(不足1公里按1公里){$pstoreinfo.exprice}元进行计费。</p>
                     <div class="contact-info-wrap">
 
                         {volist name="newdata" id="vo" key="k"}
@@ -62,6 +98,7 @@
                                         <input name="codenumber" placeholder="兑换码" type="text" id="codenumber">
                                         <input name="storeid"  placeholder="兑换门店"  type="hidden" id="storeid" value="{$storeid}">
                                         <input name="totalinfo"  placeholder="兑换明细" type="hidden" id="totalinfo" value="{$totalinfo}^{$storeid}^{$totalfee}">
+                                        <input name="expressfee"  placeholder="配送费"  type="hidden" id="expressfee" value="">
 
                                     </div>
                                 </div>
@@ -88,7 +125,7 @@
                                         <input id="orderaddress" name="orderaddress" placeholder="配送地址" type="text" id="orderaddress">
                                     </div>
                                 </div>
-
+                                <label  id="expressinfo" style="color:red;" class="col-sm-12 control-label">当前地址配送费：<b><span style="color:black;font-size: 15px;" id="currentexpressfee"></span></b>&nbsp&nbsp<span id="refresh" style="background-color: #868e96;color:black;">点击刷新</span></label>
 
                                 <label for="ordercontact" class="col-sm-12 control-label">联系人</label>
                                      <div class="col-lg-12">

@@ -191,10 +191,14 @@ class Index extends Controller
             if (isset($newdata)) {
                 //dump($newdata);
                 $this->assign('newdata', $newdata);
-                $storeinfo = Db::table("sw_userinfo")->where(['user_id'  =>  $storeid])->find(); 
+                $storeinfo = Db::table("sw_userinfo")->where(['user_id'  =>  $storeid])->find();
+                $pstoreid=Db::table("sw_user")->getFieldById($storeid,"parent_id");
+                $pstoreinfo= Db::table("sw_userinfo")->where(['user_id'  =>  $pstoreid])->find();
                 $storename = $storeinfo['company'];
-                dump($storeinfo);
+                //dump($pstoreinfo);
                 $this->assign('storeid', $storeid);
+                $this->assign('pstoreinfo', $pstoreinfo);
+                $this->assign('storeinfo',$storeinfo);
                 $this->assign('storename', $storename);
                 $this->assign("totalnum", $totalnum);
                 $this->assign("totalfee", $totalfee);
@@ -206,6 +210,20 @@ class Index extends Controller
         }else{
             $this->error('非法操作',url('front.index/index'));
         }
+    }
+    public function countexpressfee(){
+        $LatLng=getLatLng($address=input("address"),$city='惠州');
+        //dump($LatLng);
+       // echo input("lon");
+        $jl=GetDistance(input("lat"),input("lon"),$LatLng['lat'],$LatLng['lng']);
+        //注意这里的经度lng 和 lon
+        $jl=(float)$jl;
+        //echo $jl."</br>";
+        $jl=ceil(round($jl,2));//向上取整
+        //echo $jl."</br>";
+        $expressfee=(float)input("sprice")+($jl-(float)input("sdistance"))*(float)input("exprice");
+        //echo "配送费：".$expressfee;
+        echo $expressfee;
     }
     //旧方法
     /*public function addorder(){
@@ -344,12 +362,15 @@ class Index extends Controller
                                     $insertdata['type']=1;
                                     $insertdata['pickname']=input('ordercontact');
                                     $insertdata['picktel']=input('ordertel');
+                                    $expressfee=0;
                                 }
                                 else{
                                     $insertdata['type']=2;
                                     $insertdata['dispatchname']=input('ordercontact');
                                     $insertdata['dispatchtel']=input('ordertel');
                                     $insertdata['dispatchaddress']=input('orderaddress');
+                                    $expressfee=input('expressfee');
+
                                 }
                                 //$insertdata['create_time']=date_create()->format('Y-m-d H:i:s');
                                  $arroder=explode(",",$sorder[0]);
@@ -367,6 +388,11 @@ class Index extends Controller
                                     $orderarr['num']=$o[1];
                                     $orderarr['price']=$o[2];
                                     $orderarr['total']=$o[3];
+                                    if($key==0){
+                                        $orderarr['expressfee']=$expressfee;
+                                    }else{
+                                        $orderarr['expressfee']=0;
+                                    }
                                     $orderarr['specification']=$o[4];
                                     $orderarr['orderoption1']=$o[5];
                                     if(isset($o[6])){

@@ -1,17 +1,15 @@
-{layout name="frontlayout2" /}
+{layout name="backlayout" /}
 <script src="__BJS__/jquery.min.js"></script>
 <style type="text/css">
-.p1{font-size: 13px;border-bottom: 1px solid gray;margin-top: 5px;margin-bottom: 0px;background-color: #dde1e3;}
-.p2{font-size: 13px;border-bottom: 1px solid gray;margin-top: 0px;margin-bottom: 0px;}
-.p3{font-size: 10px;border-bottom: 1px solid gray;margin-top: 0px;margin-bottom: 0px;}
-.moduel{background-color: #e8e9ea;margin:10px 15px;padding-top: 10px; border-radius:5px;}
+    .p1{font-size: 15px;border-bottom: 1px solid gray;margin-top: 5px;margin-bottom: 0px;height: 30px;}
+    .p2{font-size: 15px;border-bottom: 1px solid gray;margin-top: 0px;margin-bottom: 0px;height: 30px;}
+    .p3{font-size: 14px;border-bottom: 1px solid gray;margin-top: 0px;margin-bottom: 0px;height: 30px;}
+    .moduel{background-color: white;margin:10px 15px;padding-top: 10px; border-radius:5px;}
 </style>
-<h4 style="text-align: center;margin-top: 60px;">兑换券：{$Request.param.codenumber}兑换记录</h4>
-<h4 style="text-align: center;"><span style="color:red;font-size: 15px;">(余额:{$ye}元,有效期：{$indate|date='Y-m-d'})</span></h4>
+<h4 style="text-align: center;margin-top: 60px;">订单详情</h4>
 <div style="min-height:500px; margin-bottom: 50px;margin-top: 20px;">
     <div class="container" id="orderinfo">
         <div class="row" style="margin-right:15px;">
-            {volist name="datainfo" id="vo" key="k" }
             <div class="col-lg-12 col-md-12 col-sm-12 col-12 moduel thumbnail" >
                 <p class="p1">订单号：{$vo.order_id} &nbsp&nbsp日期：{$vo.create_time|date="Y-m-d"}</p>
                 <p class="p2">&nbsp&nbsp&nbsp&nbsp商品名称：{$vo.product} &nbsp&nbsp数量：{$vo.num} &nbsp&nbsp单价：{$vo.price}</p>
@@ -39,12 +37,9 @@
                 <p class="p3">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp收货地址:{$vo.dispatchaddress}</p>
                 <p class="p2">&nbsp&nbsp&nbsp&nbsp卖家备注：{$vo.sellermemo} </p>
                 <p class="p2">&nbsp&nbsp&nbsp&nbsp买家备注：{$vo.buyermemo} </p>
+
             </div>
-            {/volist}
-
-
         </div>
     </div>
 
 </div>
-

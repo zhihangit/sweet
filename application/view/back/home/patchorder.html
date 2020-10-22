@@ -210,10 +210,11 @@
                             <th style="text-align: center" >商品</th>
                             <th style="text-align: center" >数量</th>
                             <th style="text-align: center" >规格</th>
-                            <th style="text-align: center" >金额</th>
+                            <th style="text-align: center" >商品金额</th>
+                            <th style="text-align: center" >配送费</th>
                             <th style="text-align: center" >提货方式</th>
                             <th style="text-align: center" >订单状态</th>
-                            <th style="text-align: center" >处理结果</th>
+                            <th style="text-align: center" >订单详情</th>
                             <th style="text-align: center" >操作</th>
 
 
@@ -234,6 +235,7 @@
                             <td>{$vo.num}</td>
                             <td>{$vo.specification}</td>
                             <td>{$vo.total}</td>
+                            <td>{$vo.expressfee}</td>
                             <td >{if $vo.type == '1'}自提
                                 {else /}配送
                                 {/if}
@@ -245,7 +247,7 @@
                                 {case 4 }已完成{/case}
                                 {default /}争议订单
                                 {/switch}</td>
-                            <td>处理详情</td>
+                            <td><a href="{:url('back.home/lookorder','','')}/id/{$vo.id}">查看</a></td>
                             <td>
                                 {if $Think.cookie.user_limite == '3'   }
                                 {if $vo.status == '1'}<a href="javascript:void(0)" onclick="showDealModal(this)">订单处理</a>{else /}无
@@ -281,7 +283,7 @@
 
                         </tr>
                         {/volist}
-                        <td colspan="12" style="font-size: 16px;color:red;text-align: right">查询订单合计: {$total|round=###,2}元</td>
+                        <td colspan="13" style="font-size: 16px;color:red;text-align: right">查询订单合计: {$total|round=###,2}元</td>
                         {/empty}
                         </tbody>
                     </table>
