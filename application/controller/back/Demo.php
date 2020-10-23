@@ -18,14 +18,10 @@ class Demo extends Controller
         echo config('__JS__')."------------------JS目录</BR>";
         echo config('__UPLOADS__')."------------------UPLOADS目录</BR>";
         echo config('__IMAGES__')."------------------IMAGES目录</BR>";
-
-        echo dirname(__FILE__)."------------------dirname</BR>";
-        echo $_GET['dir']."------------------getdir</BR>";
-        echo __FILE__."</BR>";
-echo  __DIR__."</BR>";
-        echo __DIR__ . '/../thinkphp/base.php';
-        echo date("Y-m-d");
-
+        $sql="select * from table order by a.dealstore_id,a.create_time desc limit 10,10";
+        echo $sql."</br>";
+        echo strpos($sql,"limit")."</br>";
+        echo trim(substr($sql,0,strpos($sql,"limit")));
     }
 
     public function classtest(){

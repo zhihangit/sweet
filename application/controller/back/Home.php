@@ -1656,4 +1656,66 @@ class Home extends Controller
         return $this->fetch('lookorder');
         
     }
+    public function neworderout(){
+        require_once Env::get('ROOT_PATH').'public/static/PHPExcel/Classes/PHPExcel.php';
+        require_once Env::get('ROOT_PATH').'public/static/PHPExcel/Classes/PHPExcel/IOFactory.php';
+        //导出
+        $path = dirname(__FILE__); //找到当前脚本所在路径
+        $objPHPExcel = new \PHPExcel();
+        $objWriter = new \PHPExcel_Writer_Excel5($objPHPExcel);
+        $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
+
+
+        // 实例化完了之后就先把数据库里面的数据查出来
+        $sqlyj=cookie('user_sql');
+        $sqlyj=trim(substr($sqlyj,0,strpos($sqlyj,"limit")));
+        $sql=Db::query($sqlyj);
+
+
+        // 设置表头信息
+        $objPHPExcel->setActiveSheetIndex(0)
+            ->setCellValue('A1', '序号')
+            ->setCellValue('B1', '订单日期')
+            ->setCellValue('C1', '兑换门店')
+            ->setCellValue('D1', '商品')
+            ->setCellValue('E1', '单价')
+            ->setCellValue('F1', '数量')
+            ->setCellValue('G1', '规格')
+            ->setCellValue('H1', '商品金额')
+            ->setCellValue('I1', '配送费')
+            ->setCellValue('J1', '提货方式[1自提2配送]')
+            ->setCellValue('K1', '订单状态[1待发货2已发货3售后中4已完成]');
+        /*--------------开始从数据库提取信息插入Excel表中------------------*/
+
+        $i=2;  //定义一个i变量，目的是在循环输出数据是控制行数
+        $count = count($sql);  //计算有多少条数据time());
+        for ($i = 2; $i <= $count+1; $i++) {
+            $objPHPExcel->getActiveSheet()->setCellValue('A' . $i, $i-1);
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . $i, $sql[$i-2]['create_time']);
+            $objPHPExcel->getActiveSheet()->setCellValue('C' . $i, $sql[$i-2]['company']);
+            $objPHPExcel->getActiveSheet()->setCellValue('D' . $i, $sql[$i-2]['product']);
+            $objPHPExcel->getActiveSheet()->setCellValue('E' . $i, $sql[$i-2]['price']);
+            $objPHPExcel->getActiveSheet()->setCellValue('F' . $i, $sql[$i-2]['num']);
+            $objPHPExcel->getActiveSheet()->setCellValue('G' . $i, $sql[$i-2]['specification']);
+            $objPHPExcel->getActiveSheet()->setCellValue('H' . $i, $sql[$i-2]['total']);
+            $objPHPExcel->getActiveSheet()->setCellValue('I' . $i, $sql[$i-2]['expressfee']);
+            $objPHPExcel->getActiveSheet()->setCellValue('J' . $i, $sql[$i-2]['type']);
+            $objPHPExcel->getActiveSheet()->setCellValue('K' . $i, $sql[$i-2]['status']);
+        }
+
+
+        /*--------------下面是设置其他信息------------------*/
+
+        $objPHPExcel->getActiveSheet()->setTitle('订单明细');      //设置sheet的名称
+        $objPHPExcel->setActiveSheetIndex(0);                   //设置sheet的起始位置
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');   //通过PHPExcel_IOFactory的写函数将上面数据写出来
+
+        $PHPWriter = \PHPExcel_IOFactory::createWriter( $objPHPExcel,"Excel2007");
+
+        header('Content-Disposition: attachment;filename="订单明细.xlsx"');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+
+        $PHPWriter->save("php://output"); //表示在$path路径下面生成demo.xlsx文件*/
+
+    }
 }

@@ -208,6 +208,7 @@
                             <th style="text-align: center" >订单号</th>
                             <th style="text-align: center" >兑换门店</th>
                             <th style="text-align: center" >商品</th>
+                            <th style="text-align: center" >单价</th>
                             <th style="text-align: center" >数量</th>
                             <th style="text-align: center" >规格</th>
                             <th style="text-align: center" >商品金额</th>
@@ -232,6 +233,7 @@
                             <td style="text-align: left;" >{$vo.order_id}</td>
                             <td>{$vo.company}</td>
                             <td>{$vo.product}</td>
+                            <td>{$vo.price}</td>
                             <td>{$vo.num}</td>
                             <td>{$vo.specification}</td>
                             <td>{$vo.total}</td>
@@ -283,7 +285,7 @@
 
                         </tr>
                         {/volist}
-                        <td colspan="13" style="font-size: 16px;color:red;text-align: right">查询订单合计: {$total|round=###,2}元</td>
+                        <td colspan="14" style="font-size: 16px;color:red;text-align: right">查询订单合计: {$total|round=###,2}元</td>
                         {/empty}
                         </tbody>
                     </table>
