@@ -6,10 +6,15 @@
 .p3{font-size: 10px;border-bottom: 1px solid gray;margin-top: 0px;margin-bottom: 0px;}
 .moduel{background-color: #e8e9ea;margin:10px 15px;padding-top: 10px; border-radius:5px;}
 </style>
-<h4 style="text-align: center;margin-top: 60px;">兑换券：{$Request.param.codenumber}兑换记录</h4>
-<h4 style="text-align: center;"><span style="color:red;font-size: 15px;">(余额:{$ye}元,有效期：{$indate|date='Y-m-d'})</span></h4>
+<h3 style="text-align: center;margin-top: 60px;">兑换券：{$Request.param.codenumber}兑换记录</h3>
+<h3 style="text-align: center;"><span style="color:red;font-size: 15px;">(余额:{$ye}元,有效期：{$indate|date='Y-m-d'})</span></h3>
 <div style="min-height:500px; margin-bottom: 50px;margin-top: 20px;">
     <div class="container" id="orderinfo">
+        {empty name="datainfo"}
+        <div class="row">
+            <h4 style="text-align: center;width: 100%;margin-top: 100px;color:grey;">该兑换券没有任何兑换记录</h4>
+        </div>
+        {else /}
         <div class="row" style="margin-right:15px;">
             {volist name="datainfo" id="vo" key="k" }
             <div class="col-lg-12 col-md-12 col-sm-12 col-12 moduel thumbnail" >
@@ -44,6 +49,8 @@
 
 
         </div>
+        {/empty}
+
     </div>
 
 </div>

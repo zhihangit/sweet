@@ -464,11 +464,15 @@ class Index extends Controller
         if($code=='' or  empty($code)){
             $this->error("请输入兑换码信息，再查询",'front.index/index');
         }
-        $sql="select a.*,b.company from sw_neworder a left join sw_userinfo b on a.dealstore_id=b.user_id where a.codenumber='$code' order by a.create_time desc ";
-        $datainfo=Db::query($sql);
-        if(!$datainfo){
+        $r=Db::table("sw_codedetail")->where('number',$code)->find();
+        if(!$r){
             $this->error("没有该兑换码信息，请重新确认",'front.index/index');
         }
+        $sql="select a.*,b.company from sw_neworder a left join sw_userinfo b on a.dealstore_id=b.user_id where a.codenumber='$code' order by a.create_time desc ";
+        $datainfo=Db::query($sql);
+/*        if(!$datainfo){
+            $this->error("没有该兑换码信息，请重新确认",'front.index/index');
+        }*/
         $this->assign('datainfo',$datainfo);
         $ye=Db::table("sw_codedetail")->getFieldByNumber($code,"balance");
         $this->assign('ye',$ye);

@@ -36,7 +36,8 @@
 
 </head>
     <div class="text-center" style="padding-top:10px;padding-bottom:10px;background:#fff;border-bottom:1px solid #ddd">
-        <img src="__BIMAGES__/logo-big.jpg" width="200" height="30">
+
+        <img src="__FIMAGES__/indeximg/logo/sweet-black-samll.png"  height="40" style="margin-left: 30px;">
     </div>
 
     <div class="ip-attack"><dl>
